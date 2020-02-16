@@ -2527,5 +2527,13 @@ void QtFontEditorFactory::disconnectPropertyManager(QtFontPropertyManager *manag
 
 QT_END_NAMESPACE
 
+
+//
+// if you get strange errors at this line
+// disable the shadow build in Qt Creator IDE
+//
+
 #include "moc_qteditorfactory.cpp"
 #include "qteditorfactory.moc"
+
+

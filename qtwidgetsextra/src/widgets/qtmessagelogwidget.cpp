@@ -128,7 +128,11 @@ public:
 
 private:
     mutable struct Cache {
-        enum { Dimensions = 1, FontMetrics = 2, All = FontMetrics|Dimensions };
+        enum {
+            Dimensions = 1,
+            FontMetrics = 2,
+            All = FontMetrics|Dimensions
+        };
         Cache() : dirty( All ) {}
         int dirty;
 

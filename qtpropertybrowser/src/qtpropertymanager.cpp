@@ -6426,5 +6426,10 @@ void QtCursorPropertyManager::uninitializeProperty(QtProperty *property)
 
 QT_END_NAMESPACE
 
+//
+// if you get strange errors at this line
+// disable the shadow build in Qt Creator IDE
+//
 #include "moc_qtpropertymanager.cpp"
 #include "qtpropertymanager.moc"
+

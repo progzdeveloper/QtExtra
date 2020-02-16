@@ -237,6 +237,8 @@ private:
 class QtAbstractPropertyBrowser;
 class QtBrowserItemPrivate;
 
+class QtAbstractPropertyBrowserPrivate;
+
 class QT_QTPROPERTYBROWSER_EXPORT QtBrowserItem
 {
 public:
@@ -251,7 +253,7 @@ private:
     friend class QtAbstractPropertyBrowserPrivate;
 };
 
-class QtAbstractPropertyBrowserPrivate;
+
 
 class QT_QTPROPERTYBROWSER_EXPORT QtAbstractPropertyBrowser : public QWidget
 {

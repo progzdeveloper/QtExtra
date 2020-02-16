@@ -2222,4 +2222,8 @@ void QtVariantEditorFactory::disconnectPropertyManager(QtVariantPropertyManager 
 
 QT_END_NAMESPACE
 
+//
+// if you get strange errors at this line
+// disable the shadow build in Qt Creator IDE
+//
 #include "moc_qtvariantproperty.cpp"
