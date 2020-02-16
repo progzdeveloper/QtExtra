@@ -5,12 +5,13 @@
 CONFIG = ordered
 TEMPLATE = subdirs
 
-SUBDIRS += qtcoreextra \
-        qtsqlextra \
+SUBDIRS += \
+        qtcoreextra \
+        qtplugins \
         qtwidgetsextra \
         qtpropertybrowser \
-        qtplugins \ 
-        examples \
+        qtsqlextra \
+        qtsqlwidgets \
         modelexporters \
-    qtsqlwidgets
+        examples
 
