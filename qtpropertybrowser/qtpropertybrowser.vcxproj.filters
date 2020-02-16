@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Include Files">
+      <UniqueIdentifier>{57880566-5c69-4ebb-99bf-af74293a9530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Files">
+      <UniqueIdentifier>{6d3f3b3e-572b-4534-8e80-3481dcc278f6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="qtpropertybrowser.pri">
+      <Filter>Project Files</Filter>
+    </None>
+    <None Include="qtpropertybrowser.pro">
+      <Filter>Project Files</Filter>
+    </None>
+    <None Include="qtpropertybrowser.qrc">
+      <Filter>Project Files</Filter>
+    </None>
+    <None Include="include\QtAbstractEditorFactoryBase">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtAbstractPropertyBrowser">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtAbstractPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtBoolPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtBrowserItem">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtButtonPropertyBrowser">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtCharEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtCharPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtCheckBoxFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtColorEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtColorPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtCursorEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtCursorPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDateEditFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDatePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDateTimeEditFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDateTimePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDockWidget">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDoublePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtDoubleSpinBoxFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtEnumEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtEnumPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtFlagPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtFontEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtFontPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtGroupBoxPropertyBrowser">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtGroupPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtIntPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtKeySequenceEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtKeySequencePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtLineEditFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtLocalePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtMainWindow">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtPointFPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtPointPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtProperty">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtRectFPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtRectPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtScrollBarFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtSizeFPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtSizePolicyPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtSizePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtSliderFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtSpinBoxFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtStringPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtTimeEditFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtTimePropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtTreePropertyBrowser">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtVariantEditorFactory">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtVariantProperty">
+      <Filter>Include Files</Filter>
+    </None>
+    <None Include="include\QtVariantPropertyManager">
+      <Filter>Include Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\qtbuttonpropertybrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qteditorfactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qtgroupboxpropertybrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qtpropertybrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qtpropertybrowserutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qtpropertymanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qttreepropertybrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qtvariantproperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qobjecteditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qpropertyproxyobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\qtbuttonpropertybrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qteditorfactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qtgroupboxpropertybrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qtpropertybrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qtpropertybrowserutils_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qtpropertymanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qttreepropertybrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qtvariantproperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qobjecteditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\qpropertyproxyobject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

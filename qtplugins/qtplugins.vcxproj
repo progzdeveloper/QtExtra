@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\qtplugininterface.cpp" />
+    <ClCompile Include="src\qtpluginmanager.cpp" />
+    <ClCompile Include="src\qtpluginmanagerdialog.cpp" />
+    <ClCompile Include="src\qtpluginpropertymodel.cpp" />
+    <ClCompile Include="src\qtplugintreeview.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\qtplugininterface.h" />
+    <ClInclude Include="src\qtpluginmanager.h" />
+    <ClInclude Include="src\qtpluginmanagerdialog.h" />
+    <ClInclude Include="src\qtpluginmetadata.h" />
+    <ClInclude Include="src\qtpluginpropertymodel.h" />
+    <ClInclude Include="src\qtpluginsext.h" />
+    <ClInclude Include="src\qtplugintreeview.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\QtPluginInterface" />
+    <None Include="include\QtPluginManager" />
+    <None Include="include\QtPluginManagerDialog" />
+    <None Include="include\QtPluginPropertyModel" />
+    <None Include="include\QtPluginsExt" />
+    <None Include="include\QtPluginTreeView" />
+    <None Include="qtplugins.pri" />
+    <None Include="qtplugins.pro" />
+    <None Include="qtplugins.qrc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C7FB7BA3-F5D5-4E17-A74C-BC280FBC007E}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeOutput>qtpluginsd.dll</NMakeOutput>
+    <NMakePreprocessorDefinitions>QTPLUGINS_MAKEDLL;QTPLUGINS_BUILD_LIB;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <OutDir>$(ProjectDir)tmp\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)tmp\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)include;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtNetwork;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QTDIR)\lib;$(LibraryPath)</LibraryPath>
+    <NMakeBuildCommandLine>nmake debug</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; qmake &amp;&amp; nmake debug</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeOutput>qtpluginsd.dll</NMakeOutput>
+    <NMakePreprocessorDefinitions>QTPLUGINS_MAKEDLL;QTPLUGINS_BUILD_LIB;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <OutDir>$(ProjectDir)tmp\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)tmp\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)include;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtNetwork;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QTDIR)\lib;$(LibraryPath)</LibraryPath>
+    <NMakeBuildCommandLine>nmake release</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; qmake &amp;&amp; nmake release</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)tmp\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)tmp\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)include;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtNetwork;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QTDIR)\lib;$(LibraryPath)</LibraryPath>
+    <NMakeBuildCommandLine>nmake debug</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; qmake &amp;&amp; nmake debug</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+    <NMakePreprocessorDefinitions>QTPLUGINS_MAKEDLL;QTPLUGINS_BUILD_LIB;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)tmp\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)tmp\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)include;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtNetwork;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QTDIR)\lib;$(LibraryPath)</LibraryPath>
+    <NMakeBuildCommandLine>nmake release</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; qmake &amp;&amp; nmake release</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+    <NMakePreprocessorDefinitions>QTPLUGINS_MAKEDLL;QTPLUGINS_BUILD_LIB;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

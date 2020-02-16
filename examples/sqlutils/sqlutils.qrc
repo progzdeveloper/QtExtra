@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="database">resources/images/database.png</file>
+        <file alias="field">resources/images/field.png</file>
+        <file alias="systable">resources/images/systable.png</file>
+        <file alias="usrtable">resources/images/table.png</file>
+        <file alias="view">resources/images/view.png</file>
+    </qresource>
+</RCC>

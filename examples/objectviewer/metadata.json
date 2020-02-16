@@ -1,0 +1,23 @@
+{
+    "QtPropertyWidget": {
+        "QtPropertyWidget":"Редактор свойств",
+        "classFilter":{"classFilter":"Фильтр классов", "placeholderText":"<Фильтр>"},
+        "propertyFilter":{"propertyFilter":"Фильр свойств", "placeholderText":"<Фильтр>"},
+        "submitPolicy":{"submitPolicy":"Способ фиксации"},
+        "viewType":{"viewType":"Вид отображения"},
+        "isFinal":{"isFinal":"Нерекурсивно"}
+    },
+    "QtGadget": {
+        "QtGadget": "Gadget",
+        "id": {"id":"Идентификатор"}
+    },
+    "QContact": {
+        "QContact": "Контакт",
+        "firstName": { "firstName": "Имя" },
+        "lastName": { "lastName": "Фамилия"},
+        "age": { "age":"Возраст", "minimum":0, "maximum":100 },
+        "rating": { "rating":"Рейтинг", "minimum":0.0, "maximum":1.0, "singleStep":0.1 },
+        "birthday": { "birthday":"День рождения" },
+        "married": { "married":"Семейное положение" }
+    }
+}

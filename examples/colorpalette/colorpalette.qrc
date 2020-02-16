@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/palettes">
+        <file alias="grays">resources/Grays.cmap</file>
+    </qresource>
+</RCC>

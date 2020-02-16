@@ -1,0 +1,17 @@
+{
+    "DataSet 1": ["Item1_1", "Item1_2", "Item1_3", "Item1_4", "Item1_5"],
+    "DataSet 2": ["Item2_1", "Item2_2", "Item2_3", "Item2_4"],
+    "DataSet 3": ["Item3_1", "Item3_2", "Item3_3", "Item3_4", "Item3_5", "Item3_6", "Item3_7", "Item3_8"],
+    "DataSet 4": ["Item4_1", "Item4_2"],
+    "DataSet 5": ["Item5_1", "Item5_2", "Item5_3", "Item5_4", "Item5_5", "Item5_6"],
+    "DataSet 6": ["Item6_1"],
+    "DataSet 7": ["Item7_1", "Item7_2", "Item7_3"],
+    "DataSet 8": ["Item1_1", "Item1_2", "Item1_3", "Item1_4", "Item1_5"],
+    "DataSet 9": ["Item2_1", "Item2_2", "Item2_3", "Item2_4"],
+    "DataSet 10": ["Item3_1", "Item3_2", "Item3_3", "Item3_4", "Item3_5", "Item3_6", "Item3_7", "Item3_8"],
+    "DataSet 11": ["Item4_1", "Item4_2"],
+    "DataSet 12": ["Item5_1", "Item5_2", "Item5_3", "Item5_4", "Item5_5", "Item5_6"],
+    "DataSet 13": ["Item3_1", "Item3_2", "Item3_3", "Item3_4", "Item3_5", "Item3_6", "Item3_7", "Item3_8"],
+    "DataSet 14": ["Item3_1", "Item3_2", "Item3_3", "Item3_4", "Item3_5", "Item3_6", "Item3_7", "Item3_8", "Item3_9", "Item3_10", "Item3_11"],
+    "DataSet 15": ["Item3_1", "Item3_2", "Item3_3", "Item3_4", "Item3_5", "Item3_6", "Item3_7"]
+}

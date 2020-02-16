@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="logo.png">resources/qt-logo.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file alias="application.json">resources/application.json</file>
+    </qresource>
+    <qresource prefix="/text">
+        <file alias="license">resources/LICENSE</file>
+    </qresource>
+</RCC>

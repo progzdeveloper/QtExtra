@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/text">
+        <file alias="connect_options.json">resources/connect_options.json</file>
+    </qresource>
+</RCC>

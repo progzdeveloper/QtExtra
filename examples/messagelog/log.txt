@@ -1,0 +1,154 @@
+[Jun 27 16:42:52] 0 Lab14 0: usb 3-1.2: new full speed USB device using uhci_hcd and address 6
+[Jun 27 16:42:52] 1 Lab14 22: usb 3-1.2: not running at top speed; connect to a high speed hub
+[Jun 27 16:42:52] 0 Lab14 0: scsi5 : usb-storage 3-1.2:1.0
+[Jun 27 16:42:53] 0 Lab14 0: scsi 5:0:0:0: Direct-Access     Ut165    USB2FlashStorage 0.00 PQ: 0 ANSI: 2
+[Jun 27 16:42:53] 0 Lab14 0: sd 5:0:0:0: Attached scsi generic sg2 type 0
+[Jun 27 16:42:53] 0 Lab14 0: sd 5:0:0:0: [sdb] 15794176 512-byte logical blocks: (8.08 GB/7.53 GiB)
+[Jun 27 16:42:53] 0 Lab14 0: sd 5:0:0:0: [sdb] Write Protect is off
+[Jun 27 16:42:53] 2 Lab14 21: sdb: unknown partition table
+[Jun 27 16:42:53] 0 Lab14 0: sd 5:0:0:0: [sdb] Attached SCSI removable disk
+[Jun 27 16:43:01] 0 Lab14 15: EXT3-fs: barriers not enabled
+[Jun 27 16:43:01] 0 Lab14 0: kjournald starting.  Commit interval 5 seconds
+[Jun 27 16:43:01] 1 Lab14 11: EXT3-fs (sdb): warning: maximal mount count reached, running e2fsck is recommended
+[Jun 27 16:43:01] 0 Lab14 0: EXT3-fs (sdb): using internal journal
+[Jun 27 16:43:01] 1 Lab14 12: EXT3-fs (sdb): mounted filesystem with writeback data mode
+[Aug 30 10:06:11] 0 newfish 0: >>>>>>>>>>>>>>>>>> Dump Card State Begins <<<<<<<<<<<<<<<<<
+[Aug 30 10:06:11] 0 newfish 0: scsi1: Dumping Card State in Message-out phase, at SEQADDR 0x16b
+[Aug 30 10:06:11] 1 newfish 10: Card was paused
+[Aug 30 10:06:11] 0 newfish 0: ACCUM = 0xa0, SINDEX = 0x61, DINDEX = 0xe4, ARG_2 = 0x1
+[Aug 30 10:06:11] 0 newfish 0: HCNT = 0x0 SCBPTR = 0x1
+[Aug 30 10:06:11] 0 newfish 0: SCSIPHASE[0x0] SCSISIGI[0xa4] ERROR[0x0] SCSIBUSL[0xd]
+[Aug 30 10:06:11] 0 newfish 0: LASTPHASE[0xa0] SCSISEQ[0x12] SBLKCTL[0xa] SCSIRATE[0xc2]
+[Aug 30 10:06:11] 0 newfish 0: SEQCTL[0x10] SEQ_FLAGS[0x40] SSTAT0[0x0] SSTAT1[0x0]
+[Aug 30 10:06:11] 0 newfish 0: SSTAT2[0x0] SSTAT3[0x0] SIMODE0[0x8] SIMODE1[0xac]
+[Aug 30 10:06:11] 0 newfish 0: SXFRCTL0[0x88] DFCNTRL[0x0] DFSTATUS[0x89]
+[Aug 30 10:06:11] 0 newfish 0: STACK: 0xe1 0xe1 0x163 0x178
+[Aug 30 10:06:11] 0 newfish 0: SCB count = 12
+[Aug 30 10:06:11] 0 newfish 0: Kernel NEXTQSCB = 11
+[Aug 30 10:06:11] 0 newfish 0: Card NEXTQSCB = 4
+[Aug 30 10:06:12] 0 newfish 0: QINFIFO entries: 4
+[Aug 30 10:06:12] 0 newfish 0: Waiting Queue entries:
+[Aug 30 10:06:12] 0 newfish 0: Disconnected Queue entries: 2:7
+[Aug 30 10:06:12] 0 newfish 0: QOUTFIFO entries:
+[Aug 30 10:06:12] 0 newfish 0: Sequencer Free SCB List: 0 6 7 5 4 3 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+[Aug 30 10:06:12] 0 newfish 0: Sequencer SCB Info:
+[Aug 30 10:06:12] 0 newfish 0:   0 SCB_CONTROL[0x0] SCB_SCSIID[0x17] SCB_LUN[0x0] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   1 SCB_CONTROL[0x64] SCB_SCSIID[0x17] SCB_LUN[0x0] SCB_TAG[0x5]
+[Aug 30 10:06:12] 0 newfish 0:   2 SCB_CONTROL[0x64] SCB_SCSIID[0x17] SCB_LUN[0x0] SCB_TAG[0x7]
+[Aug 30 10:06:12] 0 newfish 0:   3 SCB_CONTROL[0xe0] SCB_SCSIID[0x7] SCB_LUN[0x0] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   4 SCB_CONTROL[0xe0] SCB_SCSIID[0x7] SCB_LUN[0x0] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   5 SCB_CONTROL[0xe0] SCB_SCSIID[0x17] SCB_LUN[0x0] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   6 SCB_CONTROL[0x0] SCB_SCSIID[0x17] SCB_LUN[0x0] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   7 SCB_CONTROL[0xe0] SCB_SCSIID[0x17] SCB_LUN[0x0] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   8 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:   9 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  10 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  11 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  12 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  13 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  14 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  15 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  16 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  17 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:12] 0 newfish 0:  18 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  19 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  20 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  21 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  22 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  23 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  24 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  25 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  26 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  27 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  28 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  29 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  30 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0:  31 SCB_CONTROL[0x0] SCB_SCSIID[0xff] SCB_LUN[0xff] SCB_TAG[0xff]
+[Aug 30 10:06:13] 0 newfish 0: Pending list:
+[Aug 30 10:06:13] 0 newfish 0:   7 SCB_CONTROL[0x60] SCB_SCSIID[0x17] SCB_LUN[0x0]
+[Aug 30 10:06:13] 0 newfish 0:   4 SCB_CONTROL[0x74] SCB_SCSIID[0x17] SCB_LUN[0x0]
+[Aug 30 10:06:13] 0 newfish 0:   5 SCB_CONTROL[0x64] SCB_SCSIID[0x17] SCB_LUN[0x0]
+[Aug 30 10:06:13] 0 newfish 0: Kernel Free SCB list: 1 0 2 3 6 10 9 8
+[Aug 30 10:06:13] 0 newfish 0: DevQ(0:0:0): 0 waiting
+[Aug 30 10:06:13] 0 newfish 0: DevQ(0:1:0): 0 waiting
+[Aug 30 10:06:13] 0 newfish 0: DevQ(0:6:0): 0 waiting
+[Aug 30 10:06:13] 0 newfish 0:
+[Aug 30 10:06:13] 0 newfish 0: <<<<<<<<<<<<<<<<< Dump Card State Ends >>>>>>>>>>>>>>>>>>
+[Aug 30 10:06:13] 0 newfish 0: Recovery SCB completes
+[Aug 30 10:06:13] 0 newfish 0: (scsi1:A:1:0): Device is disconnected, re-queuing SCB
+[Aug 30 10:06:13] 0 newfish 0: Recovery code sleeping
+[Aug 30 10:06:13] 0 newfish 0: Recovery code awake
+[Aug 30 10:06:13] 1 newfish 17: Timer Expired
+[Aug 30 10:06:13] 1 newfish 19: aic7xxx_abort returns 0x2003
+[Aug 30 10:06:13] 0 newfish 0: scsi1:0:1:0: Attempting to queue a TARGET RESET message
+[Aug 30 10:06:13] 0 newfish 0: CDB: 0x28 0x0 0x4 0x7a 0x65 0xcf 0x0 0x0 0x10 0x0
+[Aug 30 10:06:13] 0 newfish 0: aic7xxx_dev_reset returns 0x2003
+[Aug 30 10:06:13] 0 newfish 0: Recovery SCB completes
+[Aug  1 18:27:45] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:27:46] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 48849 ssh2
+[Aug  1 18:27:46] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:27:48] 3 knight 27: Illegal user guest from 218.49.183.17
+[Aug  1 18:27:49] 3 knight 33: Failed password for illegal user guest from 218.49.183.17 port 49090 ssh2
+[Aug  1 18:27:49] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:27:52] 3 knight 33: Failed password for admin from 218.49.183.17 port 49266 ssh2
+[Aug  1 18:27:56] 3 knight 33: Failed password for admin from 218.49.183.17 port 49468 ssh2
+[Aug  1 18:27:58] 2 knight 27: Illegal user user from 218.49.183.17
+[Aug  1 18:27:59] 3 knight 33: Failed password for illegal user user from 218.49.183.17 port 49680 ssh2
+[Aug  1 18:27:59] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:28:02] 3 knight 33: Failed password for root from 218.49.183.17 port 49869 ssh2
+[Aug  1 18:28:05] 3 knight 33: Failed password for root from 218.49.183.17 port 50063 ssh2
+[Aug  1 18:28:12] 3 knight 33: Failed password for root from 218.49.183.17 port 50245 ssh2
+[Aug  1 18:28:14] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:28:19] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 50671 ssh2
+[Aug  1 18:28:19] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:29:55] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:29:56] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 52244 ssh2
+[Aug  1 18:29:56] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:29:58] 2 knight 27: Illegal user guest from 218.49.183.17
+[Aug  1 18:30:02] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:30:03] 3 knight 33: Failed password for illegal user guest from 218.49.183.17 port 52416 ssh2
+[Aug  1 18:30:03] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:30:03] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 52558 ssh2
+[Aug  1 18:30:03] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:30:05] 3 knight 33: Failed password for illegal user guest from 218.49.183.17 port 52818 ssh2
+[Aug  1 18:30:05] 2 knight 27: Illegal user guest from 218.49.183.17
+[Aug  1 18:30:05] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:30:06] 3 knight 33: Failed password for admin from 218.49.183.17 port 52851 ssh2
+[Aug  1 18:30:08] 3 knight 33: Failed password for admin from 218.49.183.17 port 53014 ssh2
+[Aug  1 18:30:09] 3 knight 33: Failed password for admin from 218.49.183.17 port 53040 ssh2
+[Aug  1 18:30:11] 3 knight 33: Failed password for admin from 218.49.183.17 port 53192 ssh2
+[Aug  1 18:30:11] 2 knight 27: Illegal user user from 218.49.183.17
+[Aug  1 18:30:12] 3 knight 33: Failed password for illegal user user from 218.49.183.17 port 53230 ssh2
+[Aug  1 18:30:12] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:30:13] 2 knight 27: Illegal user user from 218.49.183.17
+[Aug  1 18:30:14] 3 knight 33: Failed password for illegal user user from 218.49.183.17 port 53404 ssh2
+[Aug  1 18:30:14] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:30:14] 3 knight 33: Failed password for root from 218.49.183.17 port 53425 ssh2
+[Aug  1 18:30:21] 3 knight 33: Failed password for root from 218.49.183.17 port 53571 ssh2
+[Aug  1 18:30:22] 3 knight 33: Failed password for root from 218.49.183.17 port 53615 ssh2
+[Aug  1 18:30:24] 3 knight 33: Failed password for root from 218.49.183.17 port 54033 ssh2
+[Aug  1 18:30:24] 3 knight 33: Failed password for root from 218.49.183.17 port 54078 ssh2
+[Aug  1 18:30:26] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:30:27] 3 knight 33: Failed password for root from 218.49.183.17 port 54243 ssh2
+[Aug  1 18:30:27] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 54285 ssh2
+[Aug  1 18:30:27] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:30:29] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:30:34] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 54423 ssh2
+[Aug  1 18:30:34] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:35:53] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:35:54] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 39604 ssh2
+[Aug  1 18:35:54] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:35:56] 2 knight 27: Illegal user guest from 218.49.183.17
+[Aug  1 18:35:57] 3 knight 33: Failed password for illegal user guest from 218.49.183.17 port 39811 ssh2
+[Aug  1 18:35:57] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:36:00] 3 knight 33: Failed password for admin from 218.49.183.17 port 40009 ssh2
+[Aug  1 18:36:04] 3 knight 33: Failed password for admin from 218.49.183.17 port 40217 ssh2
+[Aug  1 18:36:06] 2 knight 27: Illegal user user from 218.49.183.17
+[Aug  1 18:36:11] 3 knight 33: Failed password for illegal user user from 218.49.183.17 port 40470 ssh2
+[Aug  1 18:36:11] 2 knight 25: error: Could not get shadow information for NOUSER
+[Aug  1 18:36:14] 3 knight 33: Failed password for root from 218.49.183.17 port 40973 ssh2
+[Aug  1 18:36:21] 3 knight 33: Failed password for root from 218.49.183.17 port 41159 ssh2
+[Aug  1 18:36:24] 3 knight 33: Failed password for root from 218.49.183.17 port 41541 ssh2
+[Aug  1 18:36:27] 2 knight 27: Illegal user test from 218.49.183.17
+[Aug  1 18:36:28] 3 knight 33: Failed password for illegal user test from 218.49.183.17 port 41630 ssh
+[Aug  1 18:36:28] 2 knight 25: error: Could not get shadow information for NOUSER

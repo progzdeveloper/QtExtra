@@ -1,0 +1,16 @@
+{
+    "QtPropertyWidget": {
+        "QtPropertyWidget":"Редактор свойств",
+        "classFilter":{"classFilter":"Фильтр классов", "placeholderText":"<Фильтр>"},
+        "propertyFilter":{"propertyFilter":"Фильр свойств", "placeholderText":"<Фильтр>"},
+        "submitPolicy":{"submitPolicy":"Способ фиксации"},
+        "viewType":{"viewType":"Вид отображения"},
+        "isFinal":{"isFinal":"Нерекурсивно"}
+    },
+    "PaintArea": {
+        "offset": {"offset":"offset","minimum":0.0, "maximum":1.0, "singleStep":0.01},
+        "stretch": {"stretch":"stretch","minimum":0.0, "maximum":1.0, "singleStep":0.01},
+        "angle": {"angle":"angle","minimum":0.0, "maximum":1.0, "singleStep":0.01},
+        "penWidth": {"penWidth":"penWidth", "minimum":0, "maximum":100, "singleStep":1}
+    }
+}

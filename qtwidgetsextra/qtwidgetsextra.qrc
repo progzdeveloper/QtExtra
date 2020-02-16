@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/text">
+        <file alias="textcodecs.txt">resources/text/textcodecs.txt</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="patterns-aA.png">resources/images/patterns-aA.png</file>
+        <file alias="patterns-aAHW.png">resources/images/patterns-aAHW.png</file>
+        <file alias="patterns-aAHWRX.png">resources/images/patterns-aAHWRX.png</file>
+        <file alias="patterns-aARX.png">resources/images/patterns-aARX.png</file>
+        <file alias="patterns-HW.png">resources/images/patterns-HW.png</file>
+        <file alias="patterns-HWRX.png">resources/images/patterns-HWRX.png</file>
+        <file alias="patterns-RX.png">resources/images/patterns-RX.png</file>
+        <file alias="patterns-search.png">resources/images/icons8-search-16.png</file>
+    </qresource>
+</RCC>

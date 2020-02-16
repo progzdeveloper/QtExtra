@@ -1,0 +1,186 @@
+{
+    "QODBC": {
+        "SQL_ATTR_ACCESS_MODE": {
+            "type": "QStringList",
+            "values": ["SQL_MODE_READ_ONLY", "SQL_MODE_READ_WRITE"]
+        },
+        "SQL_ATTR_LOGIN_TIMEOUT": {
+            "type": "UInt"
+        },
+        "SQL_ATTR_CONNECTION_TIMEOUT": {
+            "type": "UInt"
+        },
+        "SQL_ATTR_CURRENT_CATALOG": {
+            "type": "QString"
+        },
+        "SQL_ATTR_METADATA_ID": {
+            "type": "QStringList",
+            "values": ["SQL_FALSE", "SQL_TRUE"]
+        },
+        "SQL_ATTR_PACKET_SIZE": {
+            "type": "UInt",
+            "default": 512
+        },
+        "SQL_ATTR_TRACEFILE": {
+            "type": "QString"
+        },
+        "SQL_ATTR_TRACE": {
+            "type": "QStringList",
+            "values": ["SQL_OPT_TRACE_OFF", "SQL_OPT_TRACE_ON"]
+        },
+        "SQL_ATTR_CONNECTION_POOLING": {
+            "type": "QStringList",
+            "values": ["SQL_CP_DEFAULT", "SQL_CP_ONE_PER_DRIVER", "SQL_CP_ONE_PER_HENV", "SQL_CP_OFF"]
+        },
+        "SQL_ATTR_CP_MATCH": {
+            "type": "QStringList",
+            "values": ["SQL_CP_MATCH_DEFAULT", "SQL_CP_STRICT_MATCH", "SQL_CP_RELAXED_MATCH"]
+        }
+    },
+    "QSQLITE": {
+        "QSQLITE_BUSY_TIMEOUT": {
+            "type": "UInt",
+            "default": 5000
+        },
+        "QSQLITE_OPEN_READONLY": {
+            "type": "QStringList",
+            "values": ["0","1"]
+        },
+        "QSQLITE_OPEN_URI": {
+            "type": "QStringList",
+            "values": ["0","1"]
+        },
+        "QSQLITE_ENABLE_SHARED_CACHE": {
+            "type": "QStringList",
+            "values": ["0","1"]
+        }
+    },
+    "QPSQL": {
+        "connect_timeout": {
+            "type": "UInt"
+        },
+        "options": {
+            "type": "QString"
+        },
+        "tty": {
+            "type": "QString"
+        },
+        "requiressl": {
+            "type": "QStringList",
+            "values": ["0", "1"]
+        },
+        "service": {
+            "type": "QString"
+        }
+    },
+    "QPSQL7": {
+        "connect_timeout": {
+            "type": "UInt"
+        },
+        "client_encoding": {
+            "type": "QString"
+        },
+        "options": {
+            "type": "QString"
+        },
+        "sslmode": {
+            "type": "QStringList",
+            "values": ["prefer", "disable", "allow", "require", "verify-ca", "verify-full"]
+        },
+        "krbsrvname": {
+            "type": "QString"
+        },
+        "gsslib": {
+            "type": "QString"
+        },
+        "service": {
+            "type": "QString"
+        }
+    },
+    "QOCI": {
+        "OCI_ATTR_PREFETCH_ROWS": {
+            "type": "UInt"
+        },
+        "OCI_ATTR_PREFETCH_MEMORY": {
+            "type": "UInt"
+        }
+    },
+    "QMYSQL": {
+        "CLIENT_COMPRESS": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "CLIENT_FOUND_ROWS": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "CLIENT_IGNORE_SPACE": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "CLIENT_ODBC": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "CLIENT_NO_SCHEMA": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "CLIENT_INTERACTIVE": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "UNIX_SOCKET": {
+            "type": "QString"
+        },
+        "MYSQL_OPT_RECONNECT": {
+            "type": "QStringList",
+            "values": ["TRUE", "FALSE"]
+        },
+        "MYSQL_OPT_CONNECT_TIMEOUT": {
+            "type": "UInt"
+        },
+        "MYSQL_OPT_READ_TIMEOUT": {
+            "type": "UInt"
+        },
+        "MYSQL_OPT_WRITE_TIMEOUT": {
+            "type": "UInt"
+        },
+        "SSL_KEY": {
+            "type": "QString"
+        },
+        "SSL_CERT": {
+            "type": "QString"
+        },
+        "SSL_CA": {
+            "type": "QString"
+        },
+        "SSL_CAPATH": {
+            "type": "QString"
+        },
+        "SSL_CIPHER": {
+            "type": "QString"
+        }
+    },
+    "QDB2": {
+        "SQL_ATTR_ACCESS_MODE": {
+            "type": "QStringList",
+            "values": ["SQL_MODE_READ_ONLY", "SQL_MODE_READ_WRITE"]
+        },
+        "SQL_ATTR_LOGIN_TIMEOUT": {
+            "type": "UInt"
+        },
+        "PROTOCOL": {
+            "type": "QString"
+        }
+    },
+    "QIBASE": {
+        "ISC_DPB_LC_CTYPE": {
+            "type":"QString"
+        },
+        "ISC_DPB_SQL_ROLE_NAME": {
+            "type":"QString"
+        }
+    },
+    "QTDS" : { }
+}
