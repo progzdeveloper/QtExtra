@@ -19,8 +19,8 @@ Dialog::Dialog(QWidget *parent)
 
     browser = new QtPropertyWidget(this);
     browser->setResource(resource);
-    browser->setGadget(gadget, gadget->metaObject());
-    //browser->setObject(widget);
+    //browser->setGadget(gadget, gadget->metaObject());
+    browser->setObject(widget);
     browser->setSubmitPolicy(QtPropertyWidget::AutoSubmit);
     browser->setViewType(QtPropertyWidget::TreeView);
 

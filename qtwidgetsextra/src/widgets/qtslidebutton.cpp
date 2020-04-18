@@ -46,7 +46,7 @@ void QtSlideButtonPrivate::updateSliderRect(const QSize& size)
 
 void QtSlideButtonPrivate::drawSlider(QPainter *painter)
 {
-    const qreal margin = 2;
+    const qreal margin = 4;
 
     QRectF r = q_ptr->rect().adjusted(0, 0, -1, -1);
     qreal dx = (r.width() - sliderShape.width()) * pos;
@@ -64,12 +64,12 @@ void QtSlideButtonPrivate::drawSlider(QPainter *painter)
 
     // draw background
     // draw background outer
-    gradient.setColorAt(0, shadow.darker(130));
-    gradient.setColorAt(1, light.darker(130));
+    gradient.setColorAt(0, light.darker(140));
+    gradient.setColorAt(1, light);
     gradient.setStart(0, r.height());
     gradient.setFinalStop(0, 0);
     painter->setBrush(gradient);
-    painter->drawRoundedRect(r, 7, 7);
+    painter->drawRoundedRect(r, 12, 12);
 
     // draw background inner
     gradient.setColorAt(0, internalShadow);
@@ -77,23 +77,23 @@ void QtSlideButtonPrivate::drawSlider(QPainter *painter)
     gradient.setStart(0, 0);
     gradient.setFinalStop(0, r.height());
     painter->setBrush(gradient);
-    painter->drawRoundedRect(r.adjusted(margin, margin, -margin, -margin), 7, 7);
+    painter->drawRoundedRect(r.adjusted(margin, margin, -margin, -margin), 12, 12);
 
     // draw slider
-    gradient.setColorAt(0, button.darker(130));
+    gradient.setColorAt(0, button.darker(120));
     gradient.setColorAt(1, button);
 
     // draw outer slider
     gradient.setStart(0, r.height());
     gradient.setFinalStop(0, 0);
     painter->setBrush(gradient);
-    painter->drawRoundedRect(sliderRect.adjusted(margin, margin, -margin, -margin), 7, 7);
+    painter->drawRoundedRect(sliderRect.adjusted(margin-1, margin-1, -margin+1, -margin+1), 12, 12);
 
     // draw inner slider
     gradient.setStart(0, 0);
     gradient.setFinalStop(0, r.height());
     painter->setBrush(gradient);
-    painter->drawRoundedRect(sliderRect.adjusted(2 * margin, 2 *  margin, -2 * margin, -2 * margin), 7, 7);
+    painter->drawRoundedRect(sliderRect.adjusted(2.1 * margin, 2.1 *  margin, -2.1 * margin, -2.1 * margin), 5, 5);
 
     // draw text
     if (animation->state() == QPropertyAnimation::Running)
@@ -137,7 +137,7 @@ QtSlideButton::~QtSlideButton()
 
 QSize QtSlideButton::sizeHint() const
 {
-    return QSize(48, 24);
+    return QSize(46, 32);
 }
 
 bool QtSlideButton::hitButton(const QPoint& p) const
