@@ -11,7 +11,7 @@ Thus some components and widgets may or may not work with versions older than Qt
 ## Documentation
 There is not so many documented classes as I wish, but I'm working hard to add documentation and examples.
 
-## Widget Gallerey
+## Widget Gallery
 Here are some examples of widgets that QtExtra provide:
 
 #### Color Widgets:
@@ -19,6 +19,9 @@ Here are some examples of widgets that QtExtra provide:
 
 #### Color Palette:
 ![Color Palette](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/color_palette.png)
+
+#### Spin boxes and sliders:
+![SpinBoxes and Sliders](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/spinboxes.png)
 
 #### Various Item Delegates:
 ![Various Item Delegates](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/item_delegates(1).png)
