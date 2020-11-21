@@ -51,7 +51,7 @@ void DemoWidget::insertWidget(QWidget *w)
 {
     //layout->addRow(Qt::className(w), w);
     QHBoxLayout* itemLayout = new QHBoxLayout;
-    itemLayout->addWidget(new QLabel(Qt::className(w)));
+    itemLayout->addWidget(new QLabel(QtExtra::className(w)));
     itemLayout->addWidget(w, 1);
     layout->addLayout(itemLayout);
 }

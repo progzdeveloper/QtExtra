@@ -80,7 +80,8 @@ HEADERS += \
     $$PWD/src/widgets/qtoverviewwidget.h \
     $$PWD/src/widgets/qtbuttonlocker.h \
     $$PWD/src/widgets/qtslidebutton.h \
-    $$PWD/src/widgets/qtslidebutton_p.h
+    $$PWD/src/widgets/qtslidebutton_p.h \
+    $$PWD/src/widgets/qtslidecheckbox.h
 
 
 SOURCES += \
@@ -159,7 +160,8 @@ SOURCES += \
     $$PWD/src/widgets/qtmessagelogwidget.cpp \
     $$PWD/src/widgets/qtoverviewwidget.cpp \
     $$PWD/src/widgets/qtbuttonlocker.cpp \
-    $$PWD/src/widgets/qtslidebutton.cpp
+    $$PWD/src/widgets/qtslidebutton.cpp \
+    $$PWD/src/widgets/qtslidecheckbox.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc

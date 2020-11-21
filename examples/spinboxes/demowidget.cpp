@@ -11,6 +11,7 @@
 #include <QtSpanSlider>
 
 #include <QtSlideButton>
+#include <QtSlideCheckBox>
 
 DemoWidget::DemoWidget(QWidget *parent)
     : QWidget(parent)
@@ -49,6 +50,14 @@ DemoWidget::DemoWidget(QWidget *parent)
 
     QtSlideButton* button = new QtSlideButton(this);
     insertWidget(button);
+
+    QtSlideCheckBox* checkBoxHor = new QtSlideCheckBox(this);
+    //checkBoxHor->setMaximumSize(checkBoxHor->minimumSizeHint());
+    insertWidget(checkBoxHor);
+
+    QtSlideCheckBox* checkBoxVer = new QtSlideCheckBox(Qt::Vertical, this);
+    //checkBoxVer->setMaximumSize(checkBoxVer->minimumSizeHint());
+    insertWidget(checkBoxVer);
 }
 
 DemoWidget::~DemoWidget()
@@ -58,9 +67,8 @@ DemoWidget::~DemoWidget()
 
 void DemoWidget::insertWidget(QWidget *w)
 {
-    //layout->addRow(Qt::className(w), w);
     QHBoxLayout* itemLayout = new QHBoxLayout;
-    itemLayout->addWidget(new QLabel(Qt::className(w)));
+    itemLayout->addWidget(new QLabel(QtExtra::className(w)));
     itemLayout->addWidget(w, 1);
     layout->addLayout(itemLayout);
 }

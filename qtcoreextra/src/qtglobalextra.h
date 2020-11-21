@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QMetaObject>
 
-namespace Qt
+namespace QtExtra
 {
     static inline const QMetaObject* metaObject(QObject* object) {
         return object->metaObject();
@@ -17,36 +17,37 @@ namespace Qt
         return &T::staticMetaObject;
     }
 
+    static inline const char* className(const QMetaObject *metaObject) {
+        return (metaObject == Q_NULLPTR ? "" : metaObject->className());
+    }
+
+    static inline const char* className(const QObject* object) {
+        return (object == Q_NULLPTR ? "" : QtExtra::className(object->metaObject()));
+    }
+
+    template<class T>
+    static inline const char* className() {
+        return QtExtra::className(QtExtra::metaObject<T>());
+    }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
     template<class _Base>
     static inline bool inherits(const QMetaObject* metaObject) {
-        return metaObject->inherits(Qt::metaObject<_Base>());
+        return metaObject->inherits(QtExtra::metaObject<_Base>());
     }
 #endif
 
     template<class _Base>
     static inline bool inherits(QObject* object) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
-        return Qt::inherits<_Base>(object->metaObject());
+        return QtExtra::inherits<_Base>(object->metaObject());
 #else
-        return object->inherits(Qt::className<_Base>());
+        return object->inherits(QtExtra::className<_Base>());
 #endif
     }
 
 
-    static inline const char* className(const QMetaObject *metaObject) {
-        return (metaObject == Q_NULLPTR ? "" : metaObject->className());
-    }
 
-    static inline const char* className(const QObject* object) {
-        return (object == Q_NULLPTR ? "" : Qt::className(object->metaObject()));
-    }
-
-    template<class T>
-    static inline const char* className() {
-        return className(Qt::metaObject<T>());
-    }
 }
 
 
