@@ -54,11 +54,11 @@ public:
         painter.drawRoundedRect(rect, r, r);
     }
 
-    void drawPill(QPainter& painter, const QSize& size)
+    void drawPill(QPainter& painter, const QSize& size, bool enabled)
     {
         static const int margin = 2;
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Qt::white);
+        painter.setBrush(enabled ? Qt::white : Qt::lightGray);
         qreal p = (orientation == Qt::Horizontal ? (size.width() - size.height()) : (size.height() - size.width()));
         qreal w = (orientation == Qt::Horizontal ? (size.height() - 2*margin) : (size.width() - 2*margin)) - 1;
         if (orientation == Qt::Horizontal)
@@ -164,7 +164,7 @@ void QtSlideCheckBox::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     d->drawBackground(painter, size(), checkState());
-    d->drawPill(painter, size());
+    d->drawPill(painter, size(), isEnabled());
 }
 
 bool QtSlideCheckBox::hitButton(const QPoint &pos) const
@@ -175,8 +175,7 @@ bool QtSlideCheckBox::hitButton(const QPoint &pos) const
 void QtSlideCheckBox::nextCheckState()
 {
     Q_D(QtSlideCheckBox);
-    Qt::CheckState state = checkState();
-    d->timeLine->setDirection(state == Qt::Unchecked ? QTimeLine::Forward : QTimeLine::Backward);
+    d->timeLine->setDirection(checkState() == Qt::Unchecked ? QTimeLine::Forward : QTimeLine::Backward);
     d->timeLine->start();
     setChecked(!isChecked());
 }
