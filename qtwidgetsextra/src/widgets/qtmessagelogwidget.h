@@ -108,15 +108,15 @@ public Q_SLOTS:
 
     // QAbstractScrollArea interface
 protected:
-    virtual void scrollContentsBy(int dx, int dy);
+    void scrollContentsBy(int dx, int dy) Q_DECL_OVERRIDE;
 
     // QWidget interface
 protected:
-    virtual void paintEvent( QPaintEvent * ) Q_DECL_OVERRIDE;
-    virtual void timerEvent( QTimerEvent * ) Q_DECL_OVERRIDE;
-    virtual void resizeEvent(QResizeEvent * ) Q_DECL_OVERRIDE;
-    virtual void changeEvent( QEvent * ) Q_DECL_OVERRIDE;
-    virtual void keyPressEvent(QKeyEvent * ) Q_DECL_OVERRIDE;
+    void paintEvent( QPaintEvent * ) Q_DECL_OVERRIDE;
+    void timerEvent( QTimerEvent * ) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent * ) Q_DECL_OVERRIDE;
+    void changeEvent( QEvent * ) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent * ) Q_DECL_OVERRIDE;
 
 private:
     QT_PIMPL(QtMessageLogWidget)

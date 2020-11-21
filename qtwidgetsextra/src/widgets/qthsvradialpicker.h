@@ -18,7 +18,7 @@ public:
 
     int value() const;
 
-    QSize minimumSizeHint() const;
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     const QColor color() const;
 

@@ -13,14 +13,14 @@ class QTWIDGETSEXTRA_EXPORT QtColorSelector : public QWidget
     Q_DISABLE_COPY(QtColorSelector)
 
 public:
-    explicit QtColorSelector(QWidget *parent = nullptr);
+    explicit QtColorSelector(QWidget *parent = Q_NULLPTR);
     ~QtColorSelector();
 
     const QColor &foregroundColor() const;
     const QColor &backgroundColor() const;
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     bool dragEnabled() const;
     void setDragEnabled(bool);

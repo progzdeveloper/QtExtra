@@ -34,7 +34,7 @@ public:
     Q_DECLARE_FLAGS(SlideEffects, SlideEffect)
 
 
-    QtSlideController(QObject* parent = Q_NULLPTR);
+    explicit QtSlideController(QObject* parent = Q_NULLPTR);
     ~QtSlideController();
 
     void setWidget(QStackedWidget* w);
@@ -55,7 +55,7 @@ public Q_SLOTS:
     void setDuration(int ms);
 
 protected:
-    bool eventFilter(QObject* obj, QEvent* e);
+    bool eventFilter(QObject* obj, QEvent* e) Q_DECL_OVERRIDE;
 
     QWidget* currentWidget() const;
 
@@ -69,6 +69,7 @@ private Q_SLOTS:
     void onCurrentChange(int i);
     void onAnimationFinished();
     void render(qreal value);
+
 private:
     QT_PIMPL(QtSlideController)
 };

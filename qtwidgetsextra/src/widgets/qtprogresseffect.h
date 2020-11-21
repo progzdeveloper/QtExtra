@@ -17,7 +17,7 @@ class QTWIDGETSEXTRA_EXPORT QtProgressEffect :
 public:
     explicit QtProgressEffect(QObject* parent = Q_NULLPTR);
     explicit QtProgressEffect(QWidget* widget, QObject* parent = Q_NULLPTR);
-    virtual ~QtProgressEffect();
+    ~QtProgressEffect();
 
     qreal opacity() const;
     int minimum() const;
@@ -39,11 +39,11 @@ Q_SIGNALS:
 
     // QGraphicsEffect interface
 protected:
-    virtual void draw(QPainter *painter) Q_DECL_OVERRIDE;
+    void draw(QPainter *painter) Q_DECL_OVERRIDE;
 
     // QObject interface
 protected:
-    virtual void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QT_PIMPL(QtProgressEffect)

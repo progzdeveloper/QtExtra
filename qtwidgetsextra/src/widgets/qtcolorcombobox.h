@@ -18,7 +18,7 @@ class QTWIDGETSEXTRA_EXPORT QtColorComboBox :
     Q_DISABLE_COPY(QtColorComboBox)
 
 public:
-    explicit QtColorComboBox(QWidget *parent = 0);
+    explicit QtColorComboBox(QWidget *parent = Q_NULLPTR);
     ~QtColorComboBox();
 
     void setStandardColors();
@@ -45,9 +45,9 @@ Q_SIGNALS:
     void activated(const QColor &);
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *e);
-    void dragEnterEvent(QDragEnterEvent *);
-    void dropEvent(QDropEvent *);
+    bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *) Q_DECL_OVERRIDE;
 
 private slots:
     void slotActivated(int);

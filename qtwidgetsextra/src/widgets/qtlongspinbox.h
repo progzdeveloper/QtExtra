@@ -22,7 +22,7 @@ public:
     QtLongSpinBox(qlonglong minimum, qlonglong maximum, QWidget* parent = Q_NULLPTR);
     ~QtLongSpinBox();
 
-    virtual void stepBy ( int steps ) Q_DECL_OVERRIDE;
+    void stepBy ( int steps ) Q_DECL_OVERRIDE;
 
     qlonglong value() const;
 
@@ -46,8 +46,8 @@ public:
     void setDisplayIntegerBase(int base);
     int displayIntegerBase() const;
 
-    virtual QValidator::State validate ( QString & input, int & pos ) const Q_DECL_OVERRIDE;
-    virtual void fixup ( QString & input ) const Q_DECL_OVERRIDE;
+    QValidator::State validate ( QString & input, int & pos ) const Q_DECL_OVERRIDE;
+    void fixup ( QString & input ) const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void setValue(qlonglong v);
@@ -59,7 +59,7 @@ Q_SIGNALS:
 protected:
     virtual QString textFromValue(qlonglong value) const;
     virtual qlonglong valueFromText(const QString &text) const;
-    virtual StepEnabled stepEnabled() const Q_DECL_OVERRIDE;
+    StepEnabled stepEnabled() const Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotEditorTextChanged(const QString &t);

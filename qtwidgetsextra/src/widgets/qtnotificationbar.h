@@ -10,7 +10,7 @@ class QTWIDGETSEXTRA_EXPORT QtNotificationBar :
     Q_OBJECT
     Q_DISABLE_COPY(QtNotificationBar)
 public:
-    explicit QtNotificationBar(QWidget *parent = 0);
+    explicit QtNotificationBar(QWidget *parent = Q_NULLPTR);
     ~QtNotificationBar();
 
     bool isAnimated() const;

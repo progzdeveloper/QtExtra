@@ -13,8 +13,8 @@ class QTWIDGETSEXTRA_EXPORT QtOptionsWidget :
     Q_OBJECT
     Q_DISABLE_COPY(QtOptionsWidget)
 public:
-    explicit QtOptionsWidget(QWidget *parent = 0);
-    virtual ~QtOptionsWidget();
+    explicit QtOptionsWidget(QWidget *parent = Q_NULLPTR);
+    ~QtOptionsWidget();
 
     int addWidget ( QWidget * widget );
     int count () const;

@@ -28,8 +28,7 @@ Q_SIGNALS:
     void amountChanged(int);
     void spanChanged(int);
 private:
-    QScopedPointer<class QtDateSpanEditPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(QtDateSpanEdit)
+    QT_PIMPL(QtDateSpanEdit)
 };
 
 
@@ -39,7 +38,7 @@ class QTWIDGETSEXTRA_EXPORT QtDateRangeEdit : public QWidget
     Q_OBJECT
 
 public:
-    QtDateRangeEdit(QWidget *parent = 0);
+    explicit QtDateRangeEdit(QWidget *parent = Q_NULLPTR);
     ~QtDateRangeEdit();
 
     QDateTime lowerDateTime() const;
@@ -58,9 +57,9 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void rangeChanged(const QDateTime& lower, const QDateTime& upper);
+
 private:
-    QScopedPointer<class QtDateRangeEditPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(QtDateRangeEdit)
+    QT_PIMPL(QtDateRangeEdit)
 };
 
 #endif // QTDATERANGEEDIT_H

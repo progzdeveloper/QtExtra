@@ -12,7 +12,7 @@ class QTWIDGETSEXTRA_EXPORT QtButtonLocker : public QObject
 {
     Q_OBJECT
 public:
-    explicit QtButtonLocker(QObject *parent = nullptr);
+    explicit QtButtonLocker(QObject *parent = Q_NULLPTR);
     ~QtButtonLocker();
 
     void setIcon(const QIcon& icon);
@@ -20,7 +20,7 @@ public:
 
     // QObject interface
 public:
-    virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 protected:
     virtual void lock(QAbstractButton* button);

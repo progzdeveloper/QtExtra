@@ -33,7 +33,7 @@ public:
     Q_DECLARE_FLAGS(Fields, Field)
     Q_FLAG(Fields)
 
-    explicit QtMessageLogView(QWidget *parent = nullptr);
+    explicit QtMessageLogView(QWidget *parent = Q_NULLPTR);
     ~QtMessageLogView();
 
     QAbstractItemModel* model() const;

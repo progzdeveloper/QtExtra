@@ -15,7 +15,7 @@ public:
     QtTextSpinBox(const QStringList &list, QWidget *parent = Q_NULLPTR);
     ~QtTextSpinBox();
 
-    QValidator::State validate(QString& input, int& pos ) const;
+    QValidator::State validate(QString& input, int& pos ) const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     virtual void setList(const QStringList &s);

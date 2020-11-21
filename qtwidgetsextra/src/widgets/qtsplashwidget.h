@@ -12,9 +12,10 @@ class QTWIDGETSEXTRA_EXPORT QtSplashWidget :
 public:
     explicit QtSplashWidget(QWidget *parent);
 
-    QtSplashWidget(const QPixmap& pixmap = QPixmap(),
+    explicit QtSplashWidget(const QPixmap& pixmap = QPixmap(),
                    const QString& title = QString(),
                    const QString& copyright = QString(),
+                   QWidget *parent = Q_NULLPTR,
                    Qt::WindowFlags f = 0);
 
     ~QtSplashWidget();
@@ -48,8 +49,8 @@ Q_SIGNALS:
     void messageChanged(const QString& text);
 
 protected:
-    void drawContents(QPainter *painter);
-    void paintEvent(QPaintEvent *);
+    virtual void drawContents(QPainter *painter);
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 private:
     QT_PIMPL(QtSplashWidget)
 };

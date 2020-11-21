@@ -11,7 +11,7 @@ class QTWIDGETSEXTRA_EXPORT QtContentView :
     friend class LineNumberArea;
 
 public:
-    explicit QtContentView(QWidget *parent = 0);
+    explicit QtContentView(QWidget *parent = Q_NULLPTR);
     ~QtContentView(void);
 
     bool lineNumbersShown() const;
@@ -25,7 +25,7 @@ private Q_SLOTS:
     void highlightCurrentLine();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void lineNumberAreaPaintEvent(QPaintEvent *event);

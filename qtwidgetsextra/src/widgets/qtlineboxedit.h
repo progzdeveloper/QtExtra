@@ -15,8 +15,9 @@ class QTWIDGETSEXTRA_EXPORT QtLineBoxEdit :
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_DISABLE_COPY(QtLineBoxEdit)
 public:
-    explicit QtLineBoxEdit(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit QtLineBoxEdit(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = 0);
     ~QtLineBoxEdit();
+
     QString text() const;
     QString placeholderText() const;
     bool isReadOnly() const;
@@ -49,18 +50,18 @@ class QTWIDGETSEXTRA_EXPORT QtLineBoxDelegate :
     Q_OBJECT
     Q_DISABLE_COPY(QtLineBoxDelegate)
 public:
-    explicit QtLineBoxDelegate(QObject *parent = 0);
+    explicit QtLineBoxDelegate(QObject *parent = Q_NULLPTR);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
+                          const QModelIndex &index) const Q_DECL_OVERRIDE;
 
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     void setModelData(QWidget *editor, QAbstractItemModel *model,
-                      const QModelIndex &index) const;
+                      const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option,
-                              const QModelIndex &index) const;
+                              const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 };
 

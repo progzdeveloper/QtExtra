@@ -31,7 +31,7 @@ public Q_SLOTS:
 
     // QAbstractItemView interface
 protected Q_SLOTS:
-    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous) Q_DECL_OVERRIDE;
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void resizeIcons(const QSize& size);
@@ -42,10 +42,10 @@ Q_SIGNALS:
 
     // QWidget interface
 protected:
-    virtual void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    virtual void setModel(QAbstractItemModel *model) Q_DECL_OVERRIDE;
+    void setModel(QAbstractItemModel *model) Q_DECL_OVERRIDE;
 
 private:
     QT_PIMPL(QtColorGrid)

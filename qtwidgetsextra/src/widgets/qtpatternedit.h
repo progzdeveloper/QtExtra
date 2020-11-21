@@ -10,7 +10,6 @@ class QTWIDGETSEXTRA_EXPORT QtPatternEdit :
     Q_OBJECT
     Q_PROPERTY(Options options READ options WRITE setOptions NOTIFY optionsChanged)
 
-
 public:
     enum Option
     {

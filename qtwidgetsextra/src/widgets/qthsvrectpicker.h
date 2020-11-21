@@ -21,8 +21,9 @@ public:
     explicit QtHsvRectPicker(QWidget *parent = Q_NULLPTR);
     ~QtHsvRectPicker();
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+
     int value() const;
     QColor color() const;
     int minimumSat() const;
@@ -39,6 +40,7 @@ public Q_SLOTS:
     void setMinimumHue(int h);
     void setMaximumHue(int h);
     void setColor(const QColor &c);
+
 Q_SIGNALS:
     void valueChanged(int);
     void minimumHueChanged(int);
@@ -47,13 +49,15 @@ Q_SIGNALS:
     void maximumSatChanged(int);
     void satRangeChanged(int, int);
     void hueRangeChanged(int, int);
-    void colorChanged(const QColor& );
+    void colorChanged(const QColor&);
+
 protected:
     virtual void drawCrosshair(QPainter *painter, const QPoint &pt);
-    void paintEvent(QPaintEvent *pe);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void resizeEvent(QResizeEvent *);
+
+    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
 private:
     QT_PIMPL(QtHsvRectPicker)
 };

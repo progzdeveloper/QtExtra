@@ -104,9 +104,10 @@ QtSplashWidget::QtSplashWidget( QWidget *parent ) :
 QtSplashWidget::QtSplashWidget( const QPixmap& pixmap /*= QPixmap()*/, 
                                 const QString& title /*= QString()*/,
                                 const QString& copyright /*= QString()*/,
+                                QWidget* parent, /*= Q_NULLPTR*/
                                 Qt::WindowFlags f /*= 0*/ ) :
     //QWidget(0, Qt::SplashScreen|f),
-    QFrame(Q_NULLPTR, f|Qt::Popup|Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus),
+    QFrame(parent, f|Qt::Popup|Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus),
     d_ptr(new QtSplashWidgetPrivate(this))
 {
     Q_D(QtSplashWidget);

@@ -23,9 +23,9 @@ public:
     };
     Q_ENUM(PopupStyle)
 
-    explicit QtColorButton(QWidget* parent = 0);
-    QtColorButton(const QStringList& colorNames, QWidget* parent = Q_NULLPTR);
-    QtColorButton(const QtColorSet& colorSet, QWidget* parent = Q_NULLPTR);
+    explicit QtColorButton(QWidget* parent = Q_NULLPTR);
+    explicit QtColorButton(const QStringList& colorNames, QWidget* parent = Q_NULLPTR);
+    explicit QtColorButton(const QtColorSet& colorSet, QWidget* parent = Q_NULLPTR);
 
     ~QtColorButton();
 
@@ -47,6 +47,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void colorChanged(const QColor& c);
     void popupStyleChanged(PopupStyle);
+
 private:
     QT_PIMPL(QtColorButton)
 };

@@ -10,7 +10,7 @@ class QtColorGridModel :
 {
     Q_OBJECT
 public:
-    explicit QtColorGridModel(QObject* parent);
+    explicit QtColorGridModel(QObject* parent = Q_NULLPTR);
     ~QtColorGridModel();
 
     void setPalette(const QtColorPalette& palette);
@@ -38,7 +38,7 @@ public:
 
     // QAbstractItemDelegate interface
 public:
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 };
 
 #endif // QTCOLORGRID_P_H

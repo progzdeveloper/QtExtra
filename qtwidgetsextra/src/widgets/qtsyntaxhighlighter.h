@@ -14,8 +14,7 @@ class QTWIDGETSEXTRA_EXPORT QtSyntaxHighlighter :
 public:
     explicit QtSyntaxHighlighter(QObject* parent = Q_NULLPTR);
     explicit QtSyntaxHighlighter(QTextDocument *parent);
-
-    virtual ~QtSyntaxHighlighter();
+    ~QtSyntaxHighlighter();
 
     void load(const QJsonObject& json);
     void load(const QJsonDocument& json);
@@ -26,7 +25,7 @@ public:
 
     // QSyntaxHighlighter interface
 protected:
-    virtual void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
+    void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
 
 private:
     QT_PIMPL(QtSyntaxHighlighter)

@@ -15,7 +15,7 @@ class QTWIDGETSEXTRA_EXPORT QtEditDialog :
     Q_DISABLE_COPY(QtEditDialog)
 public:
     explicit QtEditDialog(QWidget *parent = Q_NULLPTR);
-    QtEditDialog(QItemEditorFactory* factory, QWidget* parent = Q_NULLPTR);
+    explicit QtEditDialog(QItemEditorFactory* factory, QWidget* parent = Q_NULLPTR);
     ~QtEditDialog();
 
     template<int _UserType, class _Editor>

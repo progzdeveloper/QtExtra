@@ -16,7 +16,7 @@ class QTWIDGETSEXTRA_EXPORT QtPlaceholderEffect :
 public:
     explicit QtPlaceholderEffect(QAbstractItemModel* model, const QString& text = QString(), QObject* parent = Q_NULLPTR);
     explicit QtPlaceholderEffect(QAbstractItemView* view, const QString& text = QString(), QObject* parent = Q_NULLPTR);
-    virtual ~QtPlaceholderEffect();
+    ~QtPlaceholderEffect();
 
     void setOpacity(qreal opacity);
     qreal opacity() const;
@@ -32,13 +32,14 @@ public:
 
     // QGraphicsEffect interface
 protected:
-    virtual void draw(QPainter *painter) Q_DECL_OVERRIDE;
-    virtual void sourceChanged(ChangeFlags flags) Q_DECL_OVERRIDE;
+    void draw(QPainter *painter) Q_DECL_OVERRIDE;
+    void sourceChanged(ChangeFlags flags) Q_DECL_OVERRIDE;
 
     // QObject interface
 protected:
-    virtual bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
-    virtual void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+
 Q_SIGNALS:
     void opacityChanged(qreal);
     void linkActivated(const QString&);

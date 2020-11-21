@@ -29,7 +29,7 @@ public:
     Q_ENUM(SpanType)
 
     explicit QtDateRange(QObject *parent = Q_NULLPTR);
-    explicit QtDateRange(const QDateTime& lower, const QDateTime& upper, QObject* parent = Q_NULLPTR);
+    QtDateRange(const QDateTime& lower, const QDateTime& upper, QObject* parent = Q_NULLPTR);
     ~QtDateRange();
 
     const QDateTime& lower() const;
@@ -43,6 +43,7 @@ public:
     QDateTime adjusted(const QDateTime& dt, int amount) const;
 
     QString intervalText() const;
+
 public Q_SLOTS:
     void setStep(int step);
     void setLower(const QDateTime& dt);
