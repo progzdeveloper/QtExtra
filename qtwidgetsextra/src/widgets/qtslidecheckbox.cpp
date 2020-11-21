@@ -129,6 +129,8 @@ void QtSlideCheckBox::setOrientation(Qt::Orientation orientation)
     d->orientation = orientation;
     d->updateSizePolicy();
     update();
+
+    Q_EMIT orientationChanged(orientation);
 }
 
 Qt::Orientation QtSlideCheckBox::orientation() const
