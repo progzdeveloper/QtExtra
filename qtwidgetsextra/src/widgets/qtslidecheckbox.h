@@ -15,6 +15,9 @@ public:
     explicit QtSlideCheckBox(Qt::Orientation orientation, QWidget* parent = Q_NULLPTR);
     ~QtSlideCheckBox();
 
+    void setSpacing(int m);
+    int spacing() const;
+
     void setAnimated(bool on);
     bool isAnimated() const;
 

@@ -34,7 +34,12 @@ public:
     void setColors(const QtColorSet& colorSet);
     QtColorSet colors() const;
 
+    void setGridWidth(int width);
+    int gridWidth() const;
+
     PopupStyle popupStyle() const;
+
+    void updateMenu();
 
 public Q_SLOTS:
     void setColor(const QColor& c);

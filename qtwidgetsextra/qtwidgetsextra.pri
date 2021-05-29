@@ -81,7 +81,10 @@ HEADERS += \
     $$PWD/src/widgets/qtbuttonlocker.h \
     $$PWD/src/widgets/qtslidebutton.h \
     $$PWD/src/widgets/qtslidebutton_p.h \
-    $$PWD/src/widgets/qtslidecheckbox.h
+    $$PWD/src/widgets/qtslidecheckbox.h \
+    $$PWD/src/widgets/qtfloatingtoolbutton.h \
+    $$PWD/src/widgets/qtsnackbar.h \
+    $$PWD/src/widgets/qtcardwidget.h
 
 
 SOURCES += \
@@ -161,7 +164,10 @@ SOURCES += \
     $$PWD/src/widgets/qtoverviewwidget.cpp \
     $$PWD/src/widgets/qtbuttonlocker.cpp \
     $$PWD/src/widgets/qtslidebutton.cpp \
-    $$PWD/src/widgets/qtslidecheckbox.cpp
+    $$PWD/src/widgets/qtslidecheckbox.cpp \
+    $$PWD/src/widgets/qtfloatingtoolbutton.cpp \
+    $$PWD/src/widgets/qtsnackbar.cpp \
+    $$PWD/src/widgets/qtcardwidget.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc

@@ -11,13 +11,17 @@ public:
     QTimeLine* timeLine;
     QColor background[2];
     Qt::Orientation orientation;
+    int spacing;
     qreal position;
     bool animated;
 
     QtSlideCheckBoxPrivate(Qt::Orientation o, QtSlideCheckBox* q) :
         q_ptr(q),
         timeLine(new QTimeLine(kAnimationDuration, q)),
-        orientation(o)
+        orientation(o),
+        spacing(2),
+        position(0),
+        animated(true)
     {
         timeLine->setUpdateInterval(20); // ~50 FPS
         background[0] = Qt::gray;
@@ -96,6 +100,20 @@ QtSlideCheckBox::~QtSlideCheckBox()
 {
 }
 
+void QtSlideCheckBox::setSpacing(int m)
+{
+    Q_D(QtSlideCheckBox);
+    d->spacing = m;
+    if (isVisible())
+        update();
+}
+
+int QtSlideCheckBox::spacing() const
+{
+    Q_D(const QtSlideCheckBox);
+    return d->spacing;
+}
+
 void QtSlideCheckBox::setAnimated(bool on)
 {
     Q_D(QtSlideCheckBox);
@@ -128,7 +146,8 @@ void QtSlideCheckBox::setOrientation(Qt::Orientation orientation)
 
     d->orientation = orientation;
     d->updateSizePolicy();
-    update();
+    if (isVisible())
+        update();
 
     Q_EMIT orientationChanged(orientation);
 }
@@ -175,7 +194,10 @@ bool QtSlideCheckBox::hitButton(const QPoint &pos) const
 void QtSlideCheckBox::nextCheckState()
 {
     Q_D(QtSlideCheckBox);
-    d->timeLine->setDirection(checkState() == Qt::Unchecked ? QTimeLine::Forward : QTimeLine::Backward);
-    d->timeLine->start();
-    setChecked(!isChecked());
+    if (d->animated && isVisible()) {
+        d->timeLine->setDirection(checkState() == Qt::Unchecked ? QTimeLine::Forward : QTimeLine::Backward);
+        d->timeLine->start();
+    }
+    QAbstractButton::nextCheckState();
+    QCheckBox::checkStateSet();
 }

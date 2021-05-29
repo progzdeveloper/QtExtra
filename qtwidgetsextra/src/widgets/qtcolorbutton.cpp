@@ -20,6 +20,7 @@ public:
     QColor color;
     QMenu* menu;
     QtColorButton::PopupStyle popupStyle;
+    int gridWidth;
 
     QtColorButtonPrivate(QtColorButton* q);
     void initUi();
@@ -34,14 +35,17 @@ public:
     void createGridMenu(const QStringList& names);
     void createGridMenu(const QtColorSet& colors);
     void createGridMenu(const QtColorSet& colors, const QStringList& names);
+    void setupColorGrid(QtColorGrid* grid);
 
+    void recreateMenu();
     void resetMenu();
 };
 
 QtColorButtonPrivate::QtColorButtonPrivate(QtColorButton * q) :
     q_ptr(q),
     menu(Q_NULLPTR),
-    popupStyle(QtColorButton::GridPopup)
+    popupStyle(QtColorButton::GridPopup),
+    gridWidth(-1)
 {
 }
 
@@ -91,9 +95,7 @@ QAction *QtColorButtonPrivate::createAction(const QColor &c, const QString &name
 
 void QtColorButtonPrivate::createListMenu(const QStringList& names)
 {
-    if (menu)
-        delete menu;
-    menu = new QMenu(q_ptr);
+    recreateMenu();
     for (auto it = names.begin(); it != names.end(); ++it) {
         QAction* action = createAction(*it);
         if (action)
@@ -103,9 +105,7 @@ void QtColorButtonPrivate::createListMenu(const QStringList& names)
 
 void QtColorButtonPrivate::createListMenu(const QtColorSet& colors)
 {
-    if (menu)
-        delete menu;
-    menu = new QMenu(q_ptr);
+    recreateMenu();
     for (auto it = colors.begin(); it != colors.end(); ++it)
     {
         QAction* action = createAction(*it);
@@ -116,9 +116,8 @@ void QtColorButtonPrivate::createListMenu(const QtColorSet& colors)
 
 void QtColorButtonPrivate::createListMenu(const QtColorSet& colors, const QStringList& names)
 {
-    if (menu)
-        delete menu;
-    menu = new QMenu(q_ptr);
+    recreateMenu();
+
     auto nameIt = names.begin();
     for (auto it = colors.begin(); it != colors.end(); ++it, ++nameIt)
     {
@@ -130,34 +129,45 @@ void QtColorButtonPrivate::createListMenu(const QtColorSet& colors, const QStrin
 
 void QtColorButtonPrivate::createGridMenu(const QStringList &names)
 {
-    if (menu)
-        delete menu;
-    menu = new QMenu(q_ptr);
+    recreateMenu();
+
     QtColorGrid* grid = new QtColorGrid(menu);
+
     QtColorSet colors;
     for (auto it = names.begin(); it != names.end(); ++it) {
         colors << QColor(*it);
     }
-    int width = 8 * grid->iconSize().width() + grid->iconSize().width() - 3;
     grid->setColors(colors);
-    grid->setFixedWidth(width);
-    QObject::connect(grid, SIGNAL(colorChanged(QColor)), q_ptr, SLOT(setColor(QColor)));
-    QWidgetAction* action = new QWidgetAction(menu);
-    action->setDefaultWidget(grid);
-    menu->addAction(action);
 
-    menu->setFixedWidth(width);
+    setupColorGrid(grid);
 }
 
 void QtColorButtonPrivate::createGridMenu(const QtColorSet &colors)
 {
-    if (menu)
-        delete menu;
-    menu = new QMenu(q_ptr);
+    recreateMenu();
 
     QtColorGrid* grid = new QtColorGrid(menu);
-    int width = 8 * grid->iconSize().width() + grid->iconSize().width() - 3;
     grid->setColors(colors);
+
+    setupColorGrid(grid);
+}
+
+void QtColorButtonPrivate::createGridMenu(const QtColorSet &colors, const QStringList &)
+{
+    recreateMenu();
+
+    QtColorGrid* grid = new QtColorGrid(menu);
+    grid->setColors(colors);
+
+    setupColorGrid(grid);
+}
+
+void QtColorButtonPrivate::setupColorGrid(QtColorGrid *grid)
+{
+    const QSize s = q_ptr->iconSize();
+    int width = gridWidth == -1 ? (8 * s.width() + s.width() - 3) : gridWidth;
+
+    grid->setIconSize(s);
     grid->setFixedWidth(width);
     QObject::connect(grid, SIGNAL(colorChanged(QColor)), q_ptr, SLOT(setColor(QColor)));
 
@@ -168,23 +178,11 @@ void QtColorButtonPrivate::createGridMenu(const QtColorSet &colors)
     menu->setFixedWidth(width);
 }
 
-void QtColorButtonPrivate::createGridMenu(const QtColorSet &colors, const QStringList &)
+void QtColorButtonPrivate::recreateMenu()
 {
     if (menu)
         delete menu;
     menu = new QMenu(q_ptr);
-
-    QtColorGrid* grid = new QtColorGrid(menu);
-    int width = 8 * grid->iconSize().width() + grid->iconSize().width() - 3;
-    grid->setColors(colors);
-    grid->setFixedWidth(width);
-    QObject::connect(grid, SIGNAL(colorChanged(QColor)), q_ptr, SLOT(setColor(QColor)));
-
-    QWidgetAction* action = new QWidgetAction(menu);
-    action->setDefaultWidget(grid);
-    menu->addAction(action);
-
-    menu->setFixedWidth(width);
 }
 
 void QtColorButtonPrivate::resetMenu()
@@ -310,6 +308,18 @@ QtColorSet QtColorButton::colors() const
     return colorSet;
 }
 
+void QtColorButton::setGridWidth(int width)
+{
+    Q_D(QtColorButton);
+    d->gridWidth = width;
+}
+
+int QtColorButton::gridWidth() const
+{
+    Q_D(const QtColorButton);
+    return d->gridWidth;
+}
+
 void QtColorButton::setPopupStyle(QtColorButton::PopupStyle style)
 {
     Q_D(QtColorButton);
@@ -325,6 +335,12 @@ QtColorButton::PopupStyle QtColorButton::popupStyle() const
 {
     Q_D(const QtColorButton);
     return d->popupStyle;
+}
+
+void QtColorButton::updateMenu()
+{
+    Q_D(QtColorButton);
+    d->resetMenu();
 }
 
 

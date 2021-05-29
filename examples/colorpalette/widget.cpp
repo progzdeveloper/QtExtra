@@ -38,7 +38,7 @@ Widget::Widget(QWidget *parent)
     connect(hSizeEdit, SIGNAL(valueChanged(int)), SLOT(setIconHeight(int)));
 
     colorLabel = new QLabel(tr("Color: <unspecified>"), this);
-    connect(colorGrid, SIGNAL(colorChanged(QColor)), SLOT(selected(QColor)));
+    connect(colorGrid, SIGNAL(colorChanged(QColor)), SLOT(colorSelected(QColor)));
 
     QHBoxLayout* sizeLayout = new QHBoxLayout;
     sizeLayout->addWidget(new QLabel(tr("Icon Size:")));
