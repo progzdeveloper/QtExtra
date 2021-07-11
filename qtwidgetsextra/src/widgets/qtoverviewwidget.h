@@ -9,12 +9,20 @@ class QAbstractScrollArea;
 class QTWIDGETSEXTRA_EXPORT QtOverviewWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool updatable READ isUpdatable WRITE setUpdatable)
+    Q_PROPERTY(int updateInterval READ updateInterval WRITE setUpdateInterval NOTIFY updateIntervalChanged)
 public:
     explicit QtOverviewWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags flags = Qt::WindowFlags(0));
     ~QtOverviewWidget();
 
     void setArea(QAbstractScrollArea* area);
     QAbstractScrollArea* area() const;
+
+    void setUpdatable(bool on);
+    bool isUpdatable();
+
+    void setUpdateInterval(int msec);
+    int updateInterval() const;
 
     // QObject interface
 protected:
@@ -38,6 +46,9 @@ private Q_SLOTS:
     void updatePixmap();
     void updateContentRect();
     void refresh();
+
+Q_SIGNALS:
+    void updateIntervalChanged(int);
 
 private:
     QT_PIMPL(QtOverviewWidget)

@@ -15,6 +15,8 @@
 #include <QPaintEngine>
 #include <QTimer>
 
+#include <QScopedValueRollback>
+
 static QPoint invalidPoint(-1, -1);
 
 class QtOverviewWidgetPrivate
@@ -22,18 +24,31 @@ class QtOverviewWidgetPrivate
 public:
     QtOverviewWidget* q_ptr;
     QPointer<QAbstractScrollArea> area;
+    QTimer* timer;
     QPixmap pixmap;
     QRect pixmapRect;
     QRect contentRect;
     QPoint pos;
+    bool updatable;
+    bool updating;
 
+    void createTimer();
     QPointF scaleFactor() const;
     void grabViewport();
     void updateContentRect();
 
     QtOverviewWidgetPrivate(QtOverviewWidget* q) :
-        q_ptr(q) {}
+        q_ptr(q), pos(invalidPoint),
+        updatable(false), updating(false)
+    {}
 };
+
+void QtOverviewWidgetPrivate::createTimer()
+{
+    timer = new QTimer(q_ptr);
+    timer->setInterval(100);
+    QObject::connect(timer, &QTimer::timeout, q_ptr, &QtOverviewWidget::updatePixmap);
+}
 
 QPointF QtOverviewWidgetPrivate::scaleFactor() const
 {
@@ -50,6 +65,9 @@ QPointF QtOverviewWidgetPrivate::scaleFactor() const
 
 void QtOverviewWidgetPrivate::grabViewport()
 {
+    if (updating)
+        return;
+
     if (!area)
         return;
 
@@ -68,7 +86,10 @@ void QtOverviewWidgetPrivate::grabViewport()
     int width = hbar->maximum() + hbar->pageStep();
     int height = vbar->maximum() + vbar->pageStep();
 
-    pixmap = viewport->grab(QRect(0, 0, width, height)).scaled(q_ptr->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    {
+        QScopedValueRollback<bool> lock(updating, true);
+        pixmap = viewport->grab(QRect(0, 0, width, height)).scaled(q_ptr->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
 
     hbar->setValue(oldPos.x());
     vbar->setValue(oldPos.y());
@@ -110,6 +131,9 @@ QtOverviewWidget::QtOverviewWidget(QWidget *parent, Qt::WindowFlags flags) :
 {
     setMouseTracking(true);
     setCursor(Qt::ArrowCursor);
+
+    Q_D(QtOverviewWidget);
+    d->createTimer();
 }
 
 QtOverviewWidget::~QtOverviewWidget()
@@ -150,6 +174,36 @@ QAbstractScrollArea *QtOverviewWidget::area() const
 {
     Q_D(const QtOverviewWidget);
     return d->area;
+}
+
+void QtOverviewWidget::setUpdatable(bool on)
+{
+    Q_D(QtOverviewWidget);
+    d->updatable = on;
+    if (isVisible() && d->area)
+        d->timer->start();
+}
+
+bool QtOverviewWidget::isUpdatable()
+{
+    Q_D(const QtOverviewWidget);
+    return d->updatable;
+}
+
+void QtOverviewWidget::setUpdateInterval(int msec)
+{
+    Q_D(QtOverviewWidget);
+    if (d->timer->interval() == msec)
+        return;
+
+    d->timer->setInterval(msec);
+    Q_EMIT updateIntervalChanged(msec);
+}
+
+int QtOverviewWidget::updateInterval() const
+{
+    Q_D(const QtOverviewWidget);
+    return d->timer->interval();
 }
 
 void QtOverviewWidget::updatePixmap()
@@ -225,10 +279,14 @@ bool QtOverviewWidget::eventFilter(QObject *watched, QEvent *event)
         break;
     case QEvent::Resize:
         if (watched == viewport || watched == d->area)
-        {
-            d->updateContentRect();
-            updatePixmap();
-        }
+            refresh();
+        break;
+    case QEvent::EnabledChange:
+    case QEvent::FontChange:
+    case QEvent::StyleChange:
+    case QEvent::PaletteChange:
+        if (watched == viewport || watched == d->area)
+            refresh();
         break;
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonRelease:
@@ -248,6 +306,8 @@ void QtOverviewWidget::showEvent(QShowEvent *event)
     Q_D(QtOverviewWidget);
     QWidget::showEvent(event);
     QTimer::singleShot(0, this, &QtOverviewWidget::refresh);
+    if (d->updatable)
+        d->timer->start();
 }
 
 void QtOverviewWidget::hideEvent(QHideEvent *event)
