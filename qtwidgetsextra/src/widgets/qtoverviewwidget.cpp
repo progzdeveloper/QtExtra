@@ -7,152 +7,142 @@
 #include <QMouseEvent>
 
 #include <QPixmap>
-#include <QPainter>
+#include <QStylePainter>
 
 #include <QElapsedTimer>
 #include <QBasicTimer>
 #include <QApplication>
 #include <QPaintEngine>
+#include <QTimer>
 
-
+static QPoint invalidPoint(-1, -1);
 
 class QtOverviewWidgetPrivate
 {
 public:
     QtOverviewWidget* q_ptr;
     QPointer<QAbstractScrollArea> area;
-    QPointer<QWidget> viewport;
-    QBasicTimer timer;
     QPixmap pixmap;
-    QRect cr;
-    QSize size;
+    QRect pixmapRect;
+    QRect contentRect;
     QPoint pos;
-    qint64 elapsed;
-    double factor;
 
-    void grabViewport(const QRegion &region = QRegion());
-    QPoint origin(const QSize &s);
-    void updateSize();
+    QPointF scaleFactor() const;
+    void grabViewport();
     void updateContentRect();
 
     QtOverviewWidgetPrivate(QtOverviewWidget* q) :
-        q_ptr(q), pos(-1, -1), elapsed(1000), factor(4) {}
+        q_ptr(q) {}
 };
 
-void QtOverviewWidgetPrivate::grabViewport(const QRegion& region)
+QPointF QtOverviewWidgetPrivate::scaleFactor() const
 {
-    QPoint oldPos(area->horizontalScrollBar()->value(), area->verticalScrollBar()->value());
+    if (!area)
+        return QPointF(1.0, 1.0);
 
-    int width = (area->horizontalScrollBar()->maximum() + area->horizontalScrollBar()->pageStep());
-    area->horizontalScrollBar()->setValue(0);
-    area->verticalScrollBar()->setValue(0);
+    const QScrollBar* hbar = area->horizontalScrollBar();
+    const QScrollBar* vbar = area->verticalScrollBar();
+    const int width = hbar->maximum() + hbar->pageStep();
+    const int height = vbar->maximum() + vbar->pageStep();
 
-    QSize s = size / factor;
-    if (pixmap.size() != s) {
-        pixmap = QPixmap(s);
-        //pixmap.setDevicePixelRatio(1.0/factor);
-    }
-
-    QPainter painter(&pixmap);
-    painter.scale(1/factor, 1/factor);
-    if (region.isEmpty()) {
-        if (viewport)
-            viewport->render(&painter, QPoint(), QRect(0, 0, size.width(), size.height()));
-    }
-    else {
-
-        QRegion reg;
-        for (auto it = region.cbegin(); it != region.end(); ++it) {
-            QRect r = *it;
-            if (r.width() != width) {
-                r.setX(0);
-                r.setWidth(width);
-            }
-            reg += r;
-        }
-        QElapsedTimer elapsedTimer;
-        elapsedTimer.start();
-        if (viewport)
-            viewport->render(&painter, QPoint(), reg);
-        elapsed = qMax(elapsedTimer.elapsed(), elapsed);
-        timer.start(elapsed + 10, q_ptr);
-    }
-
-    area->horizontalScrollBar()->setValue(oldPos.x());
-    area->verticalScrollBar()->setValue(oldPos.y());
+    return QPointF(width / (double)pixmapRect.width(), height / (double)pixmapRect.height());
 }
 
-QPoint QtOverviewWidgetPrivate::origin(const QSize& s)
+void QtOverviewWidgetPrivate::grabViewport()
 {
-    QPoint p = area->rect().bottomRight();
-    int x = p.x() - (s.width() + (area->verticalScrollBar()->isVisible() ? area->verticalScrollBar()->width(): 0));
-    int y = p.y() - (s.height() + (area->horizontalScrollBar()->isVisible() ? area->horizontalScrollBar()->height() - 16 : 0));
-    return QPoint(x,y);
-}
+    if (!area)
+        return;
 
-void QtOverviewWidgetPrivate::updateSize()
-{
-    int width = (area->horizontalScrollBar()->maximum() + area->horizontalScrollBar()->pageStep());
-    int height = (area->verticalScrollBar()->maximum() + area->verticalScrollBar()->pageStep());
-    factor = qMax((width / (double)qMin(area->width(), 256)), (height / ((double)area->height())));
-    if (factor == 0) {
-        factor = 8;
-    }
-    size.setWidth(width);
-    size.setHeight(height);
+    QWidget* viewport = area->viewport();
+    if (!viewport)
+        return;
+
+    QScrollBar* hbar = area->horizontalScrollBar();
+    QScrollBar* vbar = area->verticalScrollBar();
+
+    const QPoint oldPos(hbar->value(), vbar->value());
+
+    hbar->setValue(0);
+    vbar->setValue(0);
+
+    int width = hbar->maximum() + hbar->pageStep();
+    int height = vbar->maximum() + vbar->pageStep();
+
+    pixmap = viewport->grab(QRect(0, 0, width, height)).scaled(q_ptr->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    hbar->setValue(oldPos.x());
+    vbar->setValue(oldPos.y());
+
+    pixmapRect = pixmap.rect();
+    pixmapRect.moveCenter(q_ptr->rect().center());
 }
 
 void QtOverviewWidgetPrivate::updateContentRect()
 {
+    if (!area)
+    {
+        contentRect = QRect();
+        return;
+    }
+
+    QWidget* viewport = area->viewport();
+    if (!viewport)
+    {
+        contentRect = QRect();
+        return;
+    }
+
     QRectF r = viewport->rect();
-    cr.setX(0);
-    cr.setY(0);
-    cr.setWidth(r.width() / factor);
-    cr.setHeight(r.height() / factor);
-    cr.translate(area->horizontalScrollBar()->value() /  factor,
-                 area->verticalScrollBar()->value() /  factor);
+
+    QPointF scale = scaleFactor();
+    double x = area->horizontalScrollBar()->value();
+    double y = area->verticalScrollBar()->value();
+    double w = r.width();
+    double h = r.height();
+
+    contentRect.setRect(pixmapRect.x(), pixmapRect.y(), w / scale.x(), h / scale.y());
+    contentRect.translate(x / scale.x(), y / scale.y());
 }
 
 
-
-
 QtOverviewWidget::QtOverviewWidget(QWidget *parent, Qt::WindowFlags flags) :
-    QWidget(parent, Qt::Tool|flags), d_ptr(new QtOverviewWidgetPrivate(this))
+    QWidget(parent, flags), d_ptr(new QtOverviewWidgetPrivate(this))
 {
     setMouseTracking(true);
     setCursor(Qt::ArrowCursor);
-    //setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
 QtOverviewWidget::~QtOverviewWidget()
 {
-    Q_D(QtOverviewWidget);
-    d->timer.stop();
 }
 
 void QtOverviewWidget::setArea(QAbstractScrollArea *area)
 {
     Q_D(QtOverviewWidget);
+    if (d->area)
+    {
+        d->area->removeEventFilter(this);
+        disconnect(d->area->verticalScrollBar(), &QScrollBar::valueChanged, this, &QtOverviewWidget::updateContentRect);
+        disconnect(d->area->verticalScrollBar(), &QScrollBar::rangeChanged, this, &QtOverviewWidget::refresh);
+
+        disconnect(d->area->horizontalScrollBar(), &QScrollBar::valueChanged, this, &QtOverviewWidget::updateContentRect);
+        disconnect(d->area->horizontalScrollBar(), &QScrollBar::rangeChanged, this, &QtOverviewWidget::refresh);
+
+        disconnect(d->area, &QObject::destroyed, this, &QWidget::close);
+    }
+
     d->area = area;
-    if (area) {
-        d->viewport = area->viewport();
-        if (d->viewport) {
-            d->area->installEventFilter(this);
-            d->viewport->installEventFilter(this);
-            d->updateSize();
-            //setFixedSize(d->size / d->factor);
-            //repaint();
 
-            connect(d->area->verticalScrollBar(), SIGNAL(valueChanged(int)), SLOT(refresh()));
-            connect(d->area->verticalScrollBar(), SIGNAL(rangeChanged(int,int)), SLOT(updatePixmap()));
+    if (d->area)
+    {
+        d->area->installEventFilter(this);
+        connect(d->area->verticalScrollBar(), &QScrollBar::valueChanged, this, &QtOverviewWidget::updateContentRect);
+        connect(d->area->verticalScrollBar(), &QScrollBar::rangeChanged, this, &QtOverviewWidget::refresh);
 
-            connect(d->area->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(refresh()));
-            connect(d->area->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)), SLOT(updatePixmap()));
+        connect(d->area->horizontalScrollBar(), &QScrollBar::valueChanged, this, &QtOverviewWidget::updateContentRect);
+        connect(d->area->horizontalScrollBar(), &QScrollBar::rangeChanged, this, &QtOverviewWidget::refresh);
 
-            connect(d->area, SIGNAL(destroyed(QObject*)), SLOT(close()));
-
-            move(d->viewport->rect().topLeft());
-        }
+        connect(d->area, &QObject::destroyed, this, &QWidget::close);
     }
 }
 
@@ -162,179 +152,37 @@ QAbstractScrollArea *QtOverviewWidget::area() const
     return d->area;
 }
 
-
-bool QtOverviewWidget::eventFilter(QObject *watched, QEvent *event)
+void QtOverviewWidget::updatePixmap()
 {
     Q_D(QtOverviewWidget);
-
     if (!isVisible())
-        return QWidget::eventFilter(watched, event);
+        return;
 
-    if (watched != d->area && watched != d->viewport)
-        return QWidget::eventFilter(watched, event);
-
-    switch(event->type())
-    {
-    case QEvent::Hide:
-        if (watched == d->viewport || watched == d->area) {
-            this->hide();
-        }
-    case QEvent::Resize:
-        if (watched == d->viewport) {
-            d->updateSize();
-            d->updateContentRect();
-            //d->timer.start(16, this);
-            /*if (d->cr.size().width() >= d->area->width() / 4 ||
-                d->cr.size().height() >= d->area->height() / 4)
-                hide();
-            else {*/
-                //d->updateContentRect();
-                //setFixedSize(d->size / d->factor);
-                //resize(d->size / d->factor);
-                //d->elapsedTimer.start();
-            //}
-            //qApp->processEvents();
-        }
-        break;
-    case QEvent::Paint:
-        /*if (watched == d->viewport || watched == d->area) {
-            d->timer.start(d->elapsed, this);
-        }*/
-        break;
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease:
-        if (watched == d->viewport || watched == d->area) {
-            d->grabViewport(d->viewport->visibleRegion());
-            update();
-        }
-        break;
-    default:
-        break;
-    }
-    return QWidget::eventFilter(watched, event);
+    d->grabViewport();
+    update();
 }
 
-void QtOverviewWidget::timerEvent(QTimerEvent *)
+void QtOverviewWidget::updateContentRect()
 {
     Q_D(QtOverviewWidget);
-    d->grabViewport();
-    d->updateSize();
+    if (!isVisible())
+        return;
+
     d->updateContentRect();
     update();
-    d->timer.stop();
-    //QObject::timerEvent(event);
 }
 
-QSize QtOverviewWidget::maximumSize() const
-{
-    Q_D(const QtOverviewWidget);
-    return d->size;
-}
-
-void QtOverviewWidget::showEvent(QShowEvent *event)
+void QtOverviewWidget::refresh()
 {
     Q_D(QtOverviewWidget);
-    d->grabViewport();
-    d->updateSize();
-    d->updateContentRect();
+    if (!isVisible())
+        return;
 
-    QWidget::showEvent(event);
-    // shedule painting (approx. 25 fps)
-    //d->timer.start(72, this);
-}
-
-void QtOverviewWidget::hideEvent(QHideEvent *event)
-{
-    Q_D(QtOverviewWidget);
-    //d->pixmap = QPixmap(); // release pixmap
-    d->timer.stop();
-    QWidget::hideEvent(event);
-}
-
-void QtOverviewWidget::resizeEvent(QResizeEvent *event)
-{
-    Q_D(QtOverviewWidget);
-    d->updateSize();
     d->grabViewport();
     d->updateContentRect();
-    QWidget::resizeEvent(event);
-    // shedule painting
-    //d->timer.start(10, this);
+    update();
 }
 
-void QtOverviewWidget::mousePressEvent(QMouseEvent *event)
-{
-    Q_D(QtOverviewWidget);
-    switch (event->button()) {
-    case Qt::RightButton:
-        hide();
-        break;
-    case Qt::LeftButton:
-        if (d->cr.contains(event->pos())) {
-            d->pos = event->pos();
-            setCursor(Qt::ClosedHandCursor);
-        }
-        break;
-    default:
-        break;
-    }
-
-    QWidget::mousePressEvent(event);
-}
-
-void QtOverviewWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    Q_D(QtOverviewWidget);
-    if (event->buttons() == Qt::NoButton && d->pos == QPoint(-1, -1)) {
-        if (d->cr.contains(event->pos())) {
-            if (cursor().shape() != Qt::OpenHandCursor)
-                setCursor(Qt::OpenHandCursor);
-        } else {
-            if (cursor().shape() != Qt::ArrowCursor)
-                setCursor(Qt::ArrowCursor);
-        }
-    }
-
-    if ((event->buttons() & Qt::LeftButton) && d->pos != QPoint(-1, -1)) {
-        d->area->blockSignals(true);
-        QPoint dist = (event->pos() - d->pos) * d->factor;
-        int x = d->area->horizontalScrollBar()->value();
-        d->area->horizontalScrollBar()->setValue(x + dist.x());
-        int y = d->area->verticalScrollBar()->value();
-        d->area->verticalScrollBar()->setValue(y + dist.y());
-        d->pos = event->pos();
-        d->updateContentRect();
-        d->area->blockSignals(false);
-    }
-    QWidget::mouseMoveEvent(event);
-}
-
-void QtOverviewWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    Q_D(QtOverviewWidget);
-    setCursor(d->cr.contains(event->pos()) ? Qt::OpenHandCursor : Qt::ArrowCursor);
-    if (event->button() == Qt::LeftButton) {
-        Q_D(QtOverviewWidget);
-        d->pos = QPoint(-1, -1);
-        update();
-    }
-
-    QWidget::mouseReleaseEvent(event);
-}
-
-
-void QtOverviewWidget::paintEvent(QPaintEvent *event)
-{
-    Q_D(QtOverviewWidget);
-    QPainter painter(this);
-    painter.drawPixmap(rect(), d->pixmap);
-    painter.drawRect(rect().adjusted(0, 0, -1, -1));
-    drawContentRect(&painter, d->cr);
-    QWidget::paintEvent(event);
-}
 
 void QtOverviewWidget::drawContentRect(QPainter *painter, const QRect &r)
 {
@@ -349,26 +197,147 @@ void QtOverviewWidget::drawContentRect(QPainter *painter, const QRect &r)
     } else {
         QStyleOptionRubberBand option;
         option.initFrom(this);
-        option.rect = r.adjusted(1, 1, -1, 0);
+        option.rect = r;
         painter->setOpacity(0.4);
         style->drawControl(QStyle::CE_RubberBand, &option, painter, this);
     }
 }
 
-void QtOverviewWidget::updatePixmap()
+bool QtOverviewWidget::eventFilter(QObject *watched, QEvent *event)
 {
     Q_D(QtOverviewWidget);
-    //d->grabViewport();
-    d->updateSize();
-    setFixedSize(d->size / d->factor);
+
+    if (!isVisible())
+        return QWidget::eventFilter(watched, event);
+
+    if (watched != d->area)
+        return QWidget::eventFilter(watched, event);
+
+    QWidget* viewport = d->area->viewport();
+    if (!viewport)
+        return QWidget::eventFilter(watched, event);
+
+    switch(event->type())
+    {
+    case QEvent::Hide:
+        if (watched == viewport || watched == d->area)
+            hide();
+        break;
+    case QEvent::Resize:
+        if (watched == viewport || watched == d->area)
+        {
+            d->updateContentRect();
+            updatePixmap();
+        }
+        break;
+    case QEvent::MouseButtonDblClick:
+    case QEvent::MouseButtonRelease:
+    case QEvent::KeyRelease:
+        if (watched == d->area)
+            QTimer::singleShot(0, this, [this]() { updatePixmap(); });
+        break;
+    default:
+        break;
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
-void QtOverviewWidget::refresh()
+void QtOverviewWidget::showEvent(QShowEvent *event)
 {
     Q_D(QtOverviewWidget);
+    QWidget::showEvent(event);
+    QTimer::singleShot(0, this, &QtOverviewWidget::refresh);
+}
+
+void QtOverviewWidget::hideEvent(QHideEvent *event)
+{
+    Q_D(QtOverviewWidget);
+    d->pixmap = QPixmap(); // release pixmap
+    QWidget::hideEvent(event);
+}
+void QtOverviewWidget::paintEvent(QPaintEvent *event)
+{
+    Q_D(QtOverviewWidget);
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+    painter.drawPixmap(d->pixmapRect, d->pixmap);
+    drawContentRect(&painter, d->contentRect);
+}
+
+void QtOverviewWidget::resizeEvent(QResizeEvent *event)
+{
+    Q_D(QtOverviewWidget);
+    QWidget::resizeEvent(event);
     d->updateContentRect();
-    update();
+    updatePixmap();
 }
 
+void QtOverviewWidget::mousePressEvent(QMouseEvent *event)
+{
+    Q_D(QtOverviewWidget);
+    switch (event->button())
+    {
+    case Qt::RightButton:
+        hide();
+        break;
+    case Qt::LeftButton:
+        if (d->contentRect.contains(event->pos()))
+        {
+            d->pos = event->pos();
+            setCursor(Qt::ClosedHandCursor);
+        }
+        updatePixmap();
+        break;
+    default:
+        break;
+    }
 
+    QWidget::mousePressEvent(event);
+}
+
+void QtOverviewWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_D(QtOverviewWidget);
+    if (event->buttons() == Qt::NoButton && d->pos == invalidPoint)
+    {
+        if (d->contentRect.contains(event->pos())) {
+            if (cursor().shape() != Qt::OpenHandCursor)
+                setCursor(Qt::OpenHandCursor);
+        } else {
+            if (cursor().shape() != Qt::ArrowCursor)
+                setCursor(Qt::ArrowCursor);
+        }
+    }
+
+    if ((event->buttons() & Qt::LeftButton) && d->pos != invalidPoint)
+    {
+        const QPointF scale = d->scaleFactor();
+        QScrollBar* hbar = d->area->horizontalScrollBar();
+        QScrollBar* vbar = d->area->verticalScrollBar();
+
+        QSignalBlocker blocker(d->area);
+        const QPoint dist = (event->pos() - d->pos) * std::min(scale.x(), scale.y());
+        hbar->setValue(hbar->value() + dist.x());
+        vbar->setValue(vbar->value() + dist.y());
+        d->pos = event->pos();
+        d->updateContentRect();
+    }
+
+    QWidget::mouseMoveEvent(event);
+}
+
+void QtOverviewWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_D(QtOverviewWidget);
+    setCursor(d->contentRect.contains(event->pos()) ? Qt::OpenHandCursor : Qt::ArrowCursor);
+    if (event->button() == Qt::LeftButton)
+    {
+        Q_D(QtOverviewWidget);
+        d->pos = QPoint(-1, -1);
+        update();
+    }
+
+    QWidget::mouseReleaseEvent(event);
+}
 
