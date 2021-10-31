@@ -5,7 +5,7 @@
 
 class QtVariantListModel;
 class QtCheckableProxyModel;
-class QtCachingProxyModel;
+class QtRevertibleProxyModel;
 class QtItemViewController;
 
 class Widget : public QMainWindow
@@ -24,7 +24,7 @@ private:
     QtItemViewController* controller;
     QtVariantListModel* model;
     QtCheckableProxyModel* viewProxy;
-    QtCachingProxyModel* cachingProxy;
+    QtRevertibleProxyModel* cachingProxy;
 };
 
 #endif // WIDGET_H

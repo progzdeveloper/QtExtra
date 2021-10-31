@@ -861,7 +861,7 @@ public:
         double val{0};
         double minVal{-DBL_MAX};
         double maxVal{DBL_MAX};
-        double singleStep{1};
+        double singleStep{0.1};
         int decimals{2};
         double minimumValue() const { return minVal; }
         double maximumValue() const { return maxVal; }
@@ -986,7 +986,7 @@ double QtDoublePropertyManager::minimum(const QtProperty *property) const
 */
 double QtDoublePropertyManager::maximum(const QtProperty *property) const
 {
-    return getMaximum<double>(d_ptr->m_values, property, 0.0);
+    return getMaximum<double>(d_ptr->m_values, property, 1.0);
 }
 
 /*!
@@ -998,7 +998,7 @@ double QtDoublePropertyManager::maximum(const QtProperty *property) const
 */
 double QtDoublePropertyManager::singleStep(const QtProperty *property) const
 {
-    return getData<double>(d_ptr->m_values, &QtDoublePropertyManagerPrivate::Data::singleStep, property, 0);
+    return getData<double>(d_ptr->m_values, &QtDoublePropertyManagerPrivate::Data::singleStep, property, 0.1);
 }
 
 /*!

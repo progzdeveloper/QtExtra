@@ -8,41 +8,45 @@ class QTWIDGETSEXTRA_EXPORT QtCachingProxyModel :
         public QIdentityProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(bool uncommitted READ uncommitted)
-    Q_PROPERTY(int cacheSize READ cacheSize)
-    Q_DISABLE_COPY(QtCachingProxyModel)
 
 public:
-    explicit QtCachingProxyModel(QObject *parent = Q_NULLPTR);
-    virtual ~QtCachingProxyModel();
+    enum CachingPolicy
+    {
+        ManualUpdate = 0,
+        AutoUpdate = 1
+    };
 
-    bool uncommitted() const;
+    QtCachingProxyModel(QObject* parent = Q_NULLPTR);
+    ~QtCachingProxyModel();
+
+    void setCachingPolicy(CachingPolicy policy);
+    CachingPolicy cachingPolicy() const;
+
+    void setUpdateInterval(int interval);
+    int updateInterval() const;
+
+    void setMaxCacheSize(int maxSize);
+    int maxCacheSize() const;
 
     int cacheSize() const;
 
-    // Editable:
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) Q_DECL_OVERRIDE;
+    void setCachedColumn(int column);
+    int cachedColumn() const;
 
-    // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
-    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+    void setCachedRoles(const std::vector<int>& roles);
+    const std::vector<int>& cachedRoles() const;
 
-    // Remove data:
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
-    bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+    void setSourceModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
 
-    // QAbstractProxyModel interface
-    virtual void setSourceModel(QAbstractItemModel *sourceModel) Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &proxyIndex, int role) const Q_DECL_OVERRIDE;
 
-    // QAbstractItemModel interface
 public Q_SLOTS:
-    virtual bool submit() Q_DECL_OVERRIDE;
-    virtual void revert() Q_DECL_OVERRIDE;
+    void clearCache();
+    virtual void updateCache();
+    virtual void cacheIndex(const QModelIndex& index);
 
-Q_SIGNALS:
-    void changesCached(const QModelIndex&, int);
-    void accepted();
-    void rejected();
+protected:
+    void timerEvent(QTimerEvent* event) Q_DECL_OVERRIDE;
 
 private:
     QT_PIMPL(QtCachingProxyModel)

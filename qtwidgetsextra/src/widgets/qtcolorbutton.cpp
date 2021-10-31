@@ -258,7 +258,7 @@ void QtColorButton::colorSelected()
 void QtColorButton::pickColor()
 {
     Q_D(QtColorButton);
-    QColor c = QColorDialog::getColor(d->color, this, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor c = QColorDialog::getColor(d->color, Q_NULLPTR, tr("Select Color"), QColorDialog::ShowAlphaChannel);
     if (c.isValid()) {
         setColor(c);
         if (!d->colors.contains(c) && d->popupStyle != GridPopup) {

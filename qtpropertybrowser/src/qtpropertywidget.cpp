@@ -670,7 +670,7 @@ void QtPropertyWidget::setPropertyFilter(const QString& pattern)
 {
     Q_D(QtPropertyWidget);
     d->propertyFilter = pattern;
-    emit propertyFilterChanged(pattern);
+    Q_EMIT propertyFilterChanged(pattern);
     d->filterProperties(QRegExp(d->propertyFilter, Qt::CaseInsensitive, QRegExp::RegExp2));
 }
 
@@ -683,7 +683,7 @@ void QtPropertyWidget::setClassFilter(const QString &pattern)
 {
     Q_D(QtPropertyWidget);
     d->classFilter = pattern;
-    emit propertyFilterChanged(pattern);
+    Q_EMIT propertyFilterChanged(pattern);
     d->filterClasses(QRegExp(d->classFilter, Qt::CaseSensitive, QRegExp::RegExp2));
 }
 
@@ -712,24 +712,22 @@ void QtPropertyWidget::slotValueChanged(QtProperty *property, const QVariant &va
     if (!d->object)
         return;
 
-    if (d->isNotificable) {
-        emit propertyChanged(property->propertyName(), value);
-    }
-
     QtVariantProperty* variantProperty = static_cast<QtVariantProperty*>(property);
-    if (d->dynamicProperties.contains(variantProperty)) {
+    if (d->dynamicProperties.contains(variantProperty))
+    {
         d->object->setProperty(property->propertyName().toLatin1(), variantProperty->value());
+        if (d->isNotificable)
+            Q_EMIT propertyChanged(property->propertyName(), value);
+
         return;
     }
 
-    if (!d->propertyToIndex.contains(property)) {
+    if (!d->propertyToIndex.contains(property))
         return;
-    }
-    int idx = d->propertyToIndex.value(property);
 
-    QMetaProperty metaProperty = d->metaObject->property(idx);
-
-    if (d->submitPolicy == ManualSubmit) { // if manual submit
+    QMetaProperty metaProperty = d->metaObject->property(d->propertyToIndex.value(property));
+    if (d->submitPolicy == ManualSubmit) // if manual submit
+    {
         // store original value if it isn't already stored
         QVariantHash::const_iterator it = d->originalCache.constFind(metaProperty.name());
         if (it == d->originalCache.constEnd())
@@ -745,7 +743,8 @@ void QtPropertyWidget::slotValueChanged(QtProperty *property, const QVariant &va
         metaProperty.write(d->object, value);
     }
 
-    //d->updateProperties(d->metaObject, true);
+    if (d->isNotificable)
+        Q_EMIT propertyChanged(property->propertyName(), value);
 }
 
 void QtPropertyWidget::submit()

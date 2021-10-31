@@ -27,6 +27,7 @@ void MainWindow::createCentralWidget()
 
     overview = new QtOverviewWidget(area);
     overview->setArea(area);
+    overview->setUpdatable(true);
 }
 
 void MainWindow::createActions()

@@ -24,7 +24,7 @@ Widget::Widget(QWidget *parent)
     model = new QtVariantListModel(this);
     model->setEditable(true);
 
-    cachingProxy = new QtCachingProxyModel(model);
+    cachingProxy = new QtRevertibleProxyModel(model);
     cachingProxy->setSourceModel(model);
     connect(cachingProxy, SIGNAL(changesCached(QModelIndex,int)), SLOT(updateActions(QModelIndex, int)));
     connect(cachingProxy, SIGNAL(accepted()), SLOT(updateActions()));

@@ -32,7 +32,6 @@ HEADERS += \
     $$PWD/src/itemviews/models/qttextcodecmodel.h \
     $$PWD/src/itemviews/models/qtcolumnproxymodel.h \
     $$PWD/src/itemviews/models/qtcompositeproxymodel.h \
-    $$PWD/src/itemviews/models/qtcachingproxymodel.h \
     $$PWD/src/itemviews/models/qtvariantlistmodel.h \
     $$PWD/src/itemviews/models/qtcheckableproxymodel.h \
     $$PWD/src/itemviews/models/qtobjectlistmodel.h \
@@ -84,7 +83,10 @@ HEADERS += \
     $$PWD/src/widgets/qtslidecheckbox.h \
     $$PWD/src/widgets/qtfloatingtoolbutton.h \
     $$PWD/src/widgets/qtsnackbar.h \
-    $$PWD/src/widgets/qtcardwidget.h
+    $$PWD/src/widgets/qtcardwidget.h \
+    $$PWD/src/itemviews/models/qtrevertibleproxymodel.h \
+    $$PWD/src/itemviews/models/qtcachingproxymodel.h \
+    $$PWD/src/itemviews/models/qttreeproxymodel.h
 
 
 SOURCES += \
@@ -117,7 +119,6 @@ SOURCES += \
     $$PWD/src/itemviews/models/qttablemodelexporter.cpp \
     $$PWD/src/itemviews/models/qttablemodelexporterfactory.cpp \
     $$PWD/src/itemviews/models/qttablemodelexporterdialog.cpp \
-    $$PWD/src/itemviews/models/qtcachingproxymodel.cpp \
     $$PWD/src/itemviews/models/qtvariantlistmodel.cpp \
     $$PWD/src/itemviews/models/qtcheckableproxymodel.cpp \
     $$PWD/src/itemviews/models/qtobjectlistmodel.cpp \
@@ -167,7 +168,10 @@ SOURCES += \
     $$PWD/src/widgets/qtslidecheckbox.cpp \
     $$PWD/src/widgets/qtfloatingtoolbutton.cpp \
     $$PWD/src/widgets/qtsnackbar.cpp \
-    $$PWD/src/widgets/qtcardwidget.cpp
+    $$PWD/src/widgets/qtcardwidget.cpp \
+    $$PWD/src/itemviews/models/qtrevertibleproxymodel.cpp \
+    $$PWD/src/itemviews/models/qtcachingproxymodel.cpp \
+    $$PWD/src/itemviews/models/qttreeproxymodel.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc
