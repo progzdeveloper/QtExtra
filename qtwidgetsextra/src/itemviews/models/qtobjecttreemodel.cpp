@@ -68,60 +68,45 @@ QVariant QtObjectTreeModel::headerData(int section, Qt::Orientation orientation,
 
 QModelIndex QtObjectTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (mRoot == Q_NULLPTR)
-        return QModelIndex();
-
     QObject *parentObject;
 
-    if( !parent.isValid() )
-        parentObject = mRoot;
-    else
-        parentObject = static_cast<QObject*>( parent.internalPointer() );
+     if( !parent.isValid() )
+       parentObject = mRoot;
+     else
+       parentObject = static_cast<QObject*>( parent.internalPointer() );
 
-    if (parentObject == mRoot)
-        return createIndex( row, column, mRoot );
-
-    if( row < parentObject->children().count() )
-        return createIndex( row, column, parentObject->children().at( row ) );
-    else
-        return QModelIndex();
+     if( row < parentObject->children().count() )
+       return createIndex( row, column, parentObject->children().at( row ) );
+     else
+       return QModelIndex();
 }
 
 QModelIndex QtObjectTreeModel::parent(const QModelIndex &index) const
 {
     if( !index.isValid() )
-        return QModelIndex();
+       return QModelIndex();
 
-    QObject *indexObject = static_cast<QObject*>( index.internalPointer() );
-    QObject *parentObject = indexObject->parent();
+     QObject *indexObject = static_cast<QObject*>( index.internalPointer() );
+     QObject *parentObject = indexObject->parent();
 
-    if( parentObject == mRoot )
-        return QModelIndex();
+     if( parentObject == mRoot )
+       return QModelIndex();
 
-    if (!parentObject)
-        return createIndex(0, 0, mRoot);
+     QObject *grandParentObject = parentObject->parent();
 
-    QObject *grandParentObject = parentObject->parent();
-
-    return createIndex( grandParentObject->children().indexOf( parentObject ), 0, parentObject );
+     return createIndex( grandParentObject->children().indexOf( parentObject ), 0, parentObject );
 }
 
 int QtObjectTreeModel::rowCount(const QModelIndex &parent) const
 {
-    /*if (!parent.isValid())
-        return 0;*/
-
-    if (mRoot == Q_NULLPTR)
-        return 0;
-
     QObject *parentObject;
 
-    if( !parent.isValid() )
-        parentObject = mRoot;
-    else
-        parentObject = static_cast<QObject*>( parent.internalPointer() );
+     if( !parent.isValid() )
+       parentObject = mRoot;
+     else
+       parentObject = static_cast<QObject*>( parent.internalPointer() );
 
-    return (parentObject != Q_NULLPTR ? parentObject->children().count() : 0);
+     return parentObject->children().count();
 }
 
 int QtObjectTreeModel::columnCount(const QModelIndex &parent) const
@@ -187,9 +172,8 @@ Qt::ItemFlags QtObjectTreeModel::flags(const QModelIndex &index) const
 
 bool QtObjectTreeModel::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == mRoot &&
-        (event->type() == QEvent::ChildAdded ||
-         event->type() == QEvent::ChildRemoved))
+    const int eventType = event->type();
+    if (watched == mRoot && (eventType == QEvent::ChildAdded || eventType == QEvent::ChildRemoved))
     {
         //QChildEvent* childEvent = static_cast<QChildEvent*>(event);
         /*if (childEvent->added()) {
@@ -203,9 +187,8 @@ bool QtObjectTreeModel::eventFilter(QObject *watched, QEvent *event)
             beginRemoveRows(QModelIndex(), row, row);
             endRemoveRows();
         }*/
-        Q_EMIT layoutChanged();
+        //Q_EMIT layoutChanged();
     }
-
 
     return QAbstractItemModel::eventFilter(watched, event);
 }

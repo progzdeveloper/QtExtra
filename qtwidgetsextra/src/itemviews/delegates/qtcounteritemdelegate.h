@@ -34,7 +34,7 @@ public:
                        const QStyleOptionViewItem &option,
                        const QModelIndex &index) const Q_DECL_OVERRIDE;
 
-    virtual QSize sizeHint(const QStyleOptionViewItem &opt,
+    virtual QSize sizeHint(const QStyleOptionViewItem &option,
                            const QModelIndex &index) const Q_DECL_OVERRIDE;
 protected:
     virtual QString formatCounter(qint64 count) const;
