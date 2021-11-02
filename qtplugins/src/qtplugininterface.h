@@ -26,16 +26,16 @@ public:
 
     virtual ~QtGenericInterface() {}
 
-    virtual bool resolve(QObject*) const Q_DECL_OVERRIDE {
+    bool resolve(QObject*) const Q_DECL_OVERRIDE {
         return false;
     }
 
-    virtual const QString& iid() const Q_DECL_OVERRIDE {
+    const QString& iid() const Q_DECL_OVERRIDE {
         static const QString staticIID(qobject_interface_iid<_Interface*>());
         return staticIID;
     }
 
-    virtual const QString& category() const Q_DECL_OVERRIDE {
+    const QString& category() const Q_DECL_OVERRIDE {
         return _category;
     }
 

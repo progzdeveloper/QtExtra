@@ -13,12 +13,11 @@ public:
     QtSettingsMapper();
     ~QtSettingsMapper();
 
-
     // QtObjectMapper interface
 protected:
-    virtual bool write(QSettings &settings, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool read(const QSettings &settings, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool validate(const QSettings &settings, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool write(QSettings &settings, const QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool read(const QSettings &settings, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool validate(const QSettings &settings, const QMetaProperty &p) const Q_DECL_OVERRIDE;
 };
 
 

@@ -30,7 +30,7 @@ public:
     };
     Q_ENUM(Format)
 
-    QtTableModelJsonExporter(QAbstractTableModel *model);
+    explicit QtTableModelJsonExporter(QAbstractTableModel *model = Q_NULLPTR);
     ~QtTableModelJsonExporter();
 
     // QtTableModelExporter interface

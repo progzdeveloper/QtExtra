@@ -13,7 +13,7 @@ class QTCOREEXTRA_EXPORT QtResource :
         public QResource
 {
 public:
-    QtResource(const QString &file=QString(), const QLocale &locale=QLocale());
+    QtResource(const QString &file = QString(), const QLocale &locale = QLocale());
 
     QString toString() const;
     QStringList toStringList() const;

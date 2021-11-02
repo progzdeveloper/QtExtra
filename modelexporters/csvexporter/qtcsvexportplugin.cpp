@@ -14,12 +14,12 @@ QtTableModelExporter* QtCsvExporterPlugin::create( QAbstractTableModel* model ) 
 
 QString QtCsvExporterPlugin::exporterName() const
 {
-	return tr("CSV");
+    return tr("CSV");
 }
 
 QIcon QtCsvExporterPlugin::icon() const
 {
-	return QIcon(":/images/export-csv");
+    return QIcon(":/images/export-csv");
 }
 
 #if QT_VERSION < 0x050000

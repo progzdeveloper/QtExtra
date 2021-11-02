@@ -28,8 +28,8 @@ public:
 protected:
     virtual bool accepted(const QString &className) const;
 
-    virtual bool write(void* w, QObject* obj, const QMetaObject* metaClass) const;
-    virtual bool write(void* w, QObject *obj, const QMetaProperty& p) const;
+    virtual bool write(void* w, const QObject* obj, const QMetaObject* metaClass) const;
+    virtual bool write(void* w, const QObject *obj, const QMetaProperty& p) const;
 
     virtual bool read(void* r, QObject* obj, const QMetaObject* metaClass) const;
     virtual bool read(void* r, QObject *obj, const QMetaProperty& p) const;
@@ -57,7 +57,7 @@ public:
     ~QtObjectMapper() {
     }
 
-    bool serialize(_Writer& w, QObject *obj) const;
+    bool serialize(_Writer& w, const QObject *obj) const;
     bool unserialize(_Reader& r, QObject *obj) const;
 
     template<class _Object>
@@ -66,21 +66,21 @@ public:
     }
 
 protected:
-    virtual bool write(_Writer& w, QObject *obj, const QMetaProperty &p) const = 0;
+    virtual bool write(_Writer& w, const QObject *obj, const QMetaProperty &p) const = 0;
     virtual bool read(_Reader& r, QObject *obj, const QMetaProperty &p) const = 0;
     virtual bool validate(_Reader& v, const QMetaProperty &p) const = 0;
 
     // QtAbstractObjectMapper interface
 private:
-    virtual bool write(void *w, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool read(void *r, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool validate(void *v, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool write(void *w, const QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool read(void *r, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool validate(void *v, const QMetaProperty &p) const Q_DECL_OVERRIDE;
 };
 
 
 
 template<class _Writer, class _Reader>
-bool QtObjectMapper<_Writer, _Reader>::serialize(_Writer &w, QObject *obj) const
+bool QtObjectMapper<_Writer, _Reader>::serialize(_Writer &w, const QObject *obj) const
 {
     if (!obj)
         return false;
@@ -97,7 +97,7 @@ bool QtObjectMapper<_Writer, _Reader>::unserialize(_Reader &r, QObject *obj) con
 
 
 template<class _Writer, class _Reader>
-bool QtObjectMapper<_Writer, _Reader>::write(void *w, QObject *obj, const QMetaProperty &p) const
+bool QtObjectMapper<_Writer, _Reader>::write(void *w, const QObject *obj, const QMetaProperty &p) const
 {
     Q_ASSERT(w != Q_NULLPTR);
     return this->write(*reinterpret_cast<_Writer*>(w), obj, p);

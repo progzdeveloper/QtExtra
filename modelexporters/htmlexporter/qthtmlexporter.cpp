@@ -20,7 +20,6 @@ QT_METAINFO_TR(QtTableModelHtmlExporter) {
 };
 
 
-
 template<Qt::ItemDataRole _Role, class _Type>
 static inline _Type indexData(const QModelIndex& index) {
     return index.data(_Role).value<_Type>();
@@ -113,9 +112,6 @@ inline QTextCharFormat QtTableModelHtmlExporterPrivate::indexFormat(const QModel
 }
 
 
-
-
-
 QtTableModelHtmlExporter::QtTableModelHtmlExporter(QAbstractTableModel *model) :
     QtTableModelExporter(model),
     d_ptr(new QtTableModelHtmlExporterPrivate(this))
@@ -177,7 +173,7 @@ int QtTableModelHtmlExporter::padding() const
     return d->frameFormat.padding();
 }
 
-void QtTableModelHtmlExporter::setBackground(const QColor &c)
+void QtTableModelHtmlExporter::setBackground(QColor c)
 {
     Q_D(QtTableModelHtmlExporter);
     d->backgroundColor = c;
@@ -189,7 +185,7 @@ QColor QtTableModelHtmlExporter::background() const
     return d->backgroundColor;
 }
 
-void QtTableModelHtmlExporter::setHeaderBackground(const QColor &c)
+void QtTableModelHtmlExporter::setHeaderBackground(QColor c)
 {
     Q_D(QtTableModelHtmlExporter);
     d->headerBackground = c;
@@ -255,9 +251,9 @@ void QtTableModelHtmlExporter::storeIndex(const QModelIndex &index)
         return;
     }
 
-    QAbstractTableModel *m = model();
-    int rowCount =  m->rowCount(index);
-    int columnCount =  m->columnCount(index);
+    const QAbstractTableModel *m = model();
+    const int rowCount =  m->rowCount(index);
+    const int columnCount =  m->columnCount(index);
     int step = 0;
 
     d->cursor.beginEditBlock();

@@ -17,7 +17,7 @@ class QtHtmlExporterPlugin :
 #endif // QT_VERSION >= 0x050000
 
 public:
-    explicit QtHtmlExporterPlugin(QObject *parent = 0);
+    explicit QtHtmlExporterPlugin(QObject *parent = Q_NULLPTR);
     QtTableModelExporter* create(QAbstractTableModel* model) const;
     QString exporterName() const;
     QIcon icon() const;

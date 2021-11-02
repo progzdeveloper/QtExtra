@@ -5,6 +5,7 @@
 #include <QMetaProperty>
 #include <QMetaObject>
 
+namespace {
 static const int qtJsonVariantMapping[] = {
     QVariant::Invalid,  // QJsonValue::Null = 0x0
     QVariant::Bool,     // QJsonValue::Bool = 0x1
@@ -12,9 +13,9 @@ static const int qtJsonVariantMapping[] = {
     QVariant::String    // QJsonValue::String = 0x3
 };
 
-static const int qtJsonVariantMappingSize =
+static constexpr int qtJsonVariantMappingSize =
         sizeof(qtJsonVariantMapping) / sizeof(qtJsonVariantMapping[0]);
-
+}
 
 
 QtJsonMapper::QtJsonMapper(){
@@ -23,13 +24,13 @@ QtJsonMapper::QtJsonMapper(){
 QtJsonMapper::~QtJsonMapper(){
 }
 
-bool QtJsonMapper::write(QJsonObject& json, QObject *obj, const QMetaProperty &p) const
+bool QtJsonMapper::write(QJsonObject& json, const QObject *obj, const QMetaProperty &p) const
 {
     if (!p.isReadable())
         return false;
 
-    QVariant value = p.read(obj);
-    int type = value.type();
+    const QVariant value = p.read(obj);
+    const int type = value.type();
     if (type < 0 || type >= qtJsonVariantMappingSize)
         json[p.name()] = value.toString();
     else
@@ -53,10 +54,10 @@ bool QtJsonMapper::read(const QJsonObject& json, QObject *obj, const QMetaProper
 bool QtJsonMapper::validate(const QJsonObject& json, const QMetaProperty &p) const
 {
     QJsonObject::const_iterator it = json.find(p.name());
-    if (it == json.end())
+    if (it == json.constEnd())
         return false; // name not found
 
-    int type = static_cast<int>((*it).type());
+    const int type = static_cast<int>((*it).type());
     if (type < 0 || type >= qtJsonVariantMappingSize)
         return false; // incorrect type
 
@@ -79,7 +80,7 @@ QtTypedJsonMapper::~QtTypedJsonMapper()
 bool QtTypedJsonMapper::validate(const QJsonObject &jsonObject, const QMetaProperty &p) const
 {
     QJsonObject::const_iterator it = jsonObject.find(p.name());
-    if (it == jsonObject.end())
+    if (it == jsonObject.constEnd())
         return false;
 
     if ((*it).toObject()["type"].toString() != p.typeName())
@@ -88,7 +89,7 @@ bool QtTypedJsonMapper::validate(const QJsonObject &jsonObject, const QMetaPrope
     return true;
 }
 
-bool QtTypedJsonMapper::write(QJsonObject &jsonObject, QObject *obj, const QMetaProperty &p) const
+bool QtTypedJsonMapper::write(QJsonObject &jsonObject, const QObject *obj, const QMetaProperty &p) const
 {
     if (!p.isReadable())
         return true;
@@ -106,8 +107,8 @@ bool QtTypedJsonMapper::read(const QJsonObject& json, QObject *obj, const QMetaP
     if (!p.isWritable())
         return true;
 
-    QJsonObject jsonObject = json[p.name()].toObject();
-    QString typeName = jsonObject["type"].toString();
+    const QJsonObject jsonObject = json[p.name()].toObject();
+    const QString typeName = jsonObject["type"].toString();
     QVariant value(jsonObject["value"].toString());
     value.convert(QVariant::nameToType(typeName.toLatin1()));
     return (p.write(obj, value));

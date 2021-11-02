@@ -18,7 +18,6 @@
 #define MAX_COLUMNS 700
 
 
-
 static const char * ExcelExporterMetaInfoTr [] =
 {
     QT_TRANSLATE_NOOP("QtTableModelExcelExporter", "Microsoft Excel Export"),
@@ -26,7 +25,6 @@ static const char * ExcelExporterMetaInfoTr [] =
     QT_TRANSLATE_NOOP("QtTableModelExcelExporter", "Time format"), // Формат времени
     QT_TRANSLATE_NOOP("QtTableModelExcelExporter", "Open MS Excel"), // Открыть MS Exel
 };
-
 
 
 class QtTableModelExcelExporterPrivate
@@ -245,12 +243,15 @@ void QtTableModelExcelExporter::storeIndex( const QModelIndex& index /*= QModelI
     if (aborted())
         return;
 
-    QAbstractTableModel *m = model();
-    if (m->columnCount() > MAX_COLUMNS) {
-        setErrorString(tr("Unable to export data: incorrect number of columns"));
-    }
+    const QAbstractTableModel *m = model();
+    const int rowCount    = m->rowCount(index);
+    const int columnCount = m->columnCount(index);
 
-    if (index.isValid()) {
+    if (columnCount > MAX_COLUMNS)
+        setErrorString(tr("Unable to export data: incorrect number of columns"));
+
+    if (index.isValid())
+    {
         d->sheetCells->dynamicCall(
                     "SetItem(QVariant, QVariant, QVariant)",
                     d->rowName(isHeaderStored() ? index.row()+1 : index.row()),
@@ -260,8 +261,6 @@ void QtTableModelExcelExporter::storeIndex( const QModelIndex& index /*= QModelI
         return;
     }
 
-    int rowCount    = m->rowCount(index);
-    int columnCount = m->columnCount(index);
     int step = 0;
     for (int r = 0; r < rowCount; ++r) {
         for (int c = 0; c < columnCount; ++c) {

@@ -17,7 +17,7 @@ class QtXmlExporterPlugin:
 #endif // QT_VERSION >= 0x050000
 
 public:
-    explicit QtXmlExporterPlugin(QObject *parent = 0);
+    explicit QtXmlExporterPlugin(QObject *parent = Q_NULLPTR);
 
     // QtTableModelExporterPlugin interface
     QtTableModelExporter* create(QAbstractTableModel* model) const;

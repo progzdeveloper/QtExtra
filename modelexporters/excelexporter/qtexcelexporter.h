@@ -23,7 +23,7 @@ class QtTableModelExcelExporter :
     Q_CLASSINFO("autoOpen", "Open MS Excel")
 
 public:
-    QtTableModelExcelExporter(QAbstractTableModel* model = 0);
+    explicit QtTableModelExcelExporter(QAbstractTableModel* model = Q_NULLPTR);
     ~QtTableModelExcelExporter();
 
     void setDateFormat(const QString& format);

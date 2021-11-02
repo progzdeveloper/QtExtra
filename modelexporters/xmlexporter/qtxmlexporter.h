@@ -11,7 +11,7 @@ class QtTableModelXmlExporter :
     Q_CLASSINFO("autoFormat", "AutoFormat")
 
 public:
-    QtTableModelXmlExporter(QAbstractTableModel* model = 0);
+    explicit QtTableModelXmlExporter(QAbstractTableModel* model = Q_NULLPTR);
     ~QtTableModelXmlExporter();
 
     void setAutoFormatting(bool on = true);

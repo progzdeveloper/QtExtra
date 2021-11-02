@@ -8,7 +8,7 @@
 
 namespace QtExtra
 {
-    static inline const QMetaObject* metaObject(QObject* object) {
+    static inline const QMetaObject* metaObject(const QObject* object) {
         return object->metaObject();
     }
 
@@ -38,7 +38,7 @@ namespace QtExtra
 #endif
 
     template<class _Base>
-    static inline bool inherits(QObject* object) {
+    static inline bool inherits(const QObject* object) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
         return QtExtra::inherits<_Base>(object->metaObject());
 #else

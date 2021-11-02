@@ -51,14 +51,14 @@ bool QtAbstractObjectMapper::accepted(const QString& className) const
 }
 
 
-bool QtAbstractObjectMapper::write(void *w, QObject *obj, const QMetaObject *metaClass) const
+bool QtAbstractObjectMapper::write(void *w, const QObject *obj, const QMetaObject *metaClass) const
 {
     for (; metaClass != Q_NULLPTR; metaClass = metaClass->superClass())
     {
         if (!accepted(metaClass->className()))
             continue;
 
-        for (int i = metaClass->propertyOffset(); i < metaClass->propertyCount(); i++) {
+        for (int i = metaClass->propertyOffset(), n = metaClass->propertyCount(); i < n; i++) {
             if (!this->write(w, obj, metaClass->property(i))) {
                 return false;
             }
@@ -70,7 +70,7 @@ bool QtAbstractObjectMapper::write(void *w, QObject *obj, const QMetaObject *met
     return true;
 }
 
-bool QtAbstractObjectMapper::write(void*, QObject*, const QMetaProperty&) const
+bool QtAbstractObjectMapper::write(void*, const QObject*, const QMetaProperty&) const
 {
     return false;
 }
@@ -82,7 +82,7 @@ bool QtAbstractObjectMapper::read(void *r, QObject *obj, const QMetaObject *meta
         if (!accepted(metaClass->className()))
             continue;
 
-        for (int i = metaClass->propertyOffset(); i < metaClass->propertyCount(); i++) {
+        for (int i = metaClass->propertyOffset(), n = metaClass->propertyCount(); i < n; i++) {
             if (!this->read(r, obj, metaClass->property(i))) {
                 return false;
             }
@@ -106,7 +106,7 @@ bool QtAbstractObjectMapper::validate(void *v, const QMetaObject *metaClass) con
         if (!accepted(metaClass->className()))
             continue;
 
-        for (int i = metaClass->propertyOffset(); i < metaClass->propertyCount(); i++) {
+        for (int i = metaClass->propertyOffset(), n = metaClass->propertyCount(); i < n; i++) {
             if (!this->validate(v, metaClass->property(i))) {
                 return false;
             }

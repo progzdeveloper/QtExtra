@@ -41,13 +41,10 @@ public:
 };
 
 
-
-
 QtTableModelXmlExporterPrivate::QtTableModelXmlExporterPrivate() :
     codec(QTextCodec::codecForLocale()), autoFormat(true)
 {
 }
-
 
 
 QtTableModelXmlExporter::QtTableModelXmlExporter(QAbstractTableModel* model) :
@@ -104,7 +101,7 @@ void QtTableModelXmlExporter::storeIndex(const QModelIndex& index)
 {
     Q_D(QtTableModelXmlExporter);
 
-    QAbstractTableModel *m = model();
+    const QAbstractTableModel *m = model();
     if (index.isValid()) {
         static QRegExp rx("^\\d+");
 
@@ -115,15 +112,15 @@ void QtTableModelXmlExporter::storeIndex(const QModelIndex& index)
         if (rx.indexIn(headerText) != -1)
             text = QString("column%1").arg(index.column());
         else
-            text = headerText.isEmpty() ? QString("column%1").arg(index.column()) : headerText;
+            text = headerText.isEmpty() ? QStringLiteral("column%1").arg(index.column()) : headerText;
 
         QScopedXmlStreamElement elem(d->xmlWriter, text);
         d->xmlWriter.writeCharacters(index.data(itemRole()).toString());
         return;
     }
 
-    int rowCount =  m->rowCount(index);
-    int columnCount =  m->columnCount(index);
+    const int rowCount =  m->rowCount(index);
+    const int columnCount =  m->columnCount(index);
     int step = 0;
     for (int r = 0; r < rowCount; ++r) {
         QScopedXmlStreamElement rowElem(d->xmlWriter, "row");
@@ -133,8 +130,6 @@ void QtTableModelXmlExporter::storeIndex(const QModelIndex& index)
         setProgress(++step);
     }
 }
-
-
 
 QWidget *QtTableModelXmlExporter::createEditor(QDialog *parent) const
 {

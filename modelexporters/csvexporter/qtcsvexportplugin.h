@@ -17,7 +17,7 @@ class QtCsvExporterPlugin :
 #endif
 
 public:
-    explicit QtCsvExporterPlugin(QObject *parent = 0);
+    explicit QtCsvExporterPlugin(QObject *parent = Q_NULLPTR);
 
     // QtTableModelExporterPlugin interface
     QtTableModelExporter* create(QAbstractTableModel* model) const;

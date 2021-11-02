@@ -20,9 +20,9 @@ public:
 
     // QtObjectMapper interface
 protected:
-    virtual bool write(QJsonObject& json, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool read(const QJsonObject& json, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool validate(const QJsonObject& json, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool write(QJsonObject& json, const QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool read(const QJsonObject& json, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool validate(const QJsonObject& json, const QMetaProperty &p) const Q_DECL_OVERRIDE;
 };
 
 
@@ -38,8 +38,8 @@ public:
 
     // QtJsonMapper interface
 protected:
-    virtual bool write(QJsonObject& json, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool read(const QJsonObject& json, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
-    virtual bool validate(const QJsonObject& json, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool write(QJsonObject& json, const QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool read(const QJsonObject& json, QObject *obj, const QMetaProperty &p) const Q_DECL_OVERRIDE;
+    bool validate(const QJsonObject& json, const QMetaProperty &p) const Q_DECL_OVERRIDE;
 };
 

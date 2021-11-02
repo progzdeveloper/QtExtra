@@ -29,19 +29,19 @@ void QtMethodInvoker::resetMapping(const QMetaObject *metaObject)
 
     QMetaMethod method;
     QHash<QByteArray, int> methods; // temporary method mapping
-    for (int i = 0; i < metaObject->methodCount(); i++)
+    for (int i = 0, n = metaObject->methodCount(); i < n; i++)
     {
         method = metaObject->method(i);
         methods.insert(method.name(), i);
     }
 
     QMetaClassInfo attribute;
-    for (int idx = 0; idx < metaObject->classInfoCount(); idx++)
+    for (int idx = 0, n = metaObject->classInfoCount(); idx < n; idx++)
     {
         attribute = metaObject->classInfo(idx); // find attribute
         const char* methodKey = attribute.name(); // extract key
         auto it = methods.constFind(attribute.value());
-        if (it != methods.end())
+        if (it != methods.cend())
             mapping.insert(methodKey, metaObject->method(it.value())); // update mapping
     }
 }
@@ -72,7 +72,7 @@ const QMetaObject *QtMethodInvoker::metaObject() const
 bool QtMethodInvoker::invoke(QObject* object, const QString &key, const QVariantList &args, QVariant &result) const
 {
     auto it = lookup(key.toLatin1()); // lookup for a key
-    if (it == mapping.end()) {
+    if (it == mapping.cend()) {
         qWarning() << "requested method key" << key << "not found";
         return false;
     }
@@ -84,7 +84,8 @@ bool QtMethodInvoker::invoke(QObject* object, const QString &key, const QVariant
     int i = 0;
 
     // prepare arguments
-    for (auto argIt = args.begin(); argIt != args.end(); ++argIt, ++i) {
+    for (auto argIt = args.cbegin(); argIt != args.cend(); ++argIt, ++i)
+    {
         int t = static_cast<int>(argIt->type());
         if (t != it->parameterType(i)) {
             qWarning() << "argument [" << i << "] type mismatch: (expected:"
@@ -111,7 +112,7 @@ bool QtMethodInvoker::invoke(QObject* object, const QString &key, const QVariant
 bool QtMethodInvoker::invoke(QObject* object, const QString &key, const QVariantList &args) const
 {
     auto it = lookup(key.toLatin1());
-    if (it == mapping.end()) {
+    if (it == mapping.cend()) {
         qWarning() << "requested method key" << key << "not found";
         return false;
     }
@@ -122,7 +123,8 @@ bool QtMethodInvoker::invoke(QObject* object, const QString &key, const QVariant
 
     QGenericArgument ga[10];
     int i = 0;
-    for (auto argIt = args.begin(); argIt != args.end(); ++argIt, ++i) {
+    for (auto argIt = args.cbegin(); argIt != args.cend(); ++argIt, ++i)
+    {
         int t = static_cast<int>(argIt->type());
         int p = it->parameterType(i);
         if (t != p) {
@@ -153,7 +155,7 @@ bool QtMethodInvoker::invoke(QObject *object, const QString &key,
                              QGenericArgument val8, QGenericArgument val9) const
 {
     auto it = lookup(key.toLatin1());
-    if (it == mapping.end()) {
+    if (it == mapping.cend()) {
         qWarning() << "requested method key" << key << "not found";
         return false;
     }
@@ -173,7 +175,7 @@ bool QtMethodInvoker::invoke(QObject *object, const QString &key,
                              QGenericArgument val8, QGenericArgument val9) const
 {
     auto it = lookup(key.toLatin1());
-    if (it == mapping.end()) {
+    if (it == mapping.cend()) {
         qWarning() << "requested method key" << key << "not found";
         return false;
     }
@@ -194,7 +196,7 @@ bool QtMethodInvoker::invokeMethod(void *gadget, const QString &key,
                                    QGenericArgument val8, QGenericArgument val9) const
 {
     auto it = lookup(key.toLatin1());
-    if (it == mapping.end()) {
+    if (it == mapping.cend()) {
         qWarning() << "requested method key" << key << "not found";
         return false;
     }
@@ -214,7 +216,7 @@ bool QtMethodInvoker::invokeMethod(void *gadget, const QString &key,
                                    QGenericArgument val8, QGenericArgument val9) const
 {
     auto it = lookup(key.toLatin1());
-    if (it == mapping.end()) {
+    if (it == mapping.cend()) {
         qWarning() << "requested method key" << key << "not found";
         return false;
     }
@@ -230,11 +232,12 @@ bool QtMethodInvoker::invokeMethod(void *gadget, const QString &key,
 bool QtMethodInvoker::createArgs(const QString &key, QVariantList &args) const
 {
     auto it = lookup(key.toLatin1());
-    if (it == mapping.end())
+    if (it == mapping.cend())
         return false;
 
     args.clear();
-    for (int i = 0; i < it->parameterCount(); i++) {
+    for (int i = 0, n = it->parameterCount(); i < n; i++)
+    {
         QVariant::Type type = static_cast<QVariant::Type>(it->parameterType(i));
         args.push_back(QVariant(type));
     }

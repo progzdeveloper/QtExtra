@@ -13,7 +13,7 @@ QtTableModelExporter* QtXmlExporterPlugin::create( QAbstractTableModel* model ) 
 
 QString QtXmlExporterPlugin::exporterName() const
 {
-    return tr("XML");
+    return QStringLiteral("XML");
 }
 
 QIcon QtXmlExporterPlugin::icon() const

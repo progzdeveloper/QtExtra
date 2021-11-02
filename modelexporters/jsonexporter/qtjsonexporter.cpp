@@ -57,7 +57,7 @@ void QtTableModelJsonExporterPrivate::storeTableHeader(QJsonObject &json)
 {
     QJsonArray columns;
     QAbstractTableModel *m = q_ptr->model();
-    for (int i = 0; i < m->columnCount(); ++i) {
+    for (int i = 0, n = m->columnCount(); i < n; ++i) {
         columns.append(QJsonValue::fromVariant(m->headerData(i, Qt::Horizontal, Qt::DisplayRole)));
     }
     json["header"] = columns;
@@ -202,9 +202,9 @@ void QtTableModelJsonExporter::storeIndex(const QModelIndex &index)
     }
 
     QJsonArray modelData;
-    QAbstractTableModel *m = model();
-    int rowCount =  m->rowCount(index);
-    int columnCount =  m->columnCount(index);
+    const QAbstractTableModel *m = model();
+    const int rowCount =  m->rowCount(index);
+    const int columnCount =  m->columnCount(index);
     int step = 0;
     for (int r = 0; r < rowCount; ++r) {
         d->array = QJsonArray();
@@ -221,7 +221,7 @@ QWidget *QtTableModelJsonExporter::createEditor(QDialog *parent) const
 {
     QtPropertyWidget* editor = new QtPropertyWidget(parent);
     editor->setObject(const_cast<QtTableModelJsonExporter*>(this));
-    editor->setClassFilter("^(?!QObject$).*");
+    editor->setClassFilter(QStringLiteral("^(?!QObject$).*"));
     QObject::connect(parent, SIGNAL(accepted()), editor, SLOT(submit()));
     QObject::connect(parent, SIGNAL(rejected()), editor, SLOT(revert()));
     return editor;

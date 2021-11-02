@@ -11,14 +11,16 @@
 
 #include <QDebug>
 
+namespace
+{
 
 void writePath(QJsonObject& root, const QString& path, const QJsonValue& value)
 {
     if (path.isEmpty())
         return;
 
-    int index = path.indexOf('/', 0);
-    QString key = path.mid(0, index);
+    const int index = path.indexOf('/', 0);
+    const QString key = path.mid(0, index);
     //qDebug() << key;
 
     QJsonObject json;
@@ -38,13 +40,15 @@ void writePath(QJsonObject& root, const QString& path, const QJsonValue& value)
 
 void readPath(const QJsonObject& root, QString& path, QSettings::SettingsMap &map)
 {
-    QJsonValue typeObject = root["type"];
-    QJsonValue valueObject = root["value"];
-    if (root.size() == 2 && !typeObject.isUndefined() && !valueObject.isUndefined()) {
-        QString typeName = typeObject.toString();
-        QVariant::Type type = QVariant::nameToType(typeName.toLatin1());
+    const QJsonValue typeObject = root["type"];
+    const QJsonValue valueObject = root["value"];
+    if (root.size() == 2 && !typeObject.isUndefined() && !valueObject.isUndefined())
+    {
+        const QString typeName = typeObject.toString();
+        const QVariant::Type type = QVariant::nameToType(typeName.toLatin1());
         QVariant value = valueObject.toVariant();
-        if (value.type() != type) {
+        if (value.type() != type)
+        {
             if (type == QVariant::ByteArray) {
                 value = QByteArray::fromBase64(value.toByteArray());
             } else {
@@ -53,17 +57,20 @@ void readPath(const QJsonObject& root, QString& path, QSettings::SettingsMap &ma
             }
         }
         map.insert(path, value);
-    } else {
-        for (auto it = root.begin(); it != root.end(); ++it) {
+    }
+    else
+    {
+        for (auto it = root.begin(); it != root.end(); ++it)
+        {
             if (!path.isEmpty())
                 path += '/';
             path += it.key();
             readPath((*it).toObject(), path, map);
-            int index = path.lastIndexOf('/');
-            if (index > 0)
-                path.truncate(index);
+            const int i = path.lastIndexOf('/');
+            if (i > 0)
+                path.truncate(i);
         }
-        int index = path.lastIndexOf('/');
+        const int index = path.lastIndexOf('/');
         if (index > 0)
             path.truncate(index);
         else
@@ -71,6 +78,7 @@ void readPath(const QJsonObject& root, QString& path, QSettings::SettingsMap &ma
     }
 }
 
+}
 
 bool QtJsonSettingsFormat::read(QIODevice &device, QSettings::SettingsMap &map)
 {
@@ -80,19 +88,19 @@ bool QtJsonSettingsFormat::read(QIODevice &device, QSettings::SettingsMap &map)
         qCritical() << "failed to read settings: " << jsonError.errorString() << "at" << jsonError.offset;
         return false;
     }
-    QJsonObject rootObject = document.object();
+    const QJsonObject rootObject = document.object();
     QString path;
     readPath(rootObject, path, map);
     return true;
 }
 
-
 bool QtJsonSettingsFormat::write(QIODevice &device, const QSettings::SettingsMap &map)
 {
     QJsonObject root;
-    for (auto it = map.begin(); it != map.end(); ++it) {
+    for (auto it = map.cbegin(); it != map.cend(); ++it)
+    {
          QJsonObject valueObject;
-         QVariant value = it.value();
+         const QVariant value = it.value();
          switch (value.type()) {
          case QVariant::Bool:
          case QVariant::UInt:
@@ -119,7 +127,7 @@ bool QtJsonSettingsFormat::write(QIODevice &device, const QSettings::SettingsMap
 
 void QtJsonSettingsFormat::registrateDefault(const QString& ext)
 {
-    QSettings::Format format = QSettings::registerFormat(ext, &QtJsonSettingsFormat::read, &QtJsonSettingsFormat::write);
+    const QSettings::Format format = QSettings::registerFormat(ext, &QtJsonSettingsFormat::read, &QtJsonSettingsFormat::write);
     QSettings::setDefaultFormat(format);
 }
 

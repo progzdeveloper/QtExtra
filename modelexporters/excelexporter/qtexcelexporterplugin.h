@@ -17,7 +17,7 @@ class QtExcelExporterPlugin :
 #endif // QT_VERSION >= 0x050000
 
 public:
-    explicit QtExcelExporterPlugin(QObject *parent = 0);
+    explicit QtExcelExporterPlugin(QObject *parent = Q_NULLPTR);
     // QtTableModelExporterPlugin interface
     QtTableModelExporter* create(QAbstractTableModel* model) const;
     QString exporterName() const;

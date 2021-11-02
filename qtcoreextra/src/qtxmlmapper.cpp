@@ -9,10 +9,12 @@
 
 #include "qtxmlmapper.h"
 
+namespace
+{
 
 inline bool xmlWriteProperty(QXmlStreamWriter& xml, const char* propertyName, const QObject* object)
 {
-    QVariant value = object->property(propertyName);
+    const QVariant value = object->property(propertyName);
 
     xml.writeStartElement(propertyName);
     xml.writeAttribute("type", value.typeName());
@@ -23,16 +25,16 @@ inline bool xmlWriteProperty(QXmlStreamWriter& xml, const char* propertyName, co
 
 inline bool xmlReadProperty(QXmlStreamReader& xml, QObject *object)
 {
-    QXmlStreamAttributes attributes = xml.attributes();
-    QStringRef propertyName = xml.name();
-    QStringRef typeName = attributes.value("type");
-    QString strVal = attributes.value("value").toString();
+    const QXmlStreamAttributes attributes = xml.attributes();
+    const QStringRef propertyName = xml.name();
+    const QStringRef typeName = attributes.value("type");
+    const QString strVal = attributes.value("value").toString();
     QVariant value(strVal);
     value.convert(QVariant::nameToType(typeName.toLatin1()));
     return object->setProperty(propertyName.toLatin1(), value);
 }
 
-
+}
 
 QtXmlMapper::QtXmlMapper()
 {
@@ -49,7 +51,7 @@ bool QtXmlMapper::write(QXmlStreamWriter &xml, const QObject* o) const
 
     const QMetaObject *metaObject = o->metaObject();
     xml.writeStartElement("properties");
-    for (int i = 0; i < metaObject->propertyCount(); i++) {
+    for (int i = 0, n = metaObject->propertyCount(); i < n; i++) {
         xmlWriteProperty(xml, metaObject->property(i).name(), o);
     }
     xml.writeEndElement(); // "properties"

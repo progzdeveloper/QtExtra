@@ -19,7 +19,6 @@ QT_METAINFO_TR(QtTableModelCsvExporter)
 };
 
 
-
 class QtTableModelCsvExporterPrivate
 {
     Q_DECLARE_TR_FUNCTIONS(QtTableModelCsvExporterPrivate)
@@ -44,7 +43,7 @@ void QtTableModelCsvExporterPrivate::storeTableHeader()
     QString s;
     for (int i = 0; i < m->columnCount(); ++i) {
         s = m->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
-        stream << QString("?%1?").replace('?', stringQuote).arg(s) << delimiter;
+        stream << QStringLiteral("?%1?").replace('?', stringQuote).arg(s) << delimiter;
     }
 
 }
@@ -140,7 +139,7 @@ bool QtTableModelCsvExporter::isBoolAlpha() const
     return d->boolalpha;
 }
 
-void QtTableModelCsvExporter::setStringQuote(const QChar& ch)
+void QtTableModelCsvExporter::setStringQuote(QChar ch)
 {
     Q_D(QtTableModelCsvExporter);
     d->stringQuote = ch;
@@ -216,9 +215,9 @@ void QtTableModelCsvExporter::storeIndex(const QModelIndex& index)
         return;
     }
 
-    QAbstractTableModel *m = model();
-    int rowCount =  m->rowCount(index);
-    int columnCount =  m->columnCount(index);
+    const QAbstractTableModel *m = model();
+    const int rowCount =  m->rowCount(index);
+    const int columnCount =  m->columnCount(index);
     int step = 0;
     for (int r = 0; r < rowCount; ++r) {
         for (int c = 0; c < columnCount; ++c) {
@@ -233,7 +232,7 @@ QWidget *QtTableModelCsvExporter::createEditor(QDialog *parent) const
 {
     QtPropertyWidget* editor = new QtPropertyWidget(parent);
     editor->setObject(const_cast<QtTableModelCsvExporter*>(this));
-    editor->setClassFilter("^(?!QObject$).*");
+    editor->setClassFilter(QStringLiteral("^(?!QObject$).*"));
     QObject::connect(parent, SIGNAL(accepted()), editor, SLOT(submit()));
     QObject::connect(parent, SIGNAL(rejected()), editor, SLOT(revert()));
     return editor;

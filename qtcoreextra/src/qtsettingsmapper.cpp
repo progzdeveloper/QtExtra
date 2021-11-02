@@ -6,7 +6,7 @@
 
 #include "qtsettingsmapper.h"
 
-
+#include "qtglobalextra.h"
 
 QtSettingsMapper::QtSettingsMapper()
 {
@@ -18,24 +18,28 @@ QtSettingsMapper::~QtSettingsMapper()
 
 }
 
-bool QtSettingsMapper::write(QSettings &settings, QObject *obj, const QMetaProperty &p) const
+bool QtSettingsMapper::write(QSettings &settings, const QObject *obj, const QMetaProperty &p) const
 {
-    const char* className = obj->metaObject()->className();
+    const QByteArray className = QtExtra::className(obj);
+    const QByteArray propertyName = p.name();
     QString path;
+    path.reserve(className.size() + propertyName.size() + 1);
     path += className;
     path += '/';
-    path += p.name();
+    path += propertyName;
     settings.setValue(path, p.read(obj));
     return true;
 }
 
 bool QtSettingsMapper::read(const QSettings &settings, QObject *obj, const QMetaProperty &p) const
 {
-    const char* className = obj->metaObject()->className();
+    const QByteArray className = QtExtra::className(obj);
+    const QByteArray propertyName = p.name();
     QString path;
+    path.reserve(className.size() + propertyName.size() + 1);
     path += className;
     path += '/';
-    path += p.name();
+    path += propertyName;
     return p.write(obj, settings.value(path));
 }
 

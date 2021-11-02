@@ -29,12 +29,11 @@ class QtTableModelHtmlExporter :
 
 
 public:
-    QtTableModelHtmlExporter(QAbstractTableModel* model = 0);
+    explicit QtTableModelHtmlExporter(QAbstractTableModel* model = Q_NULLPTR);
     ~QtTableModelHtmlExporter();
 
     void setTitleFont(const QFont& font);
     QFont titleFont() const;
-
 
     void setBorder(qreal value);
     qreal border() const;
@@ -45,10 +44,10 @@ public:
     void setPadding(int value);
     int padding() const;
 
-    void setBackground(const QColor& c);
+    void setBackground(QColor c);
     QColor background() const;
 
-    void setHeaderBackground(const QColor& c);
+    void setHeaderBackground(QColor c);
     QColor headerBackground() const;
 
     // QtTableModelExporter interface
