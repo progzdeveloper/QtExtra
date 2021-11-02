@@ -33,6 +33,9 @@
 
 #include <QThread>
 
+namespace
+{
+
 static const char *fieldNames[] = {
     QT_TRANSLATE_NOOP("QtSqlConnectionEditPrivate", "Connection"), // 0 - ConnectionName
     QT_TRANSLATE_NOOP("QtSqlConnectionEditPrivate", "Driver"),     // 1 - DriverName,
@@ -55,6 +58,7 @@ static const char *fieldPlaceholders[] = {
     QT_TRANSLATE_NOOP("QtSqlConnectionEditPrivate", "Enter connection options...") // 7 - ConnectionOptions
 };
 
+}
 
 class QtSqlConnectionEditPrivate
 {
@@ -148,7 +152,7 @@ void QtSqlConnectionEditPrivate::createEditors()
 void QtSqlConnectionEditPrivate::setupPlaceholders()
 {
     QLineEdit* lineEdit = Q_NULLPTR;
-    for (auto it = editors.begin(); it != editors.end(); ++it)
+    for (auto it = editors.cbegin(); it != editors.cend(); ++it)
     {
         QWidget* editor = *it;
         lineEdit = qobject_cast<QLineEdit*>(editor);
@@ -167,7 +171,7 @@ void QtSqlConnectionEditPrivate::setupPlaceholders()
 void QtSqlConnectionEditPrivate::setReadOnly(bool on)
 {
     QLineEdit* lineEdit = Q_NULLPTR;
-    for (auto it = editors.begin(); it != editors.end(); ++it)
+    for (auto it = editors.cbegin(); it != editors.cend(); ++it)
     {
         QWidget* editor = *it;
         lineEdit = qobject_cast<QLineEdit*>(editor);
@@ -249,11 +253,12 @@ bool QtSqlConnectionEditPrivate::setupDialog(const QString& driverName, QtEditDi
 {
     editor->registerEditor<QVariant::StringList, QComboBox>("currentText");
     QJsonObject json;
-    auto it = driverOptions.find(driverName);
+    auto it = driverOptions.constFind(driverName);
     if (it != driverOptions.end()) {
         json = it.value().toObject();
     } else {
-        for (auto it = driverOptions.begin(); it != driverOptions.end(); ++it) {
+        for (auto it = driverOptions.constBegin(); it != driverOptions.constEnd(); ++it)
+        {
             if (driverName.contains(it.key())) {
                 json = it.value().toObject();
                 break;
@@ -264,9 +269,10 @@ bool QtSqlConnectionEditPrivate::setupDialog(const QString& driverName, QtEditDi
     if (json.isEmpty())
         return false;
 
-    for (auto it = json.begin(); it != json.end(); ++it) {
-        QJsonObject attribute = it.value().toObject();
-        QString type = attribute["type"].toString();
+    for (auto it = json.begin(); it != json.end(); ++it)
+    {
+        const QJsonObject attribute = it.value().toObject();
+        const QString type = attribute["type"].toString();
         if (type == "QString")
             editor->insert(it.key(), it.key(), QVariant(QVariant::String), true);
         if (type == "UInt")
@@ -274,9 +280,9 @@ bool QtSqlConnectionEditPrivate::setupDialog(const QString& driverName, QtEditDi
         if (type == "Int")
             editor->insert(it.key(), it.key(), attribute["default"].toInt(), true);
         if (type == "QStringList") {
-            QJsonArray array =  attribute["values"].toArray();
+            const QJsonArray array =  attribute["values"].toArray();
             QStringList keys;
-            for (auto it = array.begin(); it != array.end(); ++it) {
+            for (auto it = array.constBegin(); it != array.constEnd(); ++it) {
                 keys << (*it).toString();
             }
             editor->insert(it.key(), it.key(), keys, true);
@@ -288,8 +294,8 @@ bool QtSqlConnectionEditPrivate::setupDialog(const QString& driverName, QtEditDi
 void QtSqlConnectionEditPrivate::setupOptions(QtEditDialog *dialog)
 {
     QString options;
-    QVariantHash values = dialog->values();
-    for (auto it = values.begin(); it != values.end(); ++it) {
+    const QVariantHash values = dialog->values();
+    for (auto it = values.cbegin(); it != values.cend(); ++it) {
         options += it.key();
         options += '=';
         options += it.value().toString();
