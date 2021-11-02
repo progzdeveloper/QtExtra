@@ -55,14 +55,14 @@ class QT_QTPROPERTYBROWSER_EXPORT QtGroupPropertyManager : public QtAbstractProp
 {
     Q_OBJECT
 public:
-    QtGroupPropertyManager(QObject *parent = 0);
+    explicit QtGroupPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtGroupPropertyManager();
 
 protected:
-    virtual bool hasValue(const QtProperty *property) const;
+    bool hasValue(const QtProperty *property) const Q_DECL_OVERRIDE;
 
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 };
 
 class QtIntPropertyManagerPrivate;
@@ -71,7 +71,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtIntPropertyManager : public QtAbstractProper
 {
     Q_OBJECT
 public:
-    QtIntPropertyManager(QObject *parent = 0);
+    explicit QtIntPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtIntPropertyManager();
 
     int value(const QtProperty *property) const;
@@ -90,9 +90,9 @@ Q_SIGNALS:
     void rangeChanged(QtProperty *property, int minVal, int maxVal);
     void singleStepChanged(QtProperty *property, int step);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtIntPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtIntPropertyManager)
@@ -105,7 +105,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtBoolPropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtBoolPropertyManager(QObject *parent = 0);
+    explicit QtBoolPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtBoolPropertyManager();
 
     bool value(const QtProperty *property) const;
@@ -115,10 +115,10 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, bool val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QIcon valueIcon(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtBoolPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtBoolPropertyManager)
@@ -131,7 +131,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtDoublePropertyManager : public QtAbstractPro
 {
     Q_OBJECT
 public:
-    QtDoublePropertyManager(QObject *parent = 0);
+    explicit QtDoublePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtDoublePropertyManager();
 
     double value(const QtProperty *property) const;
@@ -153,9 +153,9 @@ Q_SIGNALS:
     void singleStepChanged(QtProperty *property, double step);
     void decimalsChanged(QtProperty *property, int prec);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtDoublePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtDoublePropertyManager)
@@ -168,7 +168,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtStringPropertyManager : public QtAbstractPro
 {
     Q_OBJECT
 public:
-    QtStringPropertyManager(QObject *parent = 0);
+    explicit QtStringPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtStringPropertyManager();
 
     QString value(const QtProperty *property) const;
@@ -181,9 +181,9 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, const QString &val);
     void regExpChanged(QtProperty *property, const QRegExp &regExp);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtStringPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtStringPropertyManager)
@@ -196,7 +196,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtDatePropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtDatePropertyManager(QObject *parent = 0);
+    explicit QtDatePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtDatePropertyManager();
 
     QDate value(const QtProperty *property) const;
@@ -212,9 +212,9 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, const QDate &val);
     void rangeChanged(QtProperty *property, const QDate &minVal, const QDate &maxVal);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtDatePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtDatePropertyManager)
@@ -227,7 +227,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtTimePropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtTimePropertyManager(QObject *parent = 0);
+    explicit QtTimePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtTimePropertyManager();
 
     QTime value(const QtProperty *property) const;
@@ -237,9 +237,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QTime &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtTimePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtTimePropertyManager)
@@ -252,7 +252,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtDateTimePropertyManager : public QtAbstractP
 {
     Q_OBJECT
 public:
-    QtDateTimePropertyManager(QObject *parent = 0);
+    explicit QtDateTimePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtDateTimePropertyManager();
 
     QDateTime value(const QtProperty *property) const;
@@ -262,9 +262,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QDateTime &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtDateTimePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtDateTimePropertyManager)
@@ -277,7 +277,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtKeySequencePropertyManager : public QtAbstra
 {
     Q_OBJECT
 public:
-    QtKeySequencePropertyManager(QObject *parent = 0);
+    explicit QtKeySequencePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtKeySequencePropertyManager();
 
     QKeySequence value(const QtProperty *property) const;
@@ -287,9 +287,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QKeySequence &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtKeySequencePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtKeySequencePropertyManager)
@@ -302,7 +302,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtCharPropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtCharPropertyManager(QObject *parent = 0);
+    explicit QtCharPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtCharPropertyManager();
 
     QChar value(const QtProperty *property) const;
@@ -312,9 +312,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QChar &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtCharPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtCharPropertyManager)
@@ -328,7 +328,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtLocalePropertyManager : public QtAbstractPro
 {
     Q_OBJECT
 public:
-    QtLocalePropertyManager(QObject *parent = 0);
+    explicit QtLocalePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtLocalePropertyManager();
 
     QtEnumPropertyManager *subEnumPropertyManager() const;
@@ -340,9 +340,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QLocale &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtLocalePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtLocalePropertyManager)
@@ -357,7 +357,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtPointPropertyManager : public QtAbstractProp
 {
     Q_OBJECT
 public:
-    QtPointPropertyManager(QObject *parent = 0);
+    explicit QtPointPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtPointPropertyManager();
 
     QtIntPropertyManager *subIntPropertyManager() const;
@@ -369,9 +369,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QPoint &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtPointPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtPointPropertyManager)
@@ -386,7 +386,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtPointFPropertyManager : public QtAbstractPro
 {
     Q_OBJECT
 public:
-    QtPointFPropertyManager(QObject *parent = 0);
+    explicit QtPointFPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtPointFPropertyManager();
 
     QtDoublePropertyManager *subDoublePropertyManager() const;
@@ -401,9 +401,9 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, const QPointF &val);
     void decimalsChanged(QtProperty *property, int prec);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtPointFPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtPointFPropertyManager)
@@ -418,7 +418,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtSizePropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtSizePropertyManager(QObject *parent = 0);
+    explicit QtSizePropertyManager(QObject *parent = Q_NULLPTR);
     ~QtSizePropertyManager();
 
     QtIntPropertyManager *subIntPropertyManager() const;
@@ -436,9 +436,9 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, const QSize &val);
     void rangeChanged(QtProperty *property, const QSize &minVal, const QSize &maxVal);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtSizePropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtSizePropertyManager)
@@ -453,7 +453,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtSizeFPropertyManager : public QtAbstractProp
 {
     Q_OBJECT
 public:
-    QtSizeFPropertyManager(QObject *parent = 0);
+    explicit QtSizeFPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtSizeFPropertyManager();
 
     QtDoublePropertyManager *subDoublePropertyManager() const;
@@ -474,9 +474,9 @@ Q_SIGNALS:
     void rangeChanged(QtProperty *property, const QSizeF &minVal, const QSizeF &maxVal);
     void decimalsChanged(QtProperty *property, int prec);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtSizeFPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtSizeFPropertyManager)
@@ -491,7 +491,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtRectPropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtRectPropertyManager(QObject *parent = 0);
+    explicit QtRectPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtRectPropertyManager();
 
     QtIntPropertyManager *subIntPropertyManager() const;
@@ -506,9 +506,9 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, const QRect &val);
     void constraintChanged(QtProperty *property, const QRect &constraint);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtRectPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtRectPropertyManager)
@@ -523,7 +523,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtRectFPropertyManager : public QtAbstractProp
 {
     Q_OBJECT
 public:
-    QtRectFPropertyManager(QObject *parent = 0);
+    explicit QtRectFPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtRectFPropertyManager();
 
     QtDoublePropertyManager *subDoublePropertyManager() const;
@@ -541,9 +541,9 @@ Q_SIGNALS:
     void constraintChanged(QtProperty *property, const QRectF &constraint);
     void decimalsChanged(QtProperty *property, int prec);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtRectFPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtRectFPropertyManager)
@@ -558,7 +558,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtEnumPropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtEnumPropertyManager(QObject *parent = 0);
+    explicit QtEnumPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtEnumPropertyManager();
 
     int value(const QtProperty *property) const;
@@ -574,10 +574,10 @@ Q_SIGNALS:
     void enumNamesChanged(QtProperty *property, const QStringList &names);
     void enumIconsChanged(QtProperty *property, const QMap<int, QIcon> &icons);
 protected:
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QIcon valueIcon(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtEnumPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtEnumPropertyManager)
@@ -590,7 +590,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtFlagPropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtFlagPropertyManager(QObject *parent = 0);
+    explicit QtFlagPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtFlagPropertyManager();
 
     QtBoolPropertyManager *subBoolPropertyManager() const;
@@ -605,9 +605,9 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, int val);
     void flagNamesChanged(QtProperty *property, const QStringList &names);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtFlagPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtFlagPropertyManager)
@@ -622,7 +622,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtSizePolicyPropertyManager : public QtAbstrac
 {
     Q_OBJECT
 public:
-    QtSizePolicyPropertyManager(QObject *parent = 0);
+    explicit QtSizePolicyPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtSizePolicyPropertyManager();
 
     QtIntPropertyManager *subIntPropertyManager() const;
@@ -635,9 +635,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QSizePolicy &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtSizePolicyPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtSizePolicyPropertyManager)
@@ -653,7 +653,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtFontPropertyManager : public QtAbstractPrope
 {
     Q_OBJECT
 public:
-    QtFontPropertyManager(QObject *parent = 0);
+    explicit QtFontPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtFontPropertyManager();
 
     QtIntPropertyManager *subIntPropertyManager() const;
@@ -667,10 +667,10 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QFont &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QIcon valueIcon(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtFontPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtFontPropertyManager)
@@ -689,7 +689,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtColorPropertyManager : public QtAbstractProp
 {
     Q_OBJECT
 public:
-    QtColorPropertyManager(QObject *parent = 0);
+    explicit QtColorPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtColorPropertyManager();
 
     QtIntPropertyManager *subIntPropertyManager() const;
@@ -701,10 +701,10 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QColor &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QIcon valueIcon(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtColorPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtColorPropertyManager)
@@ -719,7 +719,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtCursorPropertyManager : public QtAbstractPro
 {
     Q_OBJECT
 public:
-    QtCursorPropertyManager(QObject *parent = 0);
+    explicit QtCursorPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtCursorPropertyManager();
 
 #ifndef QT_NO_CURSOR
@@ -731,10 +731,10 @@ public Q_SLOTS:
 Q_SIGNALS:
     void valueChanged(QtProperty *property, const QCursor &val);
 protected:
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QIcon valueIcon(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<QtCursorPropertyManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtCursorPropertyManager)

@@ -12,12 +12,15 @@ public:
         FolderItem = 0,
         LibraryItem = 1
     };
+
     QtPluginItem(QTreeWidget *view, int type /* = Type */)
-        : QTreeWidgetItem(view, type) {
-    }
+        : QTreeWidgetItem(view, type)
+    {}
+
     QtPluginItem(QTreeWidgetItem *parent, int type /* = Type */)
-        : QTreeWidgetItem(parent, type) {
-    }
+        : QTreeWidgetItem(parent, type)
+    {}
+
     virtual ~QtPluginItem() {}
 };
 
@@ -28,10 +31,11 @@ class QtPluginFolderItem :
 {
 public:
     QtPluginFolderItem(QTreeWidget *view)
-        : QtPluginItem(view, QtPluginItem::FolderItem) {
-    }
+        : QtPluginItem(view, QtPluginItem::FolderItem)
+    {}
 
-    inline QVariant data(int column, int role) const {
+    inline QVariant data(int column, int role) const
+    {
         if (column == 0 && role == Qt::DecorationRole) {
             QStyle *style = qApp->style();
             return style->standardIcon( isExpanded() ? QStyle::SP_DirOpenIcon : QStyle::SP_DirClosedIcon );
@@ -45,7 +49,8 @@ class QtPluginLibraryItem :
 {
 public:
     QtPluginLibraryItem(QTreeWidgetItem *parent, const QtPluginMetadata& metadata)
-        : QtPluginItem(parent, QtPluginItem::LibraryItem), pluginKey(metadata.key) {
+        : QtPluginItem(parent, QtPluginItem::LibraryItem), pluginKey(metadata.key)
+    {
         setText(0, metadata.libPath.section("/", -1));
         setIcon(0, QIcon(metadata.isLoaded ? QIcon::fromTheme("user-available", QIcon(":/images/done"))
                                            : QIcon::fromTheme("user-offline", QIcon(":/images/fail"))));
@@ -55,7 +60,7 @@ public:
     inline QString key() const { return pluginKey; }
 
 private:
-    QString pluginKey;
+    const QString pluginKey;
 };
 
 
@@ -78,18 +83,18 @@ void QtPluginTreeViewPrivate::buildTree()
 {
     QtPluginFolderItem *folder = 0;
     QtPluginManager& manager = QtPluginManager::instance();
+
     QStringList iids = manager.iids();
     iids << tr("Unknown");
-    QStringList::const_iterator iidIt = iids.begin();
-    for (; iidIt != iids.end(); ++iidIt)
+
+    for (auto iidIt = iids.cbegin(); iidIt != iids.cend(); ++iidIt)
     {
         folder = new QtPluginFolderItem(q_ptr);
         folder->setText(0, manager.category(*iidIt));
-        QStringList keys = manager.keys(*iidIt);
-        QStringList::const_iterator it = keys.begin();
-        for (; it != keys.end(); ++it) {
+        const QStringList keys = manager.keys(*iidIt);
+        auto it = keys.cbegin();
+        for (; it != keys.cend(); ++it)
             new QtPluginLibraryItem(folder, manager.metadata(*it));
-        }
     }
 }
 
@@ -108,11 +113,11 @@ QtPluginTreeView::~QtPluginTreeView()
 QString QtPluginTreeView::key( const QModelIndex& index ) const
 {
     //Q_D(const QtPluginTreeView);
-    QTreeWidgetItem *it = itemFromIndex(index);
+    const QTreeWidgetItem *it = itemFromIndex(index);
     if (it->type() != QtPluginItem::LibraryItem) {
         return QString();
     }
-    QtPluginLibraryItem *item = static_cast<QtPluginLibraryItem*>(it);
+    const QtPluginLibraryItem *item = static_cast<const QtPluginLibraryItem*>(it);
     return (item != 0 ? item->key() : QString());
 
 }

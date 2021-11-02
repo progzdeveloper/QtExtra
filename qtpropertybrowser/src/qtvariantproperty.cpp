@@ -1831,12 +1831,12 @@ void QtVariantPropertyManager::uninitializeProperty(QtProperty *property)
 /*!
     \internal
 */
-QtProperty *QtVariantPropertyManager::createProperty()
+QtProperty *QtVariantPropertyManager::createProperty() const
 {
     if (!d_ptr->m_creatingProperty)
         return 0;
 
-    QtVariantProperty *property = new QtVariantProperty(this);
+    QtVariantProperty *property = new QtVariantProperty(const_cast<QtVariantPropertyManager*>(this));
     d_ptr->m_propertyToType.insert(property, qMakePair(property, d_ptr->m_propertyType));
 
     return property;
@@ -2107,13 +2107,11 @@ void QtVariantEditorFactory::connectPropertyManager(QtVariantPropertyManager *ma
     Reimplemented from the QtAbstractEditorFactory class.
 */
 QWidget *QtVariantEditorFactory::createEditor(QtVariantPropertyManager *manager, QtProperty *property,
-        QWidget *parent)
+        QWidget *parent) const
 {
     const int propType = manager->propertyType(property);
-    QtAbstractEditorFactoryBase *factory = d_ptr->m_typeToFactory.value(propType, 0);
-    if (!factory)
-        return 0;
-    return factory->createEditor(wrappedProperty(property), parent);
+    const QtAbstractEditorFactoryBase *factory = d_ptr->m_typeToFactory.value(propType, 0);
+    return (factory ? factory->createEditor(wrappedProperty(property), parent) : Q_NULLPTR);
 }
 
 /*!

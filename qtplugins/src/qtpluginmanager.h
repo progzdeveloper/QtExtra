@@ -31,7 +31,7 @@ public:
     QStringList keys(const QString& iid = QString()) const;
     QStringList iids() const;
     QString category(const QString& iid) const;
-    QtPluginMetadata metadata(const QString& key) const;
+    const QtPluginMetadata& metadata(const QString& key) const;
 
     static QtPluginManager& instance();
 

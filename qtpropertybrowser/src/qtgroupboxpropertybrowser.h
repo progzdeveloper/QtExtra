@@ -54,18 +54,18 @@ class QT_QTPROPERTYBROWSER_EXPORT QtGroupBoxPropertyBrowser : public QtAbstractP
     Q_OBJECT
 public:
 
-    QtGroupBoxPropertyBrowser(QWidget *parent = 0);
+    explicit QtGroupBoxPropertyBrowser(QWidget *parent = Q_NULLPTR);
     ~QtGroupBoxPropertyBrowser();
 
     // QtAbstractPropertyBrowser interface
 public:
-    virtual void setItemVisible(QtBrowserItem *item, bool visible);
-    virtual bool isItemVisible(QtBrowserItem *item) const;
+    virtual void setItemVisible(QtBrowserItem *item, bool visible) Q_DECL_OVERRIDE;
+    virtual bool isItemVisible(QtBrowserItem *item) const Q_DECL_OVERRIDE;
 
 protected:
-    virtual void itemInserted(QtBrowserItem *item, QtBrowserItem *afterItem);
-    virtual void itemRemoved(QtBrowserItem *item);
-    virtual void itemChanged(QtBrowserItem *item);
+    virtual void itemInserted(QtBrowserItem *item, QtBrowserItem *afterItem) Q_DECL_OVERRIDE;
+    virtual void itemRemoved(QtBrowserItem *item) Q_DECL_OVERRIDE;
+    virtual void itemChanged(QtBrowserItem *item) Q_DECL_OVERRIDE;
 
 private:
 

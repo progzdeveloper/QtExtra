@@ -30,7 +30,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtPropertyProxyObject :
 	Q_OBJECT
 
 public:
-    explicit QtPropertyProxyObject(QObject *parent = 0);
+    explicit QtPropertyProxyObject(QObject *parent = Q_NULLPTR);
     virtual ~QtPropertyProxyObject();
 
 public slots:

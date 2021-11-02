@@ -107,12 +107,12 @@ Q_SIGNALS:
     void attributeChanged(QtProperty *property,
                 const QString &attribute, const QVariant &val);
 protected:
-    virtual bool hasValue(const QtProperty *property) const;
-    QString valueText(const QtProperty *property) const;
-    QIcon valueIcon(const QtProperty *property) const;
-    virtual void initializeProperty(QtProperty *property);
-    virtual void uninitializeProperty(QtProperty *property);
-    virtual QtProperty *createProperty();
+    bool hasValue(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QString valueText(const QtProperty *property) const Q_DECL_OVERRIDE;
+    QIcon valueIcon(const QtProperty *property) const Q_DECL_OVERRIDE;
+    void initializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    void uninitializeProperty(QtProperty *property) Q_DECL_OVERRIDE;
+    QtProperty *createProperty() const Q_DECL_OVERRIDE;
 private:
     QScopedPointer<class QtVariantPropertyManagerPrivate> d_ptr;
     Q_PRIVATE_SLOT(d_func(), void slotValueChanged(QtProperty *, int))
@@ -163,10 +163,9 @@ public:
     QtVariantEditorFactory(QObject *parent = 0);
     ~QtVariantEditorFactory();
 protected:
-    void connectPropertyManager(QtVariantPropertyManager *manager);
-    QWidget *createEditor(QtVariantPropertyManager *manager, QtProperty *property,
-                QWidget *parent);
-    void disconnectPropertyManager(QtVariantPropertyManager *manager);
+    void connectPropertyManager(QtVariantPropertyManager *manager) Q_DECL_OVERRIDE;
+    QWidget *createEditor(QtVariantPropertyManager *manager, QtProperty *property, QWidget *parent) const Q_DECL_OVERRIDE;
+    void disconnectPropertyManager(QtVariantPropertyManager *manager) Q_DECL_OVERRIDE;
 private:
     QScopedPointer<class QtVariantEditorFactoryPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtVariantEditorFactory)

@@ -115,7 +115,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtAbstractPropertyManager : public QObject
     Q_OBJECT
 public:
 
-    explicit QtAbstractPropertyManager(QObject *parent = 0);
+    explicit QtAbstractPropertyManager(QObject *parent = Q_NULLPTR);
     ~QtAbstractPropertyManager();
 
     QSet<QtProperty *> properties() const;
@@ -135,7 +135,7 @@ protected:
     virtual QString valueText(const QtProperty *property) const;
     virtual void initializeProperty(QtProperty *property) = 0;
     virtual void uninitializeProperty(QtProperty *property);
-    virtual QtProperty *createProperty();
+    virtual QtProperty *createProperty() const;
 private:
     friend class QtProperty;
     QScopedPointer<QtAbstractPropertyManagerPrivate> d_ptr;
@@ -147,7 +147,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtAbstractEditorFactoryBase : public QObject
 {
     Q_OBJECT
 public:
-    virtual QWidget *createEditor(QtProperty *property, QWidget *parent) = 0;
+    virtual QWidget *createEditor(QtProperty *property, QWidget *parent) const = 0;
 protected:
     explicit QtAbstractEditorFactoryBase(QObject *parent = 0)
         : QObject(parent) {}
@@ -164,7 +164,7 @@ class QtAbstractEditorFactory : public QtAbstractEditorFactoryBase
 {
 public:
     explicit QtAbstractEditorFactory(QObject *parent) : QtAbstractEditorFactoryBase(parent) {}
-    QWidget *createEditor(QtProperty *property, QWidget *parent)
+    QWidget *createEditor(QtProperty *property, QWidget *parent) const Q_DECL_OVERRIDE
     {
         for (PropertyManager *manager : qAsConst(m_managers)) {
             if (manager == property->propertyManager()) {
@@ -207,10 +207,10 @@ public:
     }
 protected:
     virtual void connectPropertyManager(PropertyManager *manager) = 0;
-    virtual QWidget *createEditor(PropertyManager *manager, QtProperty *property,
-                QWidget *parent) = 0;
+    virtual QWidget *createEditor(PropertyManager *manager, QtProperty *property, QWidget *parent) const = 0;
     virtual void disconnectPropertyManager(PropertyManager *manager) = 0;
-    void managerDestroyed(QObject *manager)
+
+    void managerDestroyed(QObject *manager) Q_DECL_OVERRIDE
     {
         for (PropertyManager *m : qAsConst(m_managers)) {
             if (m == manager) {
@@ -219,8 +219,9 @@ protected:
             }
         }
     }
+
 private:
-    void breakConnection(QtAbstractPropertyManager *manager)
+    void breakConnection(QtAbstractPropertyManager *manager) Q_DECL_OVERRIDE
     {
         for (PropertyManager *m : qAsConst(m_managers)) {
             if (m == manager) {

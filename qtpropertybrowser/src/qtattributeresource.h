@@ -66,14 +66,14 @@ public:
 
     // QtAttributeResource interface
 public:
-    virtual bool read(const QMetaObject *metaObject) Q_DECL_OVERRIDE;
-    virtual bool read(QIODevice *device) Q_DECL_OVERRIDE;
-    virtual bool write(QIODevice *device) Q_DECL_OVERRIDE;
-    virtual void setup(const char *className, QtVariantProperty *p) Q_DECL_OVERRIDE;
-    virtual bool contains(const char *className, const char *propertyName = Q_NULLPTR) const Q_DECL_OVERRIDE;
-    virtual void erase(const char *className) Q_DECL_OVERRIDE;
-    virtual void clear() Q_DECL_OVERRIDE;
-    virtual QStringList keys() const Q_DECL_OVERRIDE;
+    bool read(const QMetaObject *metaObject) Q_DECL_OVERRIDE;
+    bool read(QIODevice *device) Q_DECL_OVERRIDE;
+    bool write(QIODevice *device) Q_DECL_OVERRIDE;
+    void setup(const char *className, QtVariantProperty *p) Q_DECL_OVERRIDE;
+    bool contains(const char *className, const char *propertyName = Q_NULLPTR) const Q_DECL_OVERRIDE;
+    void erase(const char *className) Q_DECL_OVERRIDE;
+    void clear() Q_DECL_OVERRIDE;
+    QStringList keys() const Q_DECL_OVERRIDE;
 
 private:
     bool verifyDevice(QIODevice* device,

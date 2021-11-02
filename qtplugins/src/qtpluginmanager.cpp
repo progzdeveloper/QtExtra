@@ -48,7 +48,7 @@ QtPluginManagerPrivate::~QtPluginManagerPrivate()
 
 bool QtPluginManagerPrivate::isLoaded(const QString &path) const
 {
-    for (auto it = metadata.begin(); it != metadata.end(); ++it) {
+    for (auto it = metadata.cbegin(); it != metadata.cend(); ++it) {
         if (it->libPath == path && it->isLoaded)
             return true;
     }
@@ -70,8 +70,8 @@ QtPluginManager::~QtPluginManager()
 void QtPluginManager::registrate(QtPluginInterface *iface)
 {
     Q_D(QtPluginManager);
-    QSet<QtPluginInterface*>::iterator it = d->interfaces.find(iface);
-    if (it != d->interfaces.end()) {
+    auto it = d->interfaces.constFind(iface);
+    if (it != d->interfaces.cend()) {
         if (*it)
             delete *it;
         d->interfaces.erase(it);
@@ -89,7 +89,7 @@ QStringList QtPluginManager::iids() const
 {
     Q_D(const QtPluginManager);
     QStringList iids;
-    for (auto it = d->interfaces.begin(); it != d->interfaces.end(); ++it) {
+    for (auto it = d->interfaces.cbegin(); it != d->interfaces.cend(); ++it) {
         iids << (*it)->iid();
     }
     return iids;
@@ -98,18 +98,19 @@ QStringList QtPluginManager::iids() const
 QString QtPluginManager::category(const QString &iid) const
 {
     Q_D(const QtPluginManager);
-    for (auto it = d->interfaces.begin(); it != d->interfaces.end(); ++it) {
+    for (auto it = d->interfaces.cbegin(); it != d->interfaces.cend(); ++it) {
         if ((*it)->iid() == iid)
             return (*it)->category();
     }
     return QtPluginInterface::uncategorized();
 }
 
-QtPluginMetadata QtPluginManager::metadata(const QString &key) const
+const QtPluginMetadata &QtPluginManager::metadata(const QString &key) const
 {
     Q_D(const QtPluginManager);
-    auto it = d->metadata.find(key);
-    return (it != d->metadata.end() ? *it : QtPluginMetadata());
+    static QtPluginMetadata invalidMetaData;
+    auto it = d->metadata.constFind(key);
+    return (it != d->metadata.cend() ? *it : invalidMetaData);
 }
 
 QtPluginManager &QtPluginManager::instance()
@@ -120,9 +121,10 @@ QtPluginManager &QtPluginManager::instance()
 
 void QtPluginManager::load()
 {
-    QObjectList instances = QPluginLoader::staticInstances();
-    for (auto it = instances.begin(); it != instances.end(); ++it) {
-        resolve(*it, qApp->applicationFilePath());
+    const QString appPath = qApp->applicationFilePath();
+    const QObjectList instances = QPluginLoader::staticInstances();
+    for (auto it = instances.cbegin(); it != instances.cend(); ++it) {
+        resolve(*it, appPath);
     }
 }
 
@@ -132,20 +134,23 @@ void QtPluginManager::load(const QString &path)
     if (path.isEmpty()) {
         return;
     }
-    QFileInfo fileInfo(path);
-    if (fileInfo.isFile()) {
+    const QFileInfo fileInfo(path);
+    if (fileInfo.isFile())
+    {
         if (!QLibrary::isLibrary(path))
             return;
         if (d->metadata.contains(fileInfo.absoluteFilePath()))
             return;
         d->loader.setFileName(fileInfo.absoluteFilePath());
         loadPlugin(d->loader);
-    } else {
+    }
+    else
+    {
         QDirIterator it(fileInfo.path(), QDir::Files, QDirIterator::FollowSymlinks);
         for(; it.hasNext(); it.next())
         {
-            QString pluginPath = it.fileName();
-            QFileInfo pluginInfo(path);
+            const QString pluginPath = it.fileName();
+            const QFileInfo pluginInfo(path);
             if (!QLibrary::isLibrary(pluginPath))
                 continue;
             if (d->metadata.contains(pluginInfo.absoluteFilePath()))
@@ -158,15 +163,15 @@ void QtPluginManager::load(const QString &path)
 
 void QtPluginManager::load(const QStringList &paths)
 {
-    for (auto it = paths.begin(); it != paths.end(); ++it) {
+    for (auto it = paths.cbegin(); it != paths.cend(); ++it) {
         load(*it);
     }
 }
 
 void QtPluginManager::load(const QDir &pluginsDir)
 {
-    QStringList paths = pluginsDir.entryList(QDir::Files|QDir::NoDotAndDotDot);
-    for (auto it = paths.begin(); it != paths.end(); ++it) {
+    const QStringList paths = pluginsDir.entryList(QDir::Files|QDir::NoDotAndDotDot);
+    for (auto it = paths.cbegin(); it != paths.cend(); ++it) {
         load(pluginsDir.absoluteFilePath(*it));
     }
 }
@@ -200,7 +205,7 @@ bool QtPluginManager::resolve(QObject *instance, const QString& filePath)
     int resolvedCount = 0;
 
     QtPluginInterface* interface = Q_NULLPTR;
-    for (auto it = d->interfaces.begin(); it != d->interfaces.end(); ++it)
+    for (auto it = d->interfaces.cbegin(); it != d->interfaces.cend(); ++it)
     {
         interface = *it;
         if (interface->resolve(instance))

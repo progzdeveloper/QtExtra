@@ -53,7 +53,7 @@ class QT_QTPROPERTYBROWSER_EXPORT QtButtonPropertyBrowser : public QtAbstractPro
     Q_OBJECT
 public:
 
-    QtButtonPropertyBrowser(QWidget *parent = 0);
+    explicit QtButtonPropertyBrowser(QWidget *parent = Q_NULLPTR);
     ~QtButtonPropertyBrowser();
 
     void setExpanded(QtBrowserItem *item, bool expanded);
@@ -61,8 +61,8 @@ public:
 
     // QtAbstractPropertyBrowser interface
 public:
-    void setItemVisible(QtBrowserItem *item, bool visible);
-    bool isItemVisible(QtBrowserItem *item) const;
+    void setItemVisible(QtBrowserItem *item, bool visible) Q_DECL_OVERRIDE;
+    bool isItemVisible(QtBrowserItem *item) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
 
@@ -70,9 +70,9 @@ Q_SIGNALS:
     void expanded(QtBrowserItem *item);
 
 protected:
-    virtual void itemInserted(QtBrowserItem *item, QtBrowserItem *afterItem);
-    virtual void itemRemoved(QtBrowserItem *item);
-    virtual void itemChanged(QtBrowserItem *item);
+    void itemInserted(QtBrowserItem *item, QtBrowserItem *afterItem) Q_DECL_OVERRIDE;
+    void itemRemoved(QtBrowserItem *item) Q_DECL_OVERRIDE;
+    void itemChanged(QtBrowserItem *item) Q_DECL_OVERRIDE;
 
 private:
 
@@ -82,7 +82,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void slotUpdate())
     Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed())
     Q_PRIVATE_SLOT(d_func(), void slotToggled(bool))
-
 };
 
 #if QT_VERSION >= 0x040400

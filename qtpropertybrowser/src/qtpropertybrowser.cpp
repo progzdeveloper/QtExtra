@@ -776,9 +776,9 @@ QtProperty *QtAbstractPropertyManager::addProperty(const QString &name)
 
     \sa addProperty(), initializeProperty()
 */
-QtProperty *QtAbstractPropertyManager::createProperty()
+QtProperty *QtAbstractPropertyManager::createProperty() const
 {
-    return new QtProperty(this);
+    return new QtProperty(const_cast<QtAbstractPropertyManager*>(this));
 }
 
 /*!

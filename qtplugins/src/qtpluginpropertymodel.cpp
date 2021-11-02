@@ -21,6 +21,7 @@ public:
         LoadTypeField,
         FieldCount = LoadTypeField + 1
     };
+
     QtPluginMetadata metadata;
     const QMetaObject* metaObject;
 
@@ -34,18 +35,18 @@ public:
             return tr("<Unknown>");
         }
         const char* className = metaObject->className();
-        int idx = metaObject->indexOfClassInfo(className);
-        if (idx > 0) {
+        const int idx = metaObject->indexOfClassInfo(className);
+        if (idx > 0)
             return tr(metaObject->classInfo(idx).value());
-        }
-        return className;
+        else
+            return className;
     }
 
     int classInfoCount() const
     {
         if (metaObject == Q_NULLPTR)
             return 0;
-        int count = (metaObject->classInfoCount() - metaObject->classInfoOffset());
+        const int count = (metaObject->classInfoCount() - metaObject->classInfoOffset());
         return (count - (metaObject->indexOfClassInfo(metaObject->className()) > 0));
     }
 
@@ -54,7 +55,8 @@ public:
         return (metaObject != Q_NULLPTR ? (classInfoCount() + FieldCount) : 0);
     }
 
-    QVariant fieldName(int row) const {
+    QVariant fieldName(int row) const
+    {
         if (row < 0)
             return QVariant();
         switch(row) {
@@ -67,9 +69,10 @@ public:
             break;
         }
 
-        if (metaObject != Q_NULLPTR) {
-            int n = (metaObject->classInfoCount() - metaObject->classInfoOffset());
-            int i = (row - FieldCount);
+        if (metaObject != Q_NULLPTR)
+        {
+            const int n = (metaObject->classInfoCount() - metaObject->classInfoOffset());
+            const int i = (row - FieldCount);
             if (i < n)
                 return metaObject->classInfo(metaObject->classInfoOffset() + i).name();
         }
@@ -81,7 +84,8 @@ public:
         if (row < 0)
             return QVariant();
 
-        switch(row) {
+        switch(row)
+        {
         case IIDField: return metadata.iid;
         case KeyField: return metadata.key;
         case TitleField: return translateClassName();
@@ -92,7 +96,7 @@ public:
         }
 
         if (metaObject != Q_NULLPTR) {
-            int n = (metaObject->classInfoCount() - metaObject->classInfoOffset());
+            const int n = (metaObject->classInfoCount() - metaObject->classInfoOffset());
             int i = (row - FieldCount);
             i += (qstrcmp(metaObject->classInfo(i).name(), metaObject->className()) == 0);
             if (i < n) {
@@ -141,7 +145,7 @@ QVariant QtPluginPropertyModel::data( const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    int row = index.row();
+    const int row = index.row();
     if (row < 0 || row >= d->fieldCount()) {
         return QVariant();
     }
@@ -161,7 +165,8 @@ QVariant QtPluginPropertyModel::data( const QModelIndex &index, int role) const
 
 QVariant QtPluginPropertyModel::headerData( int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole*/ ) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    {
         switch(section) {
         case TitleColumn: return tr("Property");
         case ValueColumn: return tr("Value");

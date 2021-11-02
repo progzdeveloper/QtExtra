@@ -87,7 +87,7 @@ void QtPluginManagerDialog::showProperties( QTreeWidgetItem* item )
     Q_D(QtPluginManagerDialog);
 
     d->propertyModel->clear();
-    QString key = d->pluginView->key(d->pluginView->indexFromItem(item));
+    const QString key = d->pluginView->key(d->pluginView->indexFromItem(item));
     if (key.isEmpty())
         return;
     d->propertyModel->setMetadata(QtPluginManager::instance().metadata(key));

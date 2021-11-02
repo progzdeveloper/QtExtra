@@ -72,7 +72,7 @@ public:
         ResizeToContents
     };
 
-    QtTreePropertyBrowser(QWidget *parent = 0);
+    explicit QtTreePropertyBrowser(QWidget *parent = Q_NULLPTR);
     ~QtTreePropertyBrowser();
 
     void setAnimated(bool on);

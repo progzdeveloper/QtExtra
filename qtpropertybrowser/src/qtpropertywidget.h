@@ -71,7 +71,7 @@ public:
     };
     Q_ENUM(SubmitPolicy)
 
-    QtPropertyWidget(QWidget *parent = 0);
+    explicit QtPropertyWidget(QWidget *parent = Q_NULLPTR);
     ~QtPropertyWidget();
 
     void setResource(QtAttributeResource* resource);

@@ -6,14 +6,14 @@
 #include <QMetaObject>
 
 namespace {
-static const int qtJsonVariantMapping[] = {
+static Q_DECL_CONSTEXPR int qtJsonVariantMapping[] = {
     QVariant::Invalid,  // QJsonValue::Null = 0x0
     QVariant::Bool,     // QJsonValue::Bool = 0x1
     QVariant::Double,   // QJsonValue::Double = 0x2
     QVariant::String    // QJsonValue::String = 0x3
 };
 
-static constexpr int qtJsonVariantMappingSize =
+static Q_DECL_CONSTEXPR int qtJsonVariantMappingSize =
         sizeof(qtJsonVariantMapping) / sizeof(qtJsonVariantMapping[0]);
 }
 

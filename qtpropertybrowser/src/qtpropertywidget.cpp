@@ -158,8 +158,8 @@ int QtPropertyWidgetPrivate::intToEnum(const QMetaEnum &metaEnum, int intValue) 
     QSet<int> valueMap; // dont show multiple enum values which have the same values
     QVector<int> values;
     values.reserve(metaEnum.keyCount());
-    for (int i = 0; i < metaEnum.keyCount(); i++) {
-        int value = metaEnum.value(i);
+    for (int i = 0, n = metaEnum.keyCount(); i < n; i++) {
+        const int value = metaEnum.value(i);
         if (!valueMap.contains(value)) {
             valueMap.insert(value);
             values.append(value);
@@ -195,11 +195,12 @@ int QtPropertyWidgetPrivate::flagToInt(const QMetaEnum &metaEnum, int flagValue)
 {
     if (!flagValue)
         return 0;
+
     int intValue = 0;
     QMap<int, int> valueMap; // dont show multiple enum values which have the same values
     int pos = 0;
-    for (int i = 0; i < metaEnum.keyCount(); i++) {
-        int value = metaEnum.value(i);
+    for (int i = 0, n = metaEnum.keyCount(); i < n; i++) {
+        const int value = metaEnum.value(i);
         if (!valueMap.contains(value) && isPowerOf2(value)) {
             if (isSubValue(flagValue, value))
                 intValue |= (1 << pos);
@@ -214,7 +215,7 @@ int QtPropertyWidgetPrivate::intToFlag(const QMetaEnum &metaEnum, int intValue) 
     QSet<int> valueMap; // dont show multiple enum values which have the same values
     QVector<int> values;
     valueMap.reserve(metaEnum.keyCount());
-    for (int i = 0; i < metaEnum.keyCount(); i++) {
+    for (int i = 0, n = metaEnum.keyCount(); i < n; i++) {
         int value = metaEnum.value(i);
         if (!valueMap.contains(value) && isPowerOf2(value)) {
             valueMap.insert(value);
@@ -238,7 +239,7 @@ int QtPropertyWidgetPrivate::intToFlag(const QMetaEnum &metaEnum, int intValue) 
 QString QtPropertyWidgetPrivate::translateName(const QMetaObject *metaObject) const
 {
     const char* className = metaObject->className();
-    int index = metaObject->indexOfClassInfo(className);
+    const int index = metaObject->indexOfClassInfo(className);
     if (index != -1)
         return tr( metaObject->classInfo(index).value() );
     return className;
@@ -246,7 +247,7 @@ QString QtPropertyWidgetPrivate::translateName(const QMetaObject *metaObject) co
 
 QString QtPropertyWidgetPrivate::translateName(const QMetaObject *metaObject, const char *key) const
 {
-    int index = metaObject->indexOfClassInfo(key);
+    const int index = metaObject->indexOfClassInfo(key);
     if (index != -1)
         return tr( metaObject->classInfo(index).value() );
     return key;
@@ -260,7 +261,7 @@ bool QtPropertyWidgetPrivate::matchFilter(const QRegExp &regExp, const QString& 
 
 void QtPropertyWidgetPrivate::filterItems(const QList<QtBrowserItem*>& items, const QRegExp &regExp)
 {
-    for (auto it = items.begin(); it != items.end(); ++it) {
+    for (auto it = items.cbegin(); it != items.cend(); ++it) {
         QtBrowserItem* item = *it;
         browser->setItemVisible(item, matchFilter(regExp, item->property()->propertyName()));
     }
@@ -279,8 +280,8 @@ void QtPropertyWidgetPrivate::filterProperties(const QRegExp &rx)
     if (!object)
         return;
 
-    QList<QtBrowserItem*> classItems = browser->topLevelItems();
-    for (auto it = classItems.begin(); it != classItems.end(); ++it) {
+    const QList<QtBrowserItem*> classItems = browser->topLevelItems();
+    for (auto it = classItems.cbegin(); it != classItems.cend(); ++it) {
         filterItems((*it)->children(), rx);
     }
 }
@@ -332,7 +333,6 @@ void QtPropertyWidgetPrivate::clearInternals()
 
 
 
-
 void QtPropertyWidgetPrivate::updateProperties(const QMetaObject *metaObject, bool recursive)
 {
     if (!metaObject)
@@ -341,12 +341,12 @@ void QtPropertyWidgetPrivate::updateProperties(const QMetaObject *metaObject, bo
     if (recursive)
         updateProperties(metaObject->superClass(), recursive);
 
-    QtProperty *classProperty = classToProperty.value(metaObject);
+    const QtProperty *classProperty = classToProperty.value(metaObject);
     if (!classProperty)
         return;
 
-    for (int idx = metaObject->propertyOffset(); idx < metaObject->propertyCount(); idx++) {
-        QMetaProperty metaProperty = metaObject->property(idx);
+    for (int idx = metaObject->propertyOffset(), n = metaObject->propertyCount(); idx < n; idx++) {
+        const QMetaProperty metaProperty = metaObject->property(idx);
         if (metaProperty.isReadable()) {
             if (classToIndexToProperty.contains(metaObject) && classToIndexToProperty[metaObject].contains(idx)) {
                 QtVariantProperty *subProperty = classToIndexToProperty[metaObject][idx];
@@ -400,7 +400,7 @@ void QtPropertyWidgetPrivate::resolveClassProperties(const QMetaObject *metaClas
         propertyName.reserve(64);
 
         QMetaProperty metaProperty;
-        for (int idx = metaClass->propertyOffset(); idx < metaClass->propertyCount(); idx++)
+        for (int idx = metaClass->propertyOffset(), n = metaClass->propertyCount(); idx < n; idx++)
         {
             metaProperty = metaClass->property(idx);
 
@@ -412,11 +412,14 @@ void QtPropertyWidgetPrivate::resolveClassProperties(const QMetaObject *metaClas
             if (!metaProperty.isReadable()) {
                 subProperty = readOnlyManager->addProperty(QVariant::String, propertyName);
                 subProperty->setValue(QLatin1String("< Non Readable >"));
-            } else if (metaProperty.isEnumType()) {
+            }
+            else if (metaProperty.isEnumType())
+            {
                 if (metaProperty.isFlagType()) {
                     subProperty = manager->addProperty(flagId, propertyName);
-                    QMetaEnum metaEnum = metaProperty.enumerator();
-                    for (int i = 0; i < metaEnum.keyCount(); i++) {
+                    const QMetaEnum metaEnum = metaProperty.enumerator();
+                    for (int i = 0, k = metaEnum.keyCount(); i < k; i++)
+                    {
                         int value = metaEnum.value(i);
                         if (!valueSet.contains(value) && isPowerOf2(value)) { // dont show multiple enum values which have the same values
                             valueSet.insert(value);
@@ -429,8 +432,9 @@ void QtPropertyWidgetPrivate::resolveClassProperties(const QMetaObject *metaClas
                     flagNames.clear();
                 } else {
                     subProperty = manager->addProperty(enumId, propertyName);
-                    QMetaEnum metaEnum = metaProperty.enumerator();
-                    for (int i = 0; i < metaEnum.keyCount(); i++) {
+                    const QMetaEnum metaEnum = metaProperty.enumerator();
+                    for (int i = 0, k = metaEnum.keyCount(); i < k; i++)
+                    {
                         int value = metaEnum.value(i);
                         if (!valueSet.contains(value)) { // dont show multiple enum values which have the same values
                             valueSet.insert(value);
@@ -442,7 +446,9 @@ void QtPropertyWidgetPrivate::resolveClassProperties(const QMetaObject *metaClas
                     valueSet.clear();
                     enumNames.clear();
                 }
-            } else if (manager->isPropertyTypeSupported(type)) {
+            }
+            else if (manager->isPropertyTypeSupported(type))
+            {
                 if (!metaProperty.isWritable())
                     subProperty = readOnlyManager->addProperty(type, propertyName + QLatin1String(" (Non Writable)"));
                 if (!metaProperty.isDesignable())
@@ -451,7 +457,9 @@ void QtPropertyWidgetPrivate::resolveClassProperties(const QMetaObject *metaClas
                     subProperty = manager->addProperty(type, propertyName);
                 subProperty->setValue(readProperty(metaProperty));
 
-            } else {
+            }
+            else
+            {
                 subProperty = readOnlyManager->addProperty(QVariant::String, propertyName);
                 subProperty->setValue(QLatin1String("< Unknown Type >"));
                 subProperty->setEnabled(false);
@@ -482,9 +490,9 @@ void QtPropertyWidgetPrivate::resolveDynamicProperties(QObject *object)
     QtProperty *classProperty = classToProperty.value(metaObject);
     QtVariantProperty *subProperty = 0;
 
-    QList<QByteArray> propertyList = object->dynamicPropertyNames();
+    const QList<QByteArray> propertyList = object->dynamicPropertyNames();
     int idx = metaObject->propertyCount();
-    for (auto it = propertyList.begin(); it != propertyList.end(); ++it, ++idx)
+    for (auto it = propertyList.cbegin(); it != propertyList.cend(); ++it, ++idx)
     {
         if (it->startsWith("_q_"))
             continue;
@@ -729,7 +737,7 @@ void QtPropertyWidget::slotValueChanged(QtProperty *property, const QVariant &va
     if (d->submitPolicy == ManualSubmit) // if manual submit
     {
         // store original value if it isn't already stored
-        QVariantHash::const_iterator it = d->originalCache.constFind(metaProperty.name());
+        auto it = d->originalCache.constFind(metaProperty.name());
         if (it == d->originalCache.constEnd())
             d->originalCache[metaProperty.name()] = metaProperty.read(d->object);
     }
@@ -765,13 +773,13 @@ void QtPropertyWidget::revert()
         return;
     }
     // revert the changes to original values
-    QVariantHash::const_iterator it = d->originalCache.begin();
-    for (; it != d->originalCache.end(); ++it)
+    auto it = d->originalCache.cbegin();
+    for (; it != d->originalCache.cend(); ++it)
     {
-        QString name = it.key();
-        QVariant value = it.value();
+        const QString name = it.key();
+        const QVariant value = it.value();
 
-        QMetaProperty metaProperty = d->metaObject->property(d->metaObject->indexOfProperty(name.toLatin1()));
+        const QMetaProperty metaProperty = d->metaObject->property(d->metaObject->indexOfProperty(name.toLatin1()));
         if (metaProperty.isEnumType()) {
             if (metaProperty.isFlagType())
                 d->writeProperty(metaProperty, d->intToFlag(metaProperty.enumerator(), value.toInt()));
