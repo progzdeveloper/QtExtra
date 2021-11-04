@@ -70,10 +70,16 @@ static inline bool match(const QVariant &pattern, const QVariant& what,  Qt::Mat
 }
 
 
-static inline int compare(const QVariant& pattern, const QVariant& what, Qt::MatchFlags flags)
+static inline int compareStrings(const QString& pattern, const QString& what, Qt::MatchFlags flags)
+{
+    Qt::CaseSensitivity cs = flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    return QString::compare(pattern, what, cs);
+}
+
+static inline int compareVariants(const QVariant& pattern, const QVariant& what, Qt::MatchFlags flags)
 {
     if (pattern.type() == QVariant::String)
-        return compare(pattern.toString(), what.toString(), flags);
+        return compareStrings(pattern.toString(), what.toString(), flags);
 
     if (pattern == what || pattern >= what || pattern <= what)
         return 0;
@@ -82,12 +88,6 @@ static inline int compare(const QVariant& pattern, const QVariant& what, Qt::Mat
     if (pattern < what)
         return -1;
     return 1;
-}
-
-static inline int compare(const QString& pattern, const QString& what, Qt::MatchFlags flags)
-{
-    Qt::CaseSensitivity cs = flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-    return QString::compare(pattern, what, cs);
 }
 
 }
@@ -303,10 +303,10 @@ bool QtItemFilter::accepts(const QVariant &v) const
     case Match:        return match(d->pattern, v, d->flags, d->options);
     case Equal:        return match(d->pattern, v, Qt::MatchExactly, NoOptions);
     case NotEqual:     return (!match(d->pattern, v, Qt::MatchExactly, NoOptions));
-    case Less:         return (compare(d->pattern, v, d->flags) < 0);
-    case LessEqual:    return (compare(d->pattern, v, d->flags) <= 0);
-    case Greater:      return (compare(d->pattern, v, d->flags) > 0);
-    case GreaterEqual: return (compare(d->pattern, v, d->flags) >= 0);
+    case Less:         return (compareVariants(d->pattern, v, d->flags) < 0);
+    case LessEqual:    return (compareVariants(d->pattern, v, d->flags) <= 0);
+    case Greater:      return (compareVariants(d->pattern, v, d->flags) > 0);
+    case GreaterEqual: return (compareVariants(d->pattern, v, d->flags) >= 0);
     default: break;
     }
     return false;
