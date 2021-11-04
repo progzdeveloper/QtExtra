@@ -16,7 +16,7 @@ public:
         AutoUpdate = 1
     };
 
-    QtCachingProxyModel(QObject* parent = Q_NULLPTR);
+    explicit QtCachingProxyModel(QObject* parent = Q_NULLPTR);
     ~QtCachingProxyModel();
 
     void setCachingPolicy(CachingPolicy policy);

@@ -14,8 +14,8 @@ class QTWIDGETSEXTRA_EXPORT QtPlaceholderEffect :
     Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
 public:
-    explicit QtPlaceholderEffect(QAbstractItemModel* model, const QString& text = QString(), QObject* parent = Q_NULLPTR);
-    explicit QtPlaceholderEffect(QAbstractItemView* view, const QString& text = QString(), QObject* parent = Q_NULLPTR);
+    QtPlaceholderEffect(QAbstractItemModel* model, const QString& text = QString(), QObject* parent = Q_NULLPTR);
+    QtPlaceholderEffect(QAbstractItemView* view, const QString& text = QString(), QObject* parent = Q_NULLPTR);
     ~QtPlaceholderEffect();
 
     void setOpacity(qreal opacity);

@@ -4,8 +4,6 @@
 #include "qttablemodelexporter.h"
 
 
-Q_GLOBAL_STATIC(QtTableModelExporterFactory, exporterFactoryInstance)
-
 QtTableModelExporterFactory::QtTableModelExporterFactory()
 {
 }
@@ -44,10 +42,10 @@ QStringList QtTableModelExporterFactory::keys() const
     return m_creatorHash.keys();
 }
 
-
 QtTableModelExporterFactory* QtTableModelExporterFactory::instance()
 {
-    return exporterFactoryInstance();
+    static QtTableModelExporterFactory globalInstance;
+    return &globalInstance;
 }
 
 

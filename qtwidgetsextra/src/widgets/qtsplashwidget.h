@@ -10,7 +10,7 @@ class QTWIDGETSEXTRA_EXPORT QtSplashWidget :
     Q_OBJECT
     Q_DISABLE_COPY(QtSplashWidget)
 public:
-    explicit QtSplashWidget(QWidget *parent);
+    explicit QtSplashWidget(QWidget *parent = Q_NULLPTR);
 
     explicit QtSplashWidget(const QPixmap& pixmap = QPixmap(),
                    const QString& title = QString(),

@@ -18,8 +18,8 @@ public:
 void QtTableModelExporterDialogPrivate::createUi()
 {
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Yes|QDialogButtonBox::Cancel, Qt::Horizontal, q_ptr);
-    QObject::connect(buttonBox, SIGNAL(accepted()), q_ptr, SLOT(accept()));
-    QObject::connect(buttonBox, SIGNAL(rejected()), q_ptr, SLOT(reject()));
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, q_ptr, &QtTableModelExporterDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, q_ptr, &QtTableModelExporterDialog::reject);
 
     controller = exporter->createEditor(q_ptr);
 
@@ -27,9 +27,6 @@ void QtTableModelExporterDialogPrivate::createUi()
     layout->addWidget(controller);
     layout->addWidget(buttonBox);
 }
-
-
-
 
 
 QtTableModelExporterDialog::QtTableModelExporterDialog(QtTableModelExporter *exporter,

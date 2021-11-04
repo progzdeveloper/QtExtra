@@ -22,7 +22,7 @@ public:
     };
 
     explicit QtMessageLogModel(QObject *parent = Q_NULLPTR);
-    explicit QtMessageLogModel(uint maxSize, QObject *parent = Q_NULLPTR);
+    QtMessageLogModel(uint maxSize, QObject *parent = Q_NULLPTR);
     ~QtMessageLogModel();
 
     // Header:

@@ -17,7 +17,7 @@ class QTWIDGETSEXTRA_EXPORT QtShortcutEdit :
     Q_DISABLE_COPY(QtShortcutEdit)
 
 public:
-    explicit QtShortcutEdit(QWidget *parent = 0);
+    explicit QtShortcutEdit(QWidget *parent = Q_NULLPTR);
 
     QKeySequence keySequence() const;
 

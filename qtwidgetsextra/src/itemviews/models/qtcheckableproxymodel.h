@@ -11,11 +11,11 @@ class QTWIDGETSEXTRA_EXPORT QtCheckableProxyModel :
 
     Q_OBJECT
 public:
-    explicit QtCheckableProxyModel(QObject *parent = 0);
+    explicit QtCheckableProxyModel(QObject *parent = Q_NULLPTR);
     ~QtCheckableProxyModel();
 
     // QAbstractProxyModel interface
-    virtual void setSourceModel(QAbstractItemModel *sourceModel);
+    virtual void setSourceModel(QAbstractItemModel *model);
 
     void setModelColumn(int column);
     int modelColumn() const;

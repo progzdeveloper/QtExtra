@@ -14,7 +14,7 @@ class QTWIDGETSEXTRA_EXPORT QtCrumbBar :
 {
     Q_OBJECT
 public:
-    QtCrumbBar(QWidget* parent = Q_NULLPTR);
+    explicit QtCrumbBar(QWidget* parent = Q_NULLPTR);
     virtual ~QtCrumbBar();
 
     virtual void setModel(QAbstractItemModel* model);

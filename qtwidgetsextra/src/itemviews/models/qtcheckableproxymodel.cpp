@@ -18,30 +18,36 @@ QtCheckableProxyModelPrivate::QtCheckableProxyModelPrivate() :
     column(0) {}
 
 
-
-
 QtCheckableProxyModel::QtCheckableProxyModel(QObject *parent) :
     BaseModel(parent),
     d_ptr(new QtCheckableProxyModelPrivate)
 {
     setFilterRole(Qt::CheckStateRole);
+    connect(this, SIGNAL(sourceModelChanged()), SLOT(resetInternals()));
 }
 
 QtCheckableProxyModel::~QtCheckableProxyModel()
 {
 }
 
-void QtCheckableProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
+void QtCheckableProxyModel::setSourceModel(QAbstractItemModel *model)
 {
     Q_D(QtCheckableProxyModel);
-    if (sourceModel != Q_NULLPTR) {
-        d->bits.resize(sourceModel->rowCount());
-        std::fill(d->bits.begin(), d->bits.end(), true);
-        connect(sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(insert(QModelIndex,int,int)));
-        connect(sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),  SLOT(remove(QModelIndex,int,int)));
-        connect(this, SIGNAL(sourceModelChanged()), SLOT(resetInternals()));
+    if (sourceModel())
+    {
+        disconnect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &QtCheckableProxyModel::insert);
+        disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &QtCheckableProxyModel::remove);
     }
-    BaseModel::setSourceModel(sourceModel);
+
+    BaseModel::setSourceModel(model);
+
+    if (model != Q_NULLPTR)
+    {
+        d->bits.resize(model->rowCount());
+        std::fill(d->bits.begin(), d->bits.end(), true);
+        connect(model, &QAbstractItemModel::rowsInserted, this, &QtCheckableProxyModel::insert);
+        connect(model, &QAbstractItemModel::rowsRemoved, this, &QtCheckableProxyModel::remove);
+    }
 }
 
 void QtCheckableProxyModel::setModelColumn(int column)

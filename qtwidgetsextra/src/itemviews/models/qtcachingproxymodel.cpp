@@ -43,7 +43,6 @@ public:
 };
 
 
-
 QtCachingProxyModel::QtCachingProxyModel(QObject *parent) :
     QIdentityProxyModel(parent),
     d_ptr(new QtCachingProxyModelPrivate)
@@ -144,7 +143,7 @@ void QtCachingProxyModel::setCachedRoles(const std::vector<int> &roles)
 const std::vector<int>& QtCachingProxyModel::cachedRoles() const
 {
     Q_D(const QtCachingProxyModel);
-    d->cachedRoles;
+    return d->cachedRoles;
 }
 
 void QtCachingProxyModel::setSourceModel(QAbstractItemModel *model)

@@ -15,7 +15,6 @@ public:
     QtVariantListModel(const QVariantList& list, QObject *parent = Q_NULLPTR);
     virtual ~QtVariantListModel();
 
-
     bool isEditable() const;
 
     void setValues(const QVariantList& list);

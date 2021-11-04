@@ -21,7 +21,7 @@ public:
     Q_DECLARE_FLAGS(Options, Option)
 
     explicit QtPatternEdit(QWidget *parent = Q_NULLPTR);
-    explicit QtPatternEdit(const QString &pattern, QWidget *parent = Q_NULLPTR);
+    QtPatternEdit(const QString &pattern, QWidget *parent = Q_NULLPTR);
     ~QtPatternEdit();
 
     void setOptions(Options opts);

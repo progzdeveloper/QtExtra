@@ -10,8 +10,8 @@ class QTWIDGETSEXTRA_EXPORT QtEnumListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    QtEnumListModel(QObject* parent = 0);
-    QtEnumListModel(const QMetaEnum& e, QObject* parent = 0);
+    explicit QtEnumListModel(QObject* parent = Q_NULLPTR);
+    QtEnumListModel(const QMetaEnum& e, QObject* parent = Q_NULLPTR);
 
     ~QtEnumListModel();
 

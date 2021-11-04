@@ -10,7 +10,7 @@ class QTWIDGETSEXTRA_EXPORT QtHeaderProxyModel :
     Q_OBJECT
 
 public:
-    explicit QtHeaderProxyModel(QObject *parent = nullptr);
+    explicit QtHeaderProxyModel(QObject *parent = Q_NULLPTR);
     ~QtHeaderProxyModel();
 
     // QAbstractItemModel interface

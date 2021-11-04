@@ -1,3 +1,4 @@
+#include <vector>
 #include "qtcolumnproxymodel.h"
 #include <QApplication>
 
@@ -14,14 +15,15 @@ public:
 int QtColumnProxyModelPrivate::proxyColumnForSourceColumn(int sourceColumn) const
 {
     // If this is too slow, we could add a second QVector with index=logical_source_column value=desired_pos_in_proxy.
-    return m_sourceColumns.indexOf(sourceColumn);
+    auto it = std::find(m_sourceColumns.cbegin(), m_sourceColumns.cend(), sourceColumn);
+    return (it != m_sourceColumns.end() ? *it : -1);
 }
 
 int QtColumnProxyModelPrivate::sourceColumnForProxyColumn(int proxyColumn) const
 {
     Q_ASSERT(proxyColumn >= 0);
     Q_ASSERT(proxyColumn < m_sourceColumns.size());
-    return m_sourceColumns.at(proxyColumn);
+    return m_sourceColumns[proxyColumn];
 }
 
 

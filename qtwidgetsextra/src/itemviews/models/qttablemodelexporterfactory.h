@@ -15,8 +15,10 @@ class QtTableModelExporterPlugin;
 class QTWIDGETSEXTRA_EXPORT QtTableModelExporterFactory :
         public QFactoryInterface
 {
-public:
+    Q_DISABLE_COPY(QtTableModelExporterFactory)
     QtTableModelExporterFactory();
+public:
+
     ~QtTableModelExporterFactory();
 
     void registerExporter(QtTableModelExporterPlugin* creator);
@@ -30,8 +32,6 @@ public:
     static QtTableModelExporterFactory* instance();
 
 private:
-    Q_DISABLE_COPY(QtTableModelExporterFactory)
-
     typedef QHash<QString, QtTableModelExporterPlugin*> CreatorHash;
     CreatorHash m_creatorHash;
 };

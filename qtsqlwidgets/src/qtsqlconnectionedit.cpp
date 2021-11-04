@@ -307,12 +307,6 @@ void QtSqlConnectionEditPrivate::setupOptions(QtEditDialog *dialog)
 #endif
 
 
-
-
-
-
-
-
 QtSqlConnectionEdit::QtSqlConnectionEdit(QWidget *parent, Qt::WindowFlags flags) :
     QWidget(parent, flags), d_ptr(new QtSqlConnectionEditPrivate(this))
 {

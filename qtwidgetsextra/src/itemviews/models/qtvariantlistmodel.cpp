@@ -1,6 +1,5 @@
 #include "qtvariantlistmodel.h"
 
-
 class QtVariantListModelPrivate
 {
 public:
@@ -25,8 +24,6 @@ public:
         return list.at(row);
     }
 };
-
-
 
 
 QtVariantListModel::QtVariantListModel(QObject *parent) :

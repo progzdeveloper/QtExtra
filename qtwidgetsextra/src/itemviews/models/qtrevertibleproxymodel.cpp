@@ -32,9 +32,6 @@ inline void QtRevertibleProxyModelPrivate::revertModel(QAbstractItemModel *model
 }
 
 
-
-
-
 QtRevertibleProxyModel::QtRevertibleProxyModel(QObject *parent) :
     QIdentityProxyModel(parent),
     d_ptr(new QtRevertibleProxyModelPrivate)

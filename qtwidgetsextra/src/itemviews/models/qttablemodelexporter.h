@@ -43,7 +43,7 @@ class QTWIDGETSEXTRA_EXPORT QtTableModelExporter :
     friend class QtTableModelExporterDialog;
 
 public:
-    QtTableModelExporter(QAbstractTableModel* model = Q_NULLPTR);
+    explicit QtTableModelExporter(QAbstractTableModel* model = Q_NULLPTR);
 
     virtual ~QtTableModelExporter(void);
 

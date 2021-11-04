@@ -235,7 +235,6 @@ Qt::ItemFlags QtRowProxyModel::flags(const QModelIndex &index) const
     return (d->titleEditable ? Qt::ItemIsEditable|Qt::ItemIsSelectable|Qt::ItemIsEnabled : Qt::ItemIsEnabled);
 }
 
-
 /*QModelIndex QtRowProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 {
     if (!sourceModel())

@@ -8,7 +8,7 @@ class QtObjectListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit QtObjectListModel(QObject *parent = 0);
+    explicit QtObjectListModel(QObject *parent = Q_NULLPTR);
     ~QtObjectListModel();
 
     void insert(QObject* object);

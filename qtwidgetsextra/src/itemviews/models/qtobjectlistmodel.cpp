@@ -4,11 +4,13 @@
 #include <QCoreApplication>
 #include "qtobjectlistmodel.h"
 
+namespace
+{
 
 inline QString className(const QMetaObject* metaObject)
 {
     const char* name = metaObject->className();
-    for (int i = metaObject->classInfoOffset(); i < metaObject->classInfoCount(); i++) {
+    for (int i = metaObject->classInfoOffset(), n = metaObject->classInfoCount(); i < n; i++) {
         if (qstrcmp(metaObject->classInfo(i).name(), name) == 0) {
             return QCoreApplication::translate(name, metaObject->classInfo(i).value());
         }
@@ -16,6 +18,7 @@ inline QString className(const QMetaObject* metaObject)
     return QCoreApplication::translate(name, name);
 }
 
+}
 
 QtObjectListModel::QtObjectListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -31,20 +34,24 @@ void QtObjectListModel::insert(QObject *object)
     if (object != Q_NULLPTR) {
         beginInsertRows(QModelIndex(), mObjects.size(), mObjects.size());
         mObjects.push_back(object);
-        connect(object, SIGNAL(destroyed(QObject*)), SLOT(objectDestroyed(QObject*)));
+        connect(object, &QObject::destroyed, this, &QtObjectListModel::objectDestroyed);
         endInsertRows();
     }
 }
 
 void QtObjectListModel::insert(const QObjectList &list)
 {
+    for (auto it = mObjects.cbegin(); it != mObjects.cend(); ++it) {
+        disconnect(*it, &QObject::destroyed, this, &QtObjectListModel::objectDestroyed);
+    }
+
     if (list.isEmpty())
         return;
 
     beginInsertRows(QModelIndex(), mObjects.size(), mObjects.size() + list.size());
-    std::copy(list.begin(), list.end(), std::back_inserter(mObjects));
-    for (auto it = list.begin(); it != list.end(); ++it) {
-        connect(*it, SIGNAL(destroyed(QObject*)), SLOT(objectDestroyed(QObject*)));
+    std::copy(list.cbegin(), list.cend(), std::back_inserter(mObjects));
+    for (auto it = list.cbegin(); it != list.cend(); ++it) {
+        connect(*it, &QObject::destroyed, this, &QtObjectListModel::objectDestroyed);
     }
     endInsertRows();
 }
@@ -184,7 +191,6 @@ Qt::ItemFlags QtObjectListModel::flags(const QModelIndex &index) const
 
     return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable;
 }
-
 
 
 /*bool QtObjectListModel::insertRows(int row, int count, const QModelIndex &parent)

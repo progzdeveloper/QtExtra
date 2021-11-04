@@ -14,7 +14,7 @@ class QTWIDGETSEXTRA_EXPORT QtTableModelExporterDialog :
     Q_OBJECT
 public:
     explicit QtTableModelExporterDialog(QtTableModelExporter *exporter,
-                                        QWidget *parent = 0);
+                                        QWidget *parent = Q_NULLPTR);
     ~QtTableModelExporterDialog();
 
 private:

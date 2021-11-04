@@ -43,7 +43,8 @@ static inline QString createFormattedText(QtProxyModelIndex &index, _Iterator fi
 {
     QString result;
     QVariant value;
-    for (; first != last; ++first) {
+    for (; first != last; ++first)
+    {
         value = (*first)->map(index);
         if (propagate) {
             index.setData(index.role(), value);
@@ -253,6 +254,8 @@ void QtCompositeProxyModel::attachMapping(int sourceColumn, int sourceRole, QtIt
         return;
     }*/
 
+    Q_EMIT layoutAboutToBeChanged();
+
     quint64 key = hashCode(sourceColumn, sourceRole);
     auto it = d->mappings.find(key);
     if (it == d->mappings.end()) {
@@ -263,6 +266,8 @@ void QtCompositeProxyModel::attachMapping(int sourceColumn, int sourceRole, QtIt
             it->push_back(mapper);
         }
     }
+
+    Q_EMIT layoutChanged();
 }
 
 int QtCompositeProxyModel::detachMapping(int sourceColumn, int sourceRole, QtItemMapper *mapper)
@@ -281,7 +286,9 @@ int QtCompositeProxyModel::detachMapping(int sourceColumn, int sourceRole, QtIte
 
     it->removeAt(index);
     if (it->isEmpty()) {
+        Q_EMIT layoutAboutToBeChanged();
         d->mappings.erase(it);
+        Q_EMIT layoutChanged();
     }
     return 1;
 
@@ -294,14 +301,20 @@ int QtCompositeProxyModel::detachMappings(int sourceColumn, int sourceRole)
     auto it = d->mappings.find(key);
     if (it == d->mappings.end())
         return 0;
+
+    Q_EMIT layoutAboutToBeChanged();
     int n = it->size();
     it->clear();
+    Q_EMIT layoutChanged();
+
     return n;
 }
 
 int QtCompositeProxyModel::detachMapping(QtItemMapper *mapper)
 {
     Q_D(QtCompositeProxyModel);
+
+    Q_EMIT layoutAboutToBeChanged();
     int count = 0;
     for (auto it = d->mappings.begin(); it != d->mappings.end(); ++it) {
         int index = it->indexOf(mapper);
@@ -310,6 +323,7 @@ int QtCompositeProxyModel::detachMapping(QtItemMapper *mapper)
             ++count;
         }
     }
+    Q_EMIT layoutChanged();
     return count;
 }
 
@@ -325,7 +339,12 @@ int QtCompositeProxyModel::countMappings(int sourceColumn, int sourceRole) const
 void QtCompositeProxyModel::clearMappings()
 {
     Q_D(QtCompositeProxyModel);
+
+    Q_EMIT layoutAboutToBeChanged();
+
     d->mappings.clear();
+
+    Q_EMIT layoutChanged();
 }
 
 QVariant QtCompositeProxyModel::data(const QModelIndex &proxyIndex, int role) const

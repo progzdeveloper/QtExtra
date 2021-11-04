@@ -64,22 +64,44 @@ private:
 };
 
 
+class QtAbstractItemFilter
+{
+    Q_GADGET
+    Q_DISABLE_COPY(QtAbstractItemFilter)
+
+    Q_PROPERTY(QString objectName READ objectName WRITE setObjectName)
+    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
+
+public:
+    QtAbstractItemFilter();
+    virtual ~QtAbstractItemFilter();
+
+    void setObjectName(const QString& name);
+    QString objectName() const;
+
+    void setEnabled(bool on = true);
+    bool isEnabled() const;
+
+    virtual bool accepts(const QVariant& v) const = 0;
+    virtual bool isRoleSupported(int /*role*/) const = 0;
+
+protected:
+    QString mObjectName;
+    bool mEnabled;
+};
 
 
-class QTWIDGETSEXTRA_EXPORT QtItemFilter
+class QTWIDGETSEXTRA_EXPORT QtItemFilter : public QtAbstractItemFilter
 {
     Q_GADGET
     Q_DISABLE_COPY(QtItemFilter)
 
-    Q_PROPERTY(QString objectName READ objectName WRITE setObjectName)
-    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
     Q_PROPERTY(Condition condition READ condition WRITE setCondition)
     Q_PROPERTY(Qt::MatchFlags matchFlags READ matchFlags WRITE setMatchFlags)
     Q_PROPERTY(RegexOptions regexOptions READ regexOptions WRITE setRegexOptions)
     Q_PROPERTY(QString patternString READ patternString WRITE setPatternString)
     Q_PROPERTY(Type patternType READ patternType WRITE setPatternType)
     Q_PROPERTY(int patternRole READ patternRole WRITE setPatternRole)
-
 
 public:
     enum Type {
@@ -170,12 +192,6 @@ public:
     QtItemFilter();
     virtual ~QtItemFilter();
 
-    void setObjectName(const QString& name);
-    QString objectName() const;
-
-    void setEnabled(bool on = true);
-    bool isEnabled() const;
-
     void setPattern(const QVariant& pattern);
     QVariant pattern() const;
 
@@ -199,7 +215,6 @@ public:
     void setRegexOptions(RegexOptions opt);
     RegexOptions regexOptions() const;
 
-
     virtual bool isRoleSupported(int /*role*/) const {
         return true;
     }
@@ -218,10 +233,6 @@ private:
 };
 
 
-
-
-
-
 class QTWIDGETSEXTRA_EXPORT QtItemMapper : public QtItemFilter
 {
     //Q_GADGET
@@ -238,8 +249,6 @@ protected:
         return index.data();
     }
 };
-
-
 
 
 class QTWIDGETSEXTRA_EXPORT QtItemFormatter :
@@ -293,8 +302,6 @@ private:
 };
 
 
-
-
 class QTWIDGETSEXTRA_EXPORT QtRichTextFormatter :
         public QtItemFormatter
 {
@@ -328,9 +335,6 @@ private:
     QScopedPointer<class QtRichTextFormatterPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtRichTextFormatter)
 };
-
-
-
 
 
 class QTWIDGETSEXTRA_EXPORT QtItemHighlighter :
@@ -381,8 +385,6 @@ private:
     QScopedPointer<class QtItemHighlighterPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtItemHighlighter)
 };
-
-
 
 
 /*

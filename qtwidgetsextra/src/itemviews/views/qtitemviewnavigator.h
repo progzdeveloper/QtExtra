@@ -9,7 +9,7 @@ class QTWIDGETSEXTRA_EXPORT QtItemViewNavigator :
     Q_OBJECT
 public:
     explicit QtItemViewNavigator(QWidget* parent = Q_NULLPTR);
-    explicit QtItemViewNavigator(QAbstractItemView *view, QWidget * parent = Q_NULLPTR);
+    QtItemViewNavigator(QAbstractItemView *view, QWidget * parent = Q_NULLPTR);
     ~QtItemViewNavigator(void);
 
     void setView(QAbstractItemView *view);

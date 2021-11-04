@@ -24,7 +24,8 @@ public:
         tableName("[Title]"),
         codec(QTextCodec::codecForLocale()),
         role(Qt::DisplayRole),
-        storeHeader(false) {
+        storeHeader(false)
+    {
     }
 
     QAbstractTableModel *model;

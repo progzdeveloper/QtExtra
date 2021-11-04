@@ -35,7 +35,7 @@ public:
     Q_FLAG(ActionRoles)
 
     explicit QtItemViewController(QAbstractItemView* view, QObject* parent = Q_NULLPTR);
-    explicit QtItemViewController(QAbstractItemView* view, ActionRoles actions, QObject* parent = Q_NULLPTR);
+    QtItemViewController(QAbstractItemView* view, ActionRoles actions, QObject* parent = Q_NULLPTR);
     virtual ~QtItemViewController();
 
     void setRoles(ActionRoles actions);

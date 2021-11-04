@@ -72,8 +72,9 @@ void QtEditDialogPrivate::initialize()
 void QtEditDialogPrivate::createEditor(const QString &objectName, const QString &title, const QVariant &value, bool checkable)
 {
     QByteArray propertyName = editorFactory->valuePropertyName(value.type());
-    auto it = editors.find(objectName);
-    if (it == editors.end()) {
+    auto it = editors.constFind(objectName);
+    if (it == editors.cend())
+    {
         QWidget* editor = editorFactory->createEditor(value.type(), q_ptr);
         int propertyIndex = editor->metaObject()->indexOfProperty(propertyName);
         QMetaProperty metaProperty = editor->metaObject()->property(propertyIndex);
@@ -85,7 +86,7 @@ void QtEditDialogPrivate::createEditor(const QString &objectName, const QString 
         editor->setObjectName(objectName);
 
         auto pIt = propertyMap.find(objectName);
-        if (pIt == propertyMap.end())
+        if (pIt == propertyMap.cend())
             propertyMap[objectName] = propertyName;
         else
             *pIt = propertyName;
@@ -166,8 +167,8 @@ void QtEditDialog::registerEditor(int userType, QItemEditorCreatorBase *creator)
 bool QtEditDialog::isChecked(const QString &objectName) const
 {
     Q_D(const QtEditDialog);
-    auto it = d->labels.find(objectName);
-    if (it == d->labels.end())
+    auto it = d->labels.constFind(objectName);
+    if (it == d->labels.cend())
         return false;
 
     QCheckBox* checkBox = qobject_cast<QCheckBox*>(*it);
@@ -185,7 +186,7 @@ QVariantHash QtEditDialog::values() const
 {
     Q_D(const QtEditDialog);
     QVariantHash results;
-    for (auto it = d->editors.begin(); it != d->editors.end(); ++it)
+    for (auto it = d->editors.cbegin(); it != d->editors.cend(); ++it)
     {
         if (isChecked(it.key())) {
             results[it.key()] = (*it)->property(d->propertyMap[it.key()]);
@@ -198,15 +199,15 @@ QVariant QtEditDialog::value(const QString &id) const
 {
     Q_D(const QtEditDialog);
     auto it = d->editors.constFind(id);
-    return (it != d->editors.end() ? (*it)->property(d->propertyMap[it.key()]) : QVariant());
+    return (it != d->editors.cend() ? (*it)->property(d->propertyMap[it.key()]) : QVariant());
 }
 
 void QtEditDialog::editorValueChanged()
 {
     Q_D(QtEditDialog);
     QObject* editor = sender();
-    auto it = d->propertyMap.find(editor->objectName());
-    if (it != d->propertyMap.end())
+    auto it = d->propertyMap.constFind(editor->objectName());
+    if (it != d->propertyMap.cend())
         Q_EMIT valueChanged(editor->objectName(), editor->property(*it));
 }
 

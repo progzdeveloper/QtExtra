@@ -28,7 +28,7 @@ public:
     };
 
     explicit QtRangeNavigator(QWidget *parent = Q_NULLPTR);
-    explicit QtRangeNavigator(int minimum, int maximum, QWidget* parent = Q_NULLPTR);
+    QtRangeNavigator(int minimum, int maximum, QWidget* parent = Q_NULLPTR);
     virtual ~QtRangeNavigator();
 
     QString text() const;

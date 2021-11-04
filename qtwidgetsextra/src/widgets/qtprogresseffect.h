@@ -16,7 +16,7 @@ class QTWIDGETSEXTRA_EXPORT QtProgressEffect :
 
 public:
     explicit QtProgressEffect(QObject* parent = Q_NULLPTR);
-    explicit QtProgressEffect(QWidget* widget, QObject* parent = Q_NULLPTR);
+    QtProgressEffect(QWidget* widget, QObject* parent = Q_NULLPTR);
     ~QtProgressEffect();
 
     qreal opacity() const;

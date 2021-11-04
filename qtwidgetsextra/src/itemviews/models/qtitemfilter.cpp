@@ -1,4 +1,5 @@
-#include "qtitemfilter.h"
+#include <unordered_set>
+
 #include <QPointer>
 #include <QString>
 
@@ -11,6 +12,10 @@
 
 #include <QDebug>
 
+#include "qtitemfilter.h"
+
+namespace
+{
 
 static inline QRegularExpression::PatternOptions regexOpts(QtItemFilter::RegexOptions opts, Qt::CaseSensitivity cs)
 {
@@ -32,7 +37,6 @@ static inline QRegularExpression::PatternOptions regexOpts(QtItemFilter::RegexOp
 
     return result;
 }
-
 
 static inline bool stringMatch(const QString& pattern, const QString& what, Qt::MatchFlags flags, QtItemFilter::RegexOptions options)
 {
@@ -86,37 +90,82 @@ static inline int compare(const QString& pattern, const QString& what, Qt::Match
     return QString::compare(pattern, what, cs);
 }
 
+}
+
 #ifdef QT_DEBUG
 class QtItemFilterInstanceWatcher
 {
-public:
-    QtItemFilterInstanceWatcher() {
-
+    QtItemFilterInstanceWatcher()
+    {
     }
 
-    ~QtItemFilterInstanceWatcher() {
-        if (!instances.empty()) {
-            qWarning() << "QtItemFilterInstanceWatcher: not all instances of QtItemFilter was destroyed: resource leakage possible";
-            for (auto it = instances.begin(); it != instances.end(); ++it)
+public:
+    ~QtItemFilterInstanceWatcher()
+    {
+        if (!instances.empty())
+        {
+            qWarning() << "QtItemFilterInstanceWatcher: not all instances of QtItemFilter was destroyed: memory leakage possible";
+            for (auto it = instances.cbegin(); it != instances.cend(); ++it)
                 qDebug() << (*it)->objectName() << *it;
         }
     }
 
-    void created(QtItemFilter* f) {
-        instances.insert(f);
+    static QtItemFilterInstanceWatcher& globalInsance()
+    {
+        static QtItemFilterInstanceWatcher globalWatcher;
+        return globalWatcher;
     }
 
-    void destroyed(QtItemFilter* f) {
+    void created(QtAbstractItemFilter* f)
+    {
+        instances.emplace(f);
+    }
+
+    void destroyed(QtAbstractItemFilter* f)
+    {
         auto it = instances.find(f);
-        if (it != instances.end())
+        if (it != instances.cend())
             instances.erase(it);
     }
 
-    QSet<QtItemFilter*> instances;
+    std::unordered_set<QtAbstractItemFilter*> instances;
 };
-
-static QtItemFilterInstanceWatcher globalWatcher;
 #endif
+
+
+QtAbstractItemFilter::QtAbstractItemFilter() : mEnabled(true)
+{
+#ifdef QT_DEBUG
+    QtItemFilterInstanceWatcher::globalInsance().created(this);
+#endif
+}
+
+QtAbstractItemFilter::~QtAbstractItemFilter()
+{
+#ifdef QT_DEBUG
+    QtItemFilterInstanceWatcher::globalInsance().destroyed(this);
+#endif
+}
+
+void QtAbstractItemFilter::setObjectName(const QString &name)
+{
+    mObjectName = name;
+}
+
+QString QtAbstractItemFilter::objectName() const
+{
+    return mObjectName;
+}
+
+void QtAbstractItemFilter::setEnabled(bool on)
+{
+    mEnabled = on;
+}
+
+bool QtAbstractItemFilter::isEnabled() const
+{
+    return mEnabled;
+}
 
 
 class QtItemFilterPrivate
@@ -127,15 +176,13 @@ public:
     int patternRole;
     Qt::MatchFlags flags;
     QtItemFilter::RegexOptions options;
-    quint8 condition : 7;
-    bool enabled : 1;
+    quint8 condition;
 
     QtItemFilterPrivate() :
         patternRole(Qt::EditRole),
         flags(Qt::MatchExactly),
         options(QtItemFilter::NoOptions),
-        condition(QtItemFilter::None),
-        enabled(true)
+        condition(QtItemFilter::None)
     {
     }
 };
@@ -145,40 +192,10 @@ public:
 QtItemFilter::QtItemFilter() :
     d_ptr(new QtItemFilterPrivate)
 {
-#ifdef QT_DEBUG
-    globalWatcher.created(this);
-#endif
 }
 
 QtItemFilter::~QtItemFilter()
 {
-#ifdef QT_DEBUG
-    globalWatcher.destroyed(this);
-#endif
-}
-
-void QtItemFilter::setObjectName(const QString &name)
-{
-    Q_D(QtItemFilter);
-    d->objectName = name;
-}
-
-QString QtItemFilter::objectName() const
-{
-    Q_D(const QtItemFilter);
-    return d->objectName;
-}
-
-void QtItemFilter::setEnabled(bool on)
-{
-    Q_D(QtItemFilter);
-    d->enabled = on;
-}
-
-bool QtItemFilter::isEnabled() const
-{
-    Q_D(const QtItemFilter);
-    return d->enabled;
 }
 
 void QtItemFilter::setPattern(const QVariant &pattern)
@@ -234,7 +251,6 @@ int QtItemFilter::patternRole() const
     return d->patternRole;
 }
 
-
 void QtItemFilter::setCondition(QtItemFilter::Condition c)
 {
     Q_D(QtItemFilter);
@@ -274,7 +290,7 @@ QtItemFilter::RegexOptions QtItemFilter::regexOptions() const
 bool QtItemFilter::accepted(const QModelIndex &index) const
 {
     Q_D(const QtItemFilter);
-    if (!d->enabled || (d->condition == None || !d->pattern.isValid()))
+    if (!isEnabled() || (d->condition == None || !d->pattern.isValid()))
         return true;
     return accepts(index.data(patternRole()));
 }
@@ -295,9 +311,6 @@ bool QtItemFilter::accepts(const QVariant &v) const
     }
     return false;
 }
-
-
-
 
 
 class QtItemFormatterPrivate
@@ -359,12 +372,12 @@ public:
         }*/
     }
 
-    inline const QModelIndex sibling(const QtProxyModelIndex& idx, int i) const {
-        if (orientation == Qt::Horizontal) {
+    inline const QModelIndex sibling(const QtProxyModelIndex& idx, int i) const
+    {
+        if (orientation == Qt::Horizontal)
             return (i != idx.column() ? model->index(idx.row(), i) : idx.index());
-        } else {
+        else
             return (i != idx.row() ? model->index(i, idx.column()) : idx.index());
-        }
     }
 };
 
@@ -477,14 +490,19 @@ QString QtItemFormatter::formatted(const QtProxyModelIndex &index) const
     result.reserve(result.size() + d->siblings.size() * 2);
 
     QStringRef pl;
-    if (d->siblings.empty() || d->model == Q_NULLPTR) {
+    if (d->siblings.empty() || d->model == Q_NULLPTR)
+    {
         if (d->formatString.isEmpty())
-            return format(index.data(d->textRole));
+            return format( index.data(d->textRole) );
+
         pl = d->placeholder(0);
-        buf = format(index.data(d->textRole));
+        buf = format( index.data(d->textRole) );
         result.replace( pl.data(), pl.size(), buf.data(), buf.size() );
-    } else {
-        for (int i = 0, n = d->siblings.size(); i < n; ++i) {
+    }
+    else
+    {
+        for (int i = 0, n = d->siblings.size(); i < n; ++i)
+        {
             QModelIndex idx = d->sibling(index, d->siblings[i]);
             pl = d->placeholder(i);
             buf = format( idx.data(d->textRole) );
@@ -493,9 +511,6 @@ QString QtItemFormatter::formatted(const QtProxyModelIndex &index) const
     }
     return result;
 }
-
-
-
 
 
 class QtRichTextFormatterPrivate
@@ -512,7 +527,6 @@ public:
         alignment(Qt::AlignVCenter|Qt::AlignLeft)
     {}
 };
-
 
 
 QtRichTextFormatter::QtRichTextFormatter() :
@@ -628,17 +642,10 @@ QVariant QtRichTextFormatter::data(const QtProxyModelIndex &index) const
 
     result += this->formatted(index).toHtmlEscaped();
 
-
     result += "</style></p>";
 
     return result;
 }
-
-
-
-
-
-
 
 
 class QtItemHighlighterPrivate
@@ -655,9 +662,6 @@ public:
         alignment(Qt::AlignVCenter|Qt::AlignLeft)
     {}
 };
-
-
-
 
 
 QtItemHighlighter::QtItemHighlighter() :
