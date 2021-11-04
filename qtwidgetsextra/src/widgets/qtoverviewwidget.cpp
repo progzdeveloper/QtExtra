@@ -330,7 +330,32 @@ void QtOverviewWidget::resizeEvent(QResizeEvent *event)
     Q_D(QtOverviewWidget);
     QWidget::resizeEvent(event);
     d->updateContentRect();
-    updatePixmap();
+
+    d->pixmapRect = d->pixmap.rect();
+    d->pixmapRect.moveCenter(rect().center());
+
+    const QSize oldSize = event->oldSize();
+    const QSize newSize = event->size();
+    const QSize pixmapSize = d->pixmap.size();
+
+    if (newSize.width() == oldSize.width())
+    {
+        updatePixmap();
+    }
+    else if (newSize.height() == oldSize.height())
+    {
+        const int widgetSide = std::min(newSize.width(), newSize.height());
+        const int pixmapSide = std::max(pixmapSize.width(), pixmapSize.height());
+
+        if (widgetSide != pixmapSide)
+            updatePixmap();
+        else
+            update();
+    }
+    else
+    {
+        updatePixmap();
+    }
 }
 
 void QtOverviewWidget::mousePressEvent(QMouseEvent *event)
