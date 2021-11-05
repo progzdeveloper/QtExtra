@@ -83,8 +83,8 @@ void QtOverviewWidgetPrivate::grabViewport()
     hbar->setValue(0);
     vbar->setValue(0);
 
-    int width = hbar->maximum() + hbar->pageStep();
-    int height = vbar->maximum() + vbar->pageStep();
+    const int width = hbar->maximum() + hbar->pageStep();
+    const int height = vbar->maximum() + vbar->pageStep();
 
     {
         QScopedValueRollback<bool> lock(updating, true);
@@ -96,6 +96,8 @@ void QtOverviewWidgetPrivate::grabViewport()
 
     pixmapRect = pixmap.rect();
     pixmapRect.moveCenter(q_ptr->rect().center());
+
+    updateContentRect();
 }
 
 void QtOverviewWidgetPrivate::updateContentRect()
@@ -113,13 +115,13 @@ void QtOverviewWidgetPrivate::updateContentRect()
         return;
     }
 
-    QRectF r = viewport->rect();
+    const QRectF r = viewport->rect();
 
-    QPointF scale = scaleFactor();
-    double x = area->horizontalScrollBar()->value();
-    double y = area->verticalScrollBar()->value();
-    double w = r.width();
-    double h = r.height();
+    const QPointF scale = scaleFactor();
+    const double x = area->horizontalScrollBar()->value();
+    const double y = area->verticalScrollBar()->value();
+    const double w = r.width();
+    const double h = r.height();
 
     contentRect.setRect(pixmapRect.x(), pixmapRect.y(), w / scale.x(), h / scale.y());
     contentRect.translate(x / scale.x(), y / scale.y());
@@ -329,10 +331,10 @@ void QtOverviewWidget::resizeEvent(QResizeEvent *event)
 {
     Q_D(QtOverviewWidget);
     QWidget::resizeEvent(event);
-    d->updateContentRect();
 
     d->pixmapRect = d->pixmap.rect();
     d->pixmapRect.moveCenter(rect().center());
+    d->updateContentRect();
 
     const QSize oldSize = event->oldSize();
     const QSize newSize = event->size();

@@ -73,7 +73,6 @@ bool QtRevertibleProxyModel::setData(const QModelIndex &index, const QVariant &v
     return false;
 }
 
-
 bool QtRevertibleProxyModel::submit()
 {
     Q_D(QtRevertibleProxyModel);

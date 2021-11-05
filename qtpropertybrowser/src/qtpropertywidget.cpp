@@ -9,6 +9,10 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 
+#include <QPaintEvent>
+#include <QPainter>
+#include <QPixmap>
+
 #include <QDebug>
 
 #include "qtvariantproperty.h"
@@ -33,7 +37,6 @@ static const char* colorMap[] = {
     "#c181ea", // purple
     "#81e4ea"  // cyan
 };
-
 
 
 class QtPropertyWidgetPrivate
@@ -72,6 +75,10 @@ public:
     void resolveClassProperties(const QMetaObject *metaClass);
     void resolveDynamicProperties(QObject* object);
 
+    void blockRepaint();
+    void unblockRepaint();
+
+    QPixmap pixmapBuffer;
     QHash<const QMetaObject *, QMap<int, QtVariantProperty *> > classToIndexToProperty;
     QHash<const QMetaObject *, QtProperty *>  classToProperty;
     QHash<QtProperty *, const QMetaObject *>  propertyToClass;
@@ -512,6 +519,44 @@ void QtPropertyWidgetPrivate::resolveDynamicProperties(QObject *object)
     topLevelProperties.append(classProperty);
 }
 
+void QtPropertyWidgetPrivate::blockRepaint()
+{
+    if (!q_ptr->isVisible())
+        return;
+
+    pixmapBuffer = q_ptr->grab();
+    browser->setUpdatesEnabled(false);
+    if (scroll)
+        scroll->setUpdatesEnabled(false);
+}
+
+void QtPropertyWidgetPrivate::unblockRepaint()
+{
+    browser->setUpdatesEnabled(true);
+    if (scroll)
+        scroll->setUpdatesEnabled(true);
+    pixmapBuffer = QPixmap();
+}
+
+
+struct RepaintLocker
+{
+    QtPropertyWidgetPrivate* d;
+
+    RepaintLocker(QtPropertyWidgetPrivate* p) : d(p)
+    {
+        d->blockRepaint();
+    }
+
+    void unlock() { d->unblockRepaint(); }
+
+    ~RepaintLocker()
+    {
+        if (!d->pixmapBuffer.isNull())
+            d->unblockRepaint();
+    }
+};
+
 
 
 QtPropertyWidget::QtPropertyWidget(QWidget *parent)
@@ -593,12 +638,16 @@ void QtPropertyWidget::setViewType(ViewType type)
             break;
         }
     }
+
+    RepaintLocker locker(d);
     d->browser->setFactoryForManager(d->manager, d->factory);
     if (d->object) {
         d->resolveClassProperties(d->metaObject);
         if (!d->isGadget)
             d->resolveDynamicProperties(d->object);
     }
+    locker.unlock();
+
     d->browser->update();
 }
 
@@ -623,6 +672,8 @@ QtPropertyWidget::SubmitPolicy QtPropertyWidget::submitPolicy() const
 void QtPropertyWidget::setFinal(bool on)
 {
     Q_D(QtPropertyWidget);
+
+    RepaintLocker locker(d);
     d->isFinal = on;
 
     d->clearInternals();
@@ -677,6 +728,7 @@ bool QtPropertyWidget::isObject() const
 void QtPropertyWidget::setPropertyFilter(const QString& pattern)
 {
     Q_D(QtPropertyWidget);
+    RepaintLocker locker(d);
     d->propertyFilter = pattern;
     Q_EMIT propertyFilterChanged(pattern);
     d->filterProperties(QRegExp(d->propertyFilter, Qt::CaseInsensitive, QRegExp::RegExp2));
@@ -690,6 +742,7 @@ QString QtPropertyWidget::propertyFilter() const {
 void QtPropertyWidget::setClassFilter(const QString &pattern)
 {
     Q_D(QtPropertyWidget);
+    RepaintLocker locker(d);
     d->classFilter = pattern;
     Q_EMIT propertyFilterChanged(pattern);
     d->filterClasses(QRegExp(d->classFilter, Qt::CaseSensitive, QRegExp::RegExp2));
@@ -766,12 +819,14 @@ void QtPropertyWidget::submit()
 void QtPropertyWidget::revert()
 {
     Q_D(QtPropertyWidget);
+
     if (!d->object)
         return;
 
-    if (d->submitPolicy != ManualSubmit) {
+    if (d->submitPolicy != ManualSubmit)
         return;
-    }
+
+    RepaintLocker locker(d);
     // revert the changes to original values
     auto it = d->originalCache.cbegin();
     for (; it != d->originalCache.cend(); ++it)
@@ -795,7 +850,10 @@ void QtPropertyWidget::revert()
 void QtPropertyWidget::refresh()
 {
     Q_D(QtPropertyWidget);
-    if (d->object) {
+
+    if (d->object)
+    {
+        RepaintLocker locker(d);
         d->updateProperties(d->metaObject, true);
     }
 }
@@ -803,9 +861,21 @@ void QtPropertyWidget::refresh()
 void QtPropertyWidget::objectDestroyed(QObject *object)
 {
     Q_D(QtPropertyWidget);
-    if (object == d->object) {
+    if (object == d->object)
+    {
+        RepaintLocker locker(d);
         setupObject(Q_NULLPTR);
     }
+}
+
+void QtPropertyWidget::paintEvent(QPaintEvent *event)
+{
+    Q_D(QtPropertyWidget);
+    if (d->pixmapBuffer.isNull())
+        return QWidget::paintEvent(event);
+
+    QPainter painter(this);
+    painter.drawPixmap(event->rect(), d->pixmapBuffer, event->rect());
 }
 
 bool QtPropertyWidget::isQObject(const QMetaObject *metaObject)
@@ -830,6 +900,7 @@ void QtPropertyWidget::setupObject(QObject *object)
     if (d->object == object)
         return;
 
+    RepaintLocker locker(d);
     if (d->object != Q_NULLPTR && !d->isGadget) {
         disconnect(d->object, SIGNAL(destroyed(QObject*)),
                    this, SLOT(objectDestroyed(QObject*)));
@@ -862,6 +933,7 @@ void QtPropertyWidget::setupGadget(void *gadget, const QMetaObject *metaObject)
     if (d->gadget == gadget)
         return;
 
+    RepaintLocker locker(d);
     if (d->object != Q_NULLPTR && !d->isGadget) {
         disconnect(d->object, SIGNAL(destroyed(QObject*)),
                    this, SLOT(objectDestroyed(QObject*)));

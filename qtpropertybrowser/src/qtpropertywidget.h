@@ -134,6 +134,9 @@ Q_SIGNALS:
     void classFilterChanged(const QString&);
     void propertyChanged(const QString& propertyName, const QVariant& value);
 
+protected:
+    void paintEvent(QPaintEvent* event);
+
 private:
     static bool isQObject(const QMetaObject* metaObject);
     void setupObject(QObject* object);

@@ -11,12 +11,28 @@ static inline quint64 hashCode(quint32 index, int role) {
     return (quint64(role) << 32 | quint64(index));
 }
 
+struct RoleTraverseOptions
+{
+    quint32 role : 24;
+    quint32 options : 8;
+
+    RoleTraverseOptions(int aRole, QtCompositeProxyModel::TraverseOptions aOpts)
+        : role(aRole), options(aOpts)
+    {
+    }
+
+    inline bool operator==(int aRole) const
+    {
+        return (aRole == role);
+    }
+};
+
 class QtCompositeProxyModelPrivate
 {
 public:
     typedef QList<QtItemMapper*> MapperList;
     QHash<quint64, MapperList> mappings;
-    QHash<int, QtCompositeProxyModel::TraverseOptions> traversings;
+    std::vector<RoleTraverseOptions> traversOptsMap;
     QString delimiter;
     QtCompositeProxyModel::BackgroundCombiation combinationMode;
 
@@ -63,13 +79,13 @@ inline QVariant QtCompositeProxyModelPrivate::formatText(QtProxyModelIndex &inde
     case QtCompositeProxyModel::TopMost:
         return mappers.front()->map(index);
     case QtCompositeProxyModel::Forward:
-        return createFormattedText(index, mappers.begin(), mappers.end(), delimiter, false);
+        return createFormattedText(index, mappers.cbegin(), mappers.cend(), delimiter, false);
     case QtCompositeProxyModel::Backward:
-        return createFormattedText(index, mappers.rbegin(), mappers.rend(), delimiter, false);
+        return createFormattedText(index, mappers.crbegin(), mappers.crend(), delimiter, false);
     case QtCompositeProxyModel::PropagateForward:
-        return createFormattedText(index, mappers.begin(), mappers.end(), delimiter, true);
+        return createFormattedText(index, mappers.cbegin(), mappers.cend(), delimiter, true);
     case QtCompositeProxyModel::PropagateBackward:
-        return createFormattedText(index, mappers.rbegin(), mappers.rend(), delimiter, true);
+        return createFormattedText(index, mappers.crbegin(), mappers.crend(), delimiter, true);
     default: break;
     }
     return QVariant();
@@ -80,7 +96,7 @@ template<class _Iterator>
 static inline QVariant createGradientBrush(QtProxyModelIndex &index, _Iterator first, _Iterator last, bool propagate)
 {
     QVariant v;
-    QVariant value = index.data();
+    const QVariant value = index.data();
 
     QVariantList results;
     for (; first != last; ++first)
@@ -115,7 +131,7 @@ inline QVariant QtCompositeProxyModelPrivate::formatColor(QtProxyModelIndex &ind
     switch (mode) {
     case QtCompositeProxyModel::TopMost:
         for (auto it = mappers.begin(); it != mappers.end(); ++it) {
-            QVariant value = (*it)->map(index);
+            const QVariant value = (*it)->map(index);
             if (value.isValid() && value != index.data())
                 return value;
         }
@@ -136,9 +152,10 @@ inline QVariant QtCompositeProxyModelPrivate::formatColor(QtProxyModelIndex &ind
 inline QVariant QtCompositeProxyModelPrivate::foreground(QtProxyModelIndex &index, const MapperList &mappers, int mode) const
 {
     Q_UNUSED(mode);
-    QVariant v = index.data();
-    for (auto it = mappers.begin(); it != mappers.end(); ++it) {
-        QVariant value = (*it)->map(index);
+    const QVariant v = index.data();
+    for (auto it = mappers.begin(); it != mappers.end(); ++it)
+    {
+        const QVariant value = (*it)->map(index);
         if (value.isValid() && value != v)
             return value;
     }
@@ -148,9 +165,10 @@ inline QVariant QtCompositeProxyModelPrivate::foreground(QtProxyModelIndex &inde
 inline QVariant QtCompositeProxyModelPrivate::decoration(QtProxyModelIndex &index, const MapperList &mappers, int mode) const
 {
     Q_UNUSED(mode);
-    QVariant v = index.data();
-    for (auto it = mappers.begin(); it != mappers.end(); ++it) {
-        QVariant value = (*it)->map(index);
+    const QVariant v = index.data();
+    for (auto it = mappers.begin(); it != mappers.end(); ++it)
+    {
+        const QVariant value = (*it)->map(index);
         if (value.isValid() && value != v)
             return value;
     }
@@ -172,8 +190,9 @@ inline QVariant QtCompositeProxyModelPrivate::userData(QtProxyModelIndex &index,
     QVariant result = index.data();
     switch (mode) {
     case QtCompositeProxyModel::TopMost:
-        for (auto it = mappers.begin(); it != mappers.end(); ++it) {
-            QVariant value = (*it)->map(index);
+        for (auto it = mappers.begin(); it != mappers.end(); ++it)
+        {
+            const QVariant value = (*it)->map(index);
             if (value.isValid() && value != result) {
                 result = value;
                 break;
@@ -185,13 +204,15 @@ inline QVariant QtCompositeProxyModelPrivate::userData(QtProxyModelIndex &index,
     case QtCompositeProxyModel::Backward:
         return mappers.back()->map(index);
     case QtCompositeProxyModel::PropagateForward:
-        for (auto it = mappers.begin(); it != mappers.end(); ++it) {
+        for (auto it = mappers.begin(); it != mappers.end(); ++it)
+        {
             result = (*it)->map(index);
             index.setData(index.role(), result);
         }
         break;
     case QtCompositeProxyModel::PropagateBackward:
-        for (auto it = mappers.rbegin(); it != mappers.rend(); ++it) {
+        for (auto it = mappers.rbegin(); it != mappers.rend(); ++it)
+        {
             result = (*it)->map(index);
             index.setData(index.role(), result);
         }
@@ -201,11 +222,6 @@ inline QVariant QtCompositeProxyModelPrivate::userData(QtProxyModelIndex &index,
     }
     return result;
 }
-
-
-
-
-
 
 QtCompositeProxyModel::QtCompositeProxyModel(QObject *parent) :
     QIdentityProxyModel(parent), d_ptr(new QtCompositeProxyModelPrivate)
@@ -226,14 +242,30 @@ QtCompositeProxyModel::~QtCompositeProxyModel()
 void QtCompositeProxyModel::setTraverseOptions(int role, QtCompositeProxyModel::TraverseOptions opts)
 {
     Q_D(QtCompositeProxyModel);
-    d->traversings[role] = opts;
+
+    auto it = std::find(d->traversOptsMap.begin(), d->traversOptsMap.end(), role);
+    if (it == d->traversOptsMap.end())
+    {
+        Q_EMIT layoutAboutToBeChanged();
+        d->traversOptsMap.emplace_back(role, opts);
+        Q_EMIT layoutChanged();
+    }
+    else
+    {
+        if (it->options == opts)
+            return;
+
+        Q_EMIT layoutAboutToBeChanged();
+        it->options = opts;
+        Q_EMIT layoutChanged();
+    }
 }
 
 QtCompositeProxyModel::TraverseOptions QtCompositeProxyModel::traverseOptions(int role) const
 {
     Q_D(const QtCompositeProxyModel);
-    auto it = d->traversings.find(role);
-    return (it == d->traversings.end() ? TopMost : (*it));
+    auto it = std::find(d->traversOptsMap.cbegin(), d->traversOptsMap.cend(), role);
+    return (it == d->traversOptsMap.cend() ? TopMost : static_cast<QtCompositeProxyModel::TraverseOptions>(it->options));
 }
 
 void QtCompositeProxyModel::attachMapping(int sourceColumn, int sourceRole, QtItemMapper *mapper)
@@ -256,9 +288,9 @@ void QtCompositeProxyModel::attachMapping(int sourceColumn, int sourceRole, QtIt
 
     Q_EMIT layoutAboutToBeChanged();
 
-    quint64 key = hashCode(sourceColumn, sourceRole);
+    const quint64 key = hashCode(sourceColumn, sourceRole);
     auto it = d->mappings.find(key);
-    if (it == d->mappings.end()) {
+    if (it == d->mappings.cend()) {
         d->mappings[key].push_back(mapper);
 
     } else {
@@ -276,7 +308,7 @@ int QtCompositeProxyModel::detachMapping(int sourceColumn, int sourceRole, QtIte
 
     quint64 key = hashCode(sourceColumn, sourceRole);
     auto it = d->mappings.find(key);
-    if (it == d->mappings.end())
+    if (it == d->mappings.cend())
         return 0;
 
     int index = it->indexOf(mapper);
@@ -299,7 +331,7 @@ int QtCompositeProxyModel::detachMappings(int sourceColumn, int sourceRole)
     Q_D(QtCompositeProxyModel);
     quint64 key = hashCode(sourceColumn, sourceRole);
     auto it = d->mappings.find(key);
-    if (it == d->mappings.end())
+    if (it == d->mappings.cend())
         return 0;
 
     Q_EMIT layoutAboutToBeChanged();
@@ -316,10 +348,10 @@ int QtCompositeProxyModel::detachMapping(QtItemMapper *mapper)
 
     Q_EMIT layoutAboutToBeChanged();
     int count = 0;
-    for (auto it = d->mappings.begin(); it != d->mappings.end(); ++it) {
+    for (auto it = d->mappings.cbegin(); it != d->mappings.cend(); ++it) {
         int index = it->indexOf(mapper);
         if (index >= 0) {
-            it->removeAt(index);
+            const_cast<QtCompositeProxyModelPrivate::MapperList&>(*it).removeAt(index);
             ++count;
         }
     }
@@ -330,8 +362,8 @@ int QtCompositeProxyModel::detachMapping(QtItemMapper *mapper)
 int QtCompositeProxyModel::countMappings(int sourceColumn, int sourceRole) const
 {
     Q_D(const QtCompositeProxyModel);
-    auto it = d->mappings.find(hashCode(sourceColumn, sourceRole));
-    if (it == d->mappings.end())
+    auto it = d->mappings.constFind(hashCode(sourceColumn, sourceRole));
+    if (it == d->mappings.cend())
         return 0;
     return it->size();
 }
@@ -357,8 +389,8 @@ QVariant QtCompositeProxyModel::data(const QModelIndex &proxyIndex, int role) co
     QtProxyModelIndex index( mapToSource(proxyIndex), role );
     int column = index.column();
     quint64 key = hashCode(column, role);
-    auto it = d->mappings.find(key);
-    if (it == d->mappings.end()) {
+    auto it = d->mappings.constFind(key);
+    if (it == d->mappings.cend()) {
         return QIdentityProxyModel::data(proxyIndex, role);
     }
 
