@@ -18,14 +18,15 @@ void QtCompositeItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         return;
     }
 
-    QString text = index.data(Qt::DisplayRole).toString();
+    const QString text = index.data(Qt::DisplayRole).toString();
 
     QStyleOptionViewItem option = opt;
     initStyleOption(&option, index);
     option.text.clear();
 
-    auto it = children.begin();
-    for (auto e = children.end() - 1; it != e; ++it) {
+    auto it = children.cbegin();
+    for (auto last = children.cend() - 1; it != last; ++it)
+    {
         painter->save();
         (*it)->paint(painter, option, index);
         painter->restore();
@@ -38,12 +39,11 @@ void QtCompositeItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
 QSize QtCompositeItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    static QPoint zero;
-    QRect rect(zero, QStyledItemDelegate::sizeHint(option, index));
-    QList<QAbstractItemDelegate*> children = this->findChildren<QAbstractItemDelegate*>();
-    for (auto it = children.begin(); it != children.end(); ++it) {
-        rect |= (QRect(zero, (*it)->sizeHint(option, index)));
-    }
-    return rect.size();
+    QSize size = QStyledItemDelegate::sizeHint(option, index);
+    const QList<QAbstractItemDelegate*> children = this->findChildren<QAbstractItemDelegate*>();
+    for (auto it = children.cbegin(); it != children.cend(); ++it)
+        size = size.expandedTo((*it)->sizeHint(option, index));
+
+    return size;
 }
 
