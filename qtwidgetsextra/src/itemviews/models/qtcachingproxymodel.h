@@ -38,6 +38,7 @@ public:
 
     void setSourceModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
 
+    bool setData(const QModelIndex &index, const QVariant &value, int role) Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &proxyIndex, int role) const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:

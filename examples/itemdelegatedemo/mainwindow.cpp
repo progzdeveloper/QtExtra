@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     view->setItemDelegate(delegate);
-    //view->setItemDelegateForColumn(1, new QtRichTextItemDelegate(view));
     //view->setItemDelegateForColumn(1, new QtMenuItemDelegate(view));
+    //view->setItemDelegateForColumn(1, new QtRichTextItemDelegate(view));
     //view->setItemDelegateForColumn(0, new QtSheetItemDelegate(view, view));
     view->setEditTriggers(QTreeView::AnyKeyPressed);
     view->setUniformRowHeights(false);

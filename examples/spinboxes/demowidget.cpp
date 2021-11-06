@@ -9,6 +9,7 @@
 
 #include <QtLongSpinBox>
 #include <QtTextSpinBox>
+#include <QtSpinBoxEdit>
 #include <QtSpanSlider>
 
 #include <QtSlideButton>
@@ -40,6 +41,9 @@ DemoWidget::DemoWidget(QWidget *parent)
     insertWidget(spinBox);
 
     spinBox = new QtTextSpinBox(seasons, this);
+    insertWidget(spinBox);
+
+    spinBox = new QtSpinBoxEdit(this);
     insertWidget(spinBox);
 
     QtSpanSlider* vslider = new QtSpanSlider(Qt::Vertical, this);

@@ -86,7 +86,8 @@ HEADERS += \
     $$PWD/src/widgets/qtcardwidget.h \
     $$PWD/src/itemviews/models/qtrevertibleproxymodel.h \
     $$PWD/src/itemviews/models/qtcachingproxymodel.h \
-    $$PWD/src/itemviews/models/qttreeproxymodel.h
+    $$PWD/src/itemviews/models/qttreeproxymodel.h \
+    $$PWD/src/widgets/qtspinboxedit.h
 
 
 SOURCES += \
@@ -171,7 +172,8 @@ SOURCES += \
     $$PWD/src/widgets/qtcardwidget.cpp \
     $$PWD/src/itemviews/models/qtrevertibleproxymodel.cpp \
     $$PWD/src/itemviews/models/qtcachingproxymodel.cpp \
-    $$PWD/src/itemviews/models/qttreeproxymodel.cpp
+    $$PWD/src/itemviews/models/qttreeproxymodel.cpp \
+    $$PWD/src/widgets/qtspinboxedit.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc

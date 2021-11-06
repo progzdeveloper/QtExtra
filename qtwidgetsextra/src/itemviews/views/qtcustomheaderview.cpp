@@ -31,7 +31,6 @@ public:
     QRect prevRect(int logicalIndex) const;
     QRect nextRect(int logicalIndex) const;
 
-
     void setMenuIcon();
     void drawSectionIcon(QPainter *painter, int logicalIndex, bool enabled) const;
     void drawPrevButton(QPainter *painter, int logicalIndex, bool enabled) const;

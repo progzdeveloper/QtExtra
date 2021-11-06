@@ -155,6 +155,23 @@ void QtCachingProxyModel::setSourceModel(QAbstractItemModel *model)
     QIdentityProxyModel::setSourceModel(model);
 }
 
+bool QtCachingProxyModel::setData(const QModelIndex &proxyIndex, const QVariant &value, int role)
+{
+    Q_D(QtCachingProxyModel);
+    if (QIdentityProxyModel::setData(proxyIndex, value, role))
+    {
+        const QVariant value = proxyIndex.data(role);
+        const quint64 idx = d->indexate(proxyIndex.row(), role);
+        auto it = d->cache.find(idx);
+        if (it != d->cache.end()) // cache hit
+            it->second = value;
+        else // cache miss
+            d->cacheValue(proxyIndex.row(), role, value);
+        return true;
+    }
+    return false;
+}
+
 QVariant QtCachingProxyModel::data(const QModelIndex &proxyIndex, int role) const
 {
     Q_D(const QtCachingProxyModel);
