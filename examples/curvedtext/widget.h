@@ -1,6 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include <QScopedPointer>
 #include <QFrame>
 #include <QPen>
 
@@ -10,6 +11,7 @@ class QTabWidget;
 class QPushButton;
 
 class QtPropertyWidget;
+class QtAttributeResource;
 
 class PaintArea;
 
@@ -25,11 +27,12 @@ public:
 private:
     void initUi();
 
-    void createTextPage();
-    void createRounderPage();
-    void createStarPage();
+    void createTextPage(QtAttributeResource* resource);
+    void createRounderPage(QtAttributeResource* resource);
+    void createStarPage(QtAttributeResource* resource);
 private:
     QTabWidget* tabWidget;
+    QScopedPointer<QtAttributeResource> mAttributeResource;
 };
 
 

@@ -12,13 +12,21 @@
 #include <QtPropertyWidget>
 #include <QtAttributeResource>
 
+#include <QDebug>
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
+    QFile file(":/metadata.json");
+    file.open(QFile::ReadOnly);
+    mAttributeResource.reset(new QtJsonAttributeResource);
+    if (!mAttributeResource->read(&file))
+        qWarning() << "Failed to read attribute resource: " << mAttributeResource->errorString();
+
     tabWidget = new QTabWidget(this);
-    createTextPage();
-    createRounderPage();
-    createStarPage();
+    createTextPage(mAttributeResource.data());
+    createRounderPage(mAttributeResource.data());
+    createStarPage(mAttributeResource.data());
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(tabWidget);
@@ -28,7 +36,7 @@ Widget::~Widget()
 {
 }
 
-void Widget::createTextPage()
+void Widget::createTextPage(QtAttributeResource* resource)
 {
     QWidget* pageWidget = new QWidget(this);
     PaintArea* paintArea = new PaintArea(pageWidget);
@@ -44,14 +52,10 @@ void Widget::createTextPage()
     animation->setDuration(1000);
     connect(animateButton, SIGNAL(clicked()), animation, SLOT(start()));
 
-    QFile file(":/metadata.json");
-    file.open(QFile::ReadOnly);
-    QtJsonAttributeResource* resource = new QtJsonAttributeResource;
-    if (resource->read(&file))
-        browser->setResource(resource);
-
-    browser->setObject(paintArea);
     browser->setFinal(true);
+    if (resource)
+        browser->setResource(resource);
+    browser->setObject(paintArea);
 
     QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
     splitter->addWidget(paintArea);
@@ -64,13 +68,16 @@ void Widget::createTextPage()
     tabWidget->addTab(pageWidget, tr("Curved Text"));
 }
 
-void Widget::createRounderPage()
+void Widget::createRounderPage(QtAttributeResource* resource)
 {
     QWidget* pageWidget = new QWidget(this);
     PolygonArea* paintArea = new PolygonArea(pageWidget);
     QtPropertyWidget* browser = new QtPropertyWidget(pageWidget);
-    browser->setObject(paintArea);
+
     browser->setFinal(true);
+    if (resource)
+        browser->setResource(resource);
+    browser->setObject(paintArea);
 
     QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
     splitter->addWidget(paintArea);
@@ -82,13 +89,15 @@ void Widget::createRounderPage()
     tabWidget->addTab(pageWidget, tr("Rounded Polygon"));
 }
 
-void Widget::createStarPage()
+void Widget::createStarPage(QtAttributeResource *resource)
 {
     QWidget* pageWidget = new QWidget(this);
     StarArea* paintArea = new StarArea(pageWidget);
     QtPropertyWidget* browser = new QtPropertyWidget(pageWidget);
-    browser->setObject(paintArea);
     browser->setFinal(true);
+    if (resource)
+        browser->setResource(resource);
+    browser->setObject(paintArea);
 
     QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
     splitter->addWidget(paintArea);
@@ -447,6 +456,7 @@ int StarArea::sideCount() const
 void StarArea::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.fillRect(rect(), Qt::white);
     painter.fillPath(mPath, mColor);
 }

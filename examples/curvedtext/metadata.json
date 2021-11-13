@@ -12,5 +12,13 @@
         "stretch": {"stretch":"stretch","minimum":0.0, "maximum":1.0, "singleStep":0.01},
         "angle": {"angle":"angle","minimum":0.0, "maximum":1.0, "singleStep":0.01},
         "penWidth": {"penWidth":"penWidth", "minimum":0, "maximum":100, "singleStep":1}
+    },
+    "PolygonArea": {
+        "radius": {"radius":"radius","minimum":0.0, "maximum":1000.0, "singleStep":1.0}
+    },
+    "StarArea": {
+        "sideCount":{"sideCount":"sideCount", "minimum":3, "maximum":1000, "singleStep":1},
+        "factor": {"factor":"factor","minimum":0.0, "maximum":1.0, "singleStep":0.05},
+        "radius": {"radius":"radius","minimum":0.0, "maximum":1000.0, "singleStep":1.0}
     }
 }
