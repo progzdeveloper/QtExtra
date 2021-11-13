@@ -303,10 +303,10 @@ bool QtItemFilter::accepts(const QVariant &v) const
     case Match:        return match(d->pattern, v, d->flags, d->options);
     case Equal:        return match(d->pattern, v, Qt::MatchExactly, NoOptions);
     case NotEqual:     return (!match(d->pattern, v, Qt::MatchExactly, NoOptions));
-    case Less:         return (compareVariants(d->pattern, v, d->flags) < 0);
-    case LessEqual:    return (compareVariants(d->pattern, v, d->flags) <= 0);
-    case Greater:      return (compareVariants(d->pattern, v, d->flags) > 0);
-    case GreaterEqual: return (compareVariants(d->pattern, v, d->flags) >= 0);
+    case Less:         return (compareVariants(d->pattern, v, d->flags) > 0);
+    case LessEqual:    return (compareVariants(d->pattern, v, d->flags) >= 0);
+    case Greater:      return (compareVariants(d->pattern, v, d->flags) < 0);
+    case GreaterEqual: return (compareVariants(d->pattern, v, d->flags) <= 0);
     default: break;
     }
     return false;

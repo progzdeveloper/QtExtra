@@ -4,6 +4,9 @@
 #include <QFrame>
 #include <QPen>
 
+#include <QtPaintUtils>
+
+class QTabWidget;
 class QPushButton;
 
 class QtPropertyWidget;
@@ -22,10 +25,11 @@ public:
 private:
     void initUi();
 
+    void createTextPage();
+    void createRounderPage();
+    void createStarPage();
 private:
-    QtPropertyWidget* browser;
-    PaintArea* paintArea;
-    QPushButton* animateButton;
+    QTabWidget* tabWidget;
 };
 
 
@@ -101,5 +105,102 @@ private:
     QPen mLinePen;
     bool mClockwise;
 };
+
+
+class PolygonArea :
+        public QFrame
+{
+    Q_OBJECT
+
+    Q_PROPERTY(Shape shape READ shape WRITE setShape)
+    Q_PROPERTY(double radius READ radius WRITE setRadius)
+    Q_PROPERTY(QColor shapeColor READ shapeColor WRITE setShapeColor)
+    Q_PROPERTY(bool outlineVisible READ isOutlineVisible WRITE setOutlineVisible)
+public:
+    enum Shape
+    {
+        Triangle,
+        Rectangle,
+        Star
+    };
+    Q_ENUM(Shape)
+
+    explicit PolygonArea(QWidget* parent = Q_NULLPTR);
+
+    void setShape(Shape s);
+    Shape shape() const;
+
+    void setShapeColor(QColor color);
+    QColor shapeColor() const;
+
+    void setRadius(double radius);
+    double radius() const;
+
+    void setOutlineVisible(bool on);
+    bool isOutlineVisible() const;
+
+    // QWidget interface
+protected:
+    virtual void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+    virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+
+private:
+    void updatePolygon(const QRect& rect);
+    void updatePath();
+
+private:
+    QtPolygonRounder<ManhattanDistance> rounder;
+    QPainterPath mPath;
+    QPolygonF mPolygon;
+    QColor mColor;
+    double mRadius;
+    Shape mShape;
+    bool mOutline;
+};
+
+class StarArea :
+        public QFrame
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int sideCount READ sideCount WRITE setSideCount)
+    Q_PROPERTY(double factor READ factor WRITE setFactor)
+    Q_PROPERTY(double radius READ radius WRITE setRadius)
+    Q_PROPERTY(QColor color READ color WRITE setColor)
+
+public:
+    explicit StarArea(QWidget* parent);
+
+    void setColor(QColor color);
+    QColor color() const;
+
+    void setRadius(double radius);
+    double radius() const;
+
+    void setFactor(double factor);
+    double factor() const;
+
+    void setSideCount(int sideCount);
+    int sideCount() const;
+
+    // QWidget interface
+protected:
+    virtual void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+    virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+
+private:
+    void updatePolygon();
+    void updatePath();
+
+private:
+    QtPolygonRounder<ManhattanDistance> rounder;
+    QPainterPath mPath;
+    QPolygonF mPolygon;
+    QColor mColor;
+    quint32 mSideCount;
+    double mFactor;
+    double mRadius;
+};
+
 
 #endif // WIDGET_H

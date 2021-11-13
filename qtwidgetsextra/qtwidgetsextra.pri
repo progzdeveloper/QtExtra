@@ -2,7 +2,6 @@
 # Input
 HEADERS += \
     $$PWD/src/qtwidgetsextra.h \
-    $$PWD/src/painting/qtpainter.h \
     $$PWD/src/painting/qtcolorutils.h \
     $$PWD/src/painting/qtcolorpalette.h \
     $$PWD/src/mainwindow/qtdocktabbar.h \
@@ -87,11 +86,11 @@ HEADERS += \
     $$PWD/src/itemviews/models/qtrevertibleproxymodel.h \
     $$PWD/src/itemviews/models/qtcachingproxymodel.h \
     $$PWD/src/itemviews/models/qttreeproxymodel.h \
-    $$PWD/src/widgets/qtspinboxedit.h
+    $$PWD/src/widgets/qtspinboxedit.h \
+    $$PWD/src/painting/qtpaintutils.h
 
 
 SOURCES += \
-    $$PWD/src/painting/qtpainter.cpp \
     $$PWD/src/painting/qtcolorutils.cpp \
     $$PWD/src/painting/qtcolorpalette.cpp \
     $$PWD/src/painting/qtcolorpaletteformats.cpp \
@@ -173,7 +172,8 @@ SOURCES += \
     $$PWD/src/itemviews/models/qtrevertibleproxymodel.cpp \
     $$PWD/src/itemviews/models/qtcachingproxymodel.cpp \
     $$PWD/src/itemviews/models/qttreeproxymodel.cpp \
-    $$PWD/src/widgets/qtspinboxedit.cpp
+    $$PWD/src/widgets/qtspinboxedit.cpp \
+    $$PWD/src/painting/qtpaintutils.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc

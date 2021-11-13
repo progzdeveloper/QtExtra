@@ -1,4 +1,5 @@
 #include "widget.h"
+#include <QTabWidget>
 #include <QPushButton>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -6,7 +7,7 @@
 #include <QFile>
 #include <QPainter>
 #include <QPen>
-#include <QtPainter>
+
 #include <QPropertyAnimation>
 #include <QtPropertyWidget>
 #include <QtAttributeResource>
@@ -14,22 +15,28 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
-    initUi();
+    tabWidget = new QTabWidget(this);
+    createTextPage();
+    createRounderPage();
+    createStarPage();
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(tabWidget);
 }
 
 Widget::~Widget()
 {
 }
 
-void Widget::initUi()
+void Widget::createTextPage()
 {
+    QWidget* pageWidget = new QWidget(this);
+    PaintArea* paintArea = new PaintArea(pageWidget);
+    QtPropertyWidget* browser = new QtPropertyWidget(pageWidget);
 
-    paintArea = new PaintArea(this);
-    browser = new QtPropertyWidget(this);
+    QPushButton* animateButton = new QPushButton(tr("Animate!"), pageWidget);
 
-    animateButton = new QPushButton(tr("Animate!"), this);
-
-    QPropertyAnimation* animation = new QPropertyAnimation(this);
+    QPropertyAnimation* animation = new QPropertyAnimation(pageWidget);
     animation->setTargetObject(paintArea);
     animation->setPropertyName("stretch");
     animation->setStartValue(0.0);
@@ -46,17 +53,52 @@ void Widget::initUi()
     browser->setObject(paintArea);
     browser->setFinal(true);
 
-
-    QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
+    QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
     splitter->addWidget(paintArea);
     splitter->addWidget(browser);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout(pageWidget);
     layout->addWidget(splitter);
     layout->addWidget(animateButton);
+
+    tabWidget->addTab(pageWidget, tr("Curved Text"));
 }
 
+void Widget::createRounderPage()
+{
+    QWidget* pageWidget = new QWidget(this);
+    PolygonArea* paintArea = new PolygonArea(pageWidget);
+    QtPropertyWidget* browser = new QtPropertyWidget(pageWidget);
+    browser->setObject(paintArea);
+    browser->setFinal(true);
 
+    QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
+    splitter->addWidget(paintArea);
+    splitter->addWidget(browser);
+
+    QVBoxLayout* layout = new QVBoxLayout(pageWidget);
+    layout->addWidget(splitter);
+
+    tabWidget->addTab(pageWidget, tr("Rounded Polygon"));
+}
+
+void Widget::createStarPage()
+{
+    QWidget* pageWidget = new QWidget(this);
+    StarArea* paintArea = new StarArea(pageWidget);
+    QtPropertyWidget* browser = new QtPropertyWidget(pageWidget);
+    browser->setObject(paintArea);
+    browser->setFinal(true);
+
+    QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
+    splitter->addWidget(paintArea);
+    splitter->addWidget(browser);
+
+    QVBoxLayout* layout = new QVBoxLayout(pageWidget);
+    layout->addWidget(splitter);
+
+    tabWidget->addTab(pageWidget, tr("Star Polygon"));
+}
 
 
 
@@ -72,7 +114,7 @@ PaintArea::PaintArea(QWidget *parent) :
     mLinePen(Qt::darkRed),
     mClockwise(true)
 {
-
+    setFrameStyle(QFrame::Box|QFrame::Plain);
 }
 
 void PaintArea::setText(const QString &text)
@@ -190,7 +232,7 @@ void PaintArea::paintEvent(QPaintEvent *)
 {
     QtPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.fillRect(rect(), Qt::white);
+    painter.fillRect(contentsRect(), Qt::white);
 
     if (mShape == Curve) {
         QPainterPath path(QPointF(0.0, 0.0));
@@ -224,3 +266,210 @@ void PaintArea::paintEvent(QPaintEvent *)
     }
 }
 
+
+PolygonArea::PolygonArea(QWidget *parent) :
+    QFrame(parent),
+    mRadius(0.0),
+    mShape(PolygonArea::Triangle)
+{
+    setFrameStyle(QFrame::Box|QFrame::Plain);
+    setMinimumSize(32, 32);
+    setShapeColor(Qt::red);
+    setShape(Triangle);
+}
+
+void PolygonArea::setShape(PolygonArea::Shape s)
+{
+    mShape = s;
+    updatePolygon(rect());
+    updatePath();
+
+    if (isVisible())
+        update();
+}
+
+PolygonArea::Shape PolygonArea::shape() const
+{
+    return mShape;
+}
+
+void PolygonArea::setShapeColor(QColor color)
+{
+    mColor = color;
+    if (isVisible())
+        update();
+}
+
+QColor PolygonArea::shapeColor() const
+{
+    return mColor;
+}
+
+void PolygonArea::setRadius(double radius)
+{
+    mRadius = radius;
+    updatePolygon(rect());
+    updatePath();
+    if (isVisible())
+        update();
+}
+
+double PolygonArea::radius() const
+{
+    return mRadius;
+}
+
+void PolygonArea::setOutlineVisible(bool on)
+{
+    mOutline = on;
+    if (isVisible())
+        update();
+}
+
+bool PolygonArea::isOutlineVisible() const
+{
+    return mOutline;
+}
+
+void PolygonArea::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.fillRect(contentsRect(), Qt::white);
+
+    painter.fillPath(mPath, mColor);
+    if (mOutline)
+    {
+        painter.setRenderHint(QPainter::Antialiasing, false);
+        painter.setPen(QPen(Qt::black, 0, Qt::DashLine));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawPolygon(mPolygon);
+    }
+}
+
+void PolygonArea::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    updatePolygon(rect());
+    updatePath();
+    update();
+}
+
+void PolygonArea::updatePolygon(const QRect &rect)
+{
+    QtStarPolygonizer polygonizer;
+    mPolygon.clear();
+    switch (mShape)
+    {
+    case Triangle:
+        mPolygon << QPointF(10.0, 10.0) << QPointF(rect.width() * 0.5, rect.height()-10.0) << QPointF(rect.width()-10.0, 10.0);
+        break;
+    case Rectangle:
+        mPolygon << QPointF(10.0, 10.0) << QPointF(rect.width() - 10.0, 10.0)
+                 << QPointF(rect.width() - 10.0, rect.height() - 10.0) << QPointF(10.0, rect.height() - 10.0);
+        break;
+    case Star:
+        polygonizer(mPolygon, 5, 0.5, rect);
+        break;
+    default:
+        break;
+    }
+}
+
+void PolygonArea::updatePath()
+{
+    mPath = QPainterPath();
+    if (mRadius == 0)
+        mPath.addPolygon(mPolygon);
+    else
+        mPath = rounder(mPolygon, mRadius);
+}
+
+StarArea::StarArea(QWidget *parent) :
+    QFrame(parent),
+    mColor(Qt::red),
+    mSideCount(5),
+    mFactor(0.5),
+    mRadius(0.0)
+{
+}
+
+void StarArea::setColor(QColor color)
+{
+    mColor = color;
+    update();
+}
+
+QColor StarArea::color() const
+{
+    return mColor;
+}
+
+void StarArea::setRadius(double radius)
+{
+    mRadius = radius;
+    updatePolygon();
+    updatePath();
+    update();
+}
+
+double StarArea::radius() const
+{
+    return mRadius;
+}
+
+void StarArea::setFactor(double factor)
+{
+    mFactor = factor;
+    updatePolygon();
+    updatePath();
+    update();
+}
+
+double StarArea::factor() const
+{
+    return mFactor;
+}
+
+void StarArea::setSideCount(int sideCount)
+{
+    mSideCount = std::max(3, sideCount);
+    updatePolygon();
+    updatePath();
+    update();
+}
+
+int StarArea::sideCount() const
+{
+    return mSideCount;
+}
+
+void StarArea::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.fillRect(rect(), Qt::white);
+    painter.fillPath(mPath, mColor);
+}
+
+void StarArea::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    updatePolygon();
+    updatePath();
+    update();
+}
+
+void StarArea::updatePolygon()
+{
+    QtStarPolygonizer polygonizer;
+    mPolygon = polygonizer(mPolygon, mSideCount, mFactor, rect());
+}
+
+void StarArea::updatePath()
+{
+    mPath = QPainterPath();
+    if (mRadius == 0)
+        mPath.addPolygon(mPolygon);
+    else
+        mPath = rounder(mPolygon, mRadius);
+}
