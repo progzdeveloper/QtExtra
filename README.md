@@ -60,3 +60,19 @@ Button Mode:
 ![Text By Circle](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/text_by_curve.png)
 
 
+#### Extensions for QStyleItemDelegate (allow to embed widgets as items of view)
+
+#### Example of displaying static content with complex layout inside Item View
+![WidgetDelegate Loading](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/WidgetItemDelegateStatic.png)
+
+#### Example of animations inside Item View
+![WidgetDelegate Loading](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/WidgetDelegateLoading.png)
+
+#### Example of clickable widgets inside Item View
+![WidgetDelegate Dynamic](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/WidgetItemDelegateLoaded.png)
+
+#### Example of resizing widgets inside Item View
+![WidgetDelegate DynamicSize](https://github.com/progzdeveloper/QtExtra/blob/master/documentation/images/WidgetItemDelegateSize.png)
+
+
+

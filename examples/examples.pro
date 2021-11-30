@@ -21,4 +21,5 @@ SUBDIRS += \
     overlay \
     messagelog \
     overview \
-    groupingmodel
+    groupingmodel \
+    widgetdelegatedemo

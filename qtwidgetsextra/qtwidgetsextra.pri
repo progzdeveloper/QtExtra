@@ -87,7 +87,8 @@ HEADERS += \
     $$PWD/src/itemviews/models/qtcachingproxymodel.h \
     $$PWD/src/itemviews/models/qttreeproxymodel.h \
     $$PWD/src/widgets/qtspinboxedit.h \
-    $$PWD/src/painting/qtpaintutils.h
+    $$PWD/src/painting/qtpaintutils.h \
+    $$PWD/src/itemviews/delegates/qtwidgetitemdelegate.h
 
 
 SOURCES += \
@@ -173,7 +174,8 @@ SOURCES += \
     $$PWD/src/itemviews/models/qtcachingproxymodel.cpp \
     $$PWD/src/itemviews/models/qttreeproxymodel.cpp \
     $$PWD/src/widgets/qtspinboxedit.cpp \
-    $$PWD/src/painting/qtpaintutils.cpp
+    $$PWD/src/painting/qtpaintutils.cpp \
+    $$PWD/src/itemviews/delegates/qtwidgetitemdelegate.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc
