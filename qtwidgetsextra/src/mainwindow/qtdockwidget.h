@@ -13,8 +13,8 @@ class QTWIDGETSEXTRA_EXPORT QtDockWidget :
     Q_PROPERTY(bool autoHide READ isAutoHide WRITE setAutoHide)
 
 public:
-    explicit QtDockWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
-    explicit QtDockWidget(const QString& title, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit QtDockWidget(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit QtDockWidget(const QString& title, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~QtDockWidget();
 
     bool isAutoHide() const;

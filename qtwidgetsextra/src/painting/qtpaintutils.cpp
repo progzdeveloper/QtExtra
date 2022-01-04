@@ -1,5 +1,6 @@
 #include "qtpaintutils.h"
 
+
 inline void __drawCircularText(QPainter& painter, const QString &text, const QPainterPath &path, qreal stretch, qreal start, qreal factor)
 {
     QPen pen = painter.pen();

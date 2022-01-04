@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT += core widgets
-win32-msvc*|win32-icc: QT += axcontainer
+win32-msvc*|win32-icc|win32-g++: QT += axcontainer
 
 TEMPLATE = lib
 CONFIG += plugin

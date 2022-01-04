@@ -1,6 +1,7 @@
 #include "qtcardwidget.h"
 #include <QVariant>
 #include <QPainter>
+#include <QPainterPath>
 #include <cstring>
 #include <cstdlib>
 
