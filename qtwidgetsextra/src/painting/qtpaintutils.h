@@ -6,6 +6,7 @@
 #include <QtWidgetsExtra>
 
 #include <QPainter>
+#include <QPainterPath>
 
 
 class QTWIDGETSEXTRA_EXPORT QtPainter :
