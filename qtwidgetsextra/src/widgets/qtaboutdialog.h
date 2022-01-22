@@ -23,9 +23,6 @@ public:
     void setLicenseFile(const QString& fileName);
     void setImage(const QPixmap& pixmap);
 
-protected:
-    void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-
 private:
     QT_PIMPL(QtAboutDialog)
 };

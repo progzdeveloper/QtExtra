@@ -61,7 +61,6 @@ void QtColorButtonPrivate::initUi()
 
 QAction* QtColorButtonPrivate::createAction(const QString &name)
 {
-
     QAction* action = Q_NULLPTR;
     QColor c(name);
     if (c.isValid()) {
@@ -79,7 +78,6 @@ QAction* QtColorButtonPrivate::createAction(const QString &name)
 
 QAction *QtColorButtonPrivate::createAction(const QColor &c, const QString &name)
 {
-
     QAction* action = Q_NULLPTR;
     if (c.isValid()) {
        action = new QAction(menu);
@@ -258,7 +256,7 @@ void QtColorButton::colorSelected()
 void QtColorButton::pickColor()
 {
     Q_D(QtColorButton);
-    QColor c = QColorDialog::getColor(d->color, Q_NULLPTR, tr("Select Color"), QColorDialog::ShowAlphaChannel);
+    QColor c = QColorDialog::getColor(d->color, parentWidget(), tr("Select Color"), QColorDialog::ShowAlphaChannel);
     if (c.isValid()) {
         setColor(c);
         if (!d->colors.contains(c) && d->popupStyle != GridPopup) {

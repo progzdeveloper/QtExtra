@@ -10,7 +10,6 @@ class QtButtonLockerPrivate
 public:
     QIcon lockIcon;
     QHash<QAbstractButton*, QIcon> buttonIcons;
-    QtButtonLockerPrivate() {}
 };
 
 

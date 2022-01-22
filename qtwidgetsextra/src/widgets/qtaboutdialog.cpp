@@ -27,16 +27,10 @@ public:
     QLabel *logoLabel;
     QLabel *copyrightLabel;
 
-    QtAboutDialogPrivate();
     void initUi(QWidget *parent);
-
     void updateSize(QWidget* parent);
 };
 
-QtAboutDialogPrivate::QtAboutDialogPrivate()
-{
-
-}
 
 void QtAboutDialogPrivate::initUi(QWidget *parent)
 {
@@ -78,18 +72,14 @@ void QtAboutDialogPrivate::initUi(QWidget *parent)
     QVBoxLayout *mainLayout = new QVBoxLayout(parent);
     mainLayout->addLayout(layout);
     mainLayout->addLayout(buttonLayout);
-    //mainLayout->setContentsMargins(2, 2, 2, 2);
 }
 
 void QtAboutDialogPrivate::updateSize(QWidget * parent)
 {
-    //QScreen* screen = QApplication::primaryScreen();
     QAbstractTextDocumentLayout* layout = licenseBrowser->document()->documentLayout();
     QSize documentSize = layout->documentSize().toSize();
     parent->resize(parent->height(), logoLabel->width() + documentSize.width());
 }
-
-
 
 
 QtAboutDialog::QtAboutDialog(QWidget *parent) :
@@ -179,12 +169,5 @@ void QtAboutDialog::setImage(const QPixmap& pixmap)
 {
     Q_D(QtAboutDialog);
     d->logoLabel->setPixmap(pixmap);
-}
-
-void QtAboutDialog::showEvent(QShowEvent* e)
-{
-    //Q_D(QAboutDialog);
-    QDialog::showEvent(e);
-    //d->updateSize(this);
 }
 
