@@ -82,9 +82,6 @@ void QtColorGridModel::clear()
 }
 
 
-
-
-
 QtColorGridDelegate::QtColorGridDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
 {
@@ -121,10 +118,6 @@ void QtColorGridDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 
     style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
 }
-
-
-
-
 
 
 class QtColorGridPrivate

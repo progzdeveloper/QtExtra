@@ -1,7 +1,7 @@
 #include "qtpaintutils.h"
 
 
-inline void __drawCircularText(QPainter& painter, const QString &text, const QPainterPath &path, qreal stretch, qreal start, qreal factor)
+inline void drawCircularTextImpl(QPainter& painter, const QString &text, const QPainterPath &path, qreal stretch, qreal start, qreal factor)
 {
     QPen pen = painter.pen();
 
@@ -37,7 +37,7 @@ inline void __drawCircularText(QPainter& painter, const QString &text, const QPa
 }
 
 
-inline void __drawCurvedText(QPainter& painter, const QString &text, const QPainterPath &path, qreal stretch, qreal factor)
+inline void drawCurvedTextImpl(QPainter& painter, const QString &text, const QPainterPath &path, qreal stretch, qreal factor)
 {
     QPen pen = painter.pen();
 
@@ -72,9 +72,6 @@ inline void __drawCurvedText(QPainter& painter, const QString &text, const QPain
 }
 
 
-
-
-
 QtPainter::QtPainter() :
     QPainter()
 {
@@ -94,7 +91,7 @@ void QtPainter::drawCurvedText(const QString &text,
                                qreal stretch,
                                qreal factor)
 {
-    __drawCurvedText(*this, text, path,
+    drawCurvedTextImpl(*this, text, path,
                      qBound(qreal(0), stretch, qreal(1)),
                      qBound(qreal(0), factor, qreal(1)));
 }
@@ -112,7 +109,7 @@ void QtPainter::drawCircularText(const QString &text,
     if (!clockwise)
         path = path.toReversed();
 
-    __drawCircularText(*this, text, path,
+    drawCircularTextImpl(*this, text, path,
                        qBound(qreal(0), stretch, qreal(1)),
                        qBound(qreal(0), start, qreal(1)),
                        qBound(qreal(0), factor, qreal(1)));
@@ -131,7 +128,7 @@ void QtPainter::drawCircularText(const QString &text,
     if (!clockwise)
         path = path.toReversed();
 
-    __drawCircularText(*this, text, path,
+    drawCircularTextImpl(*this, text, path,
                        qBound(qreal(0), stretch, qreal(1)),
                        qBound(qreal(0), start, qreal(1)),
                        qBound(qreal(0), factor, qreal(1)));
@@ -149,15 +146,11 @@ void QtPainter::drawCircularText(const QString &text,
     path.addEllipse(rect.x(), rect.y(), rect.width(), rect.height());
     if (!clockwise)
         path = path.toReversed();
-    __drawCircularText(*this, text, path,
+    drawCircularTextImpl(*this, text, path,
                        qBound(qreal(0), stretch, qreal(1)),
                        qBound(qreal(0), start, qreal(1)),
                        qBound(qreal(0), factor, qreal(1)));
 }
-
-
-
-
 
 
 QtPainterSaver::QtPainterSaver( QPainter * p )

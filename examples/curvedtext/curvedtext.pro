@@ -47,10 +47,12 @@ DEPENDPATH += \
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+        widget.cpp \
+    qtradiusesmodel.cpp
 
 HEADERS += \
-        widget.h
+        widget.h \
+    qtradiusesmodel.h
 
 RESOURCES += \
     curvedtext.qrc

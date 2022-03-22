@@ -1,5 +1,9 @@
 #include "widget.h"
+#include "qtradiusesmodel.h"
+#include <memory>
+#include <QItemEditorFactory>
 #include <QTabWidget>
+#include <QTableView>
 #include <QPushButton>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -14,9 +18,27 @@
 
 #include <QDebug>
 
+class MyItemEditorFactory : public QItemEditorFactory
+{
+public:
+    virtual QWidget* createEditor(int userType, QWidget *parent) const
+    {
+        if (userType == QVariant::Double)
+        {
+            QSlider* slider = new QSlider(Qt::Horizontal, parent);
+            slider->setAutoFillBackground(true);
+            return slider;
+        }
+        return QItemEditorFactory::createEditor(userType, parent);
+    }
+};
+
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
+    QItemEditorFactory::setDefaultFactory(new MyItemEditorFactory);
+
     QFile file(":/metadata.json");
     file.open(QFile::ReadOnly);
     mAttributeResource.reset(new QtJsonAttributeResource);
@@ -99,14 +121,36 @@ void Widget::createStarPage(QtAttributeResource *resource)
         browser->setResource(resource);
     browser->setObject(paintArea);
 
+
+    QTableView* view = new QTableView(pageWidget);
+    QtRadiusesModel* model = new QtRadiusesModel(view);
+    view->setModel(model);
+
+    QWidget* browserWidget = new QWidget(pageWidget);
+    QVBoxLayout* browserLayout = new QVBoxLayout(browserWidget);
+    browserLayout->addWidget(browser);
+    browserLayout->addWidget(view);
+
     QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
     splitter->addWidget(paintArea);
-    splitter->addWidget(browser);
+    splitter->addWidget(browserWidget);
 
     QVBoxLayout* layout = new QVBoxLayout(pageWidget);
     layout->addWidget(splitter);
 
     tabWidget->addTab(pageWidget, tr("Star Polygon"));
+
+    model->reset(paintArea->sideCount() * 2);
+    connect(model, &QtRadiusesModel::dataChanged, this, [paintArea, model]()
+    {
+        paintArea->setRadiuses(model->radiuses());
+    });
+
+    connect(paintArea, &StarArea::verticesCountChanged, this, [paintArea, model](int n)
+    {
+        model->reset(n);
+        paintArea->setRadiuses(model->radiuses());
+    });
 }
 
 
@@ -394,6 +438,20 @@ void PolygonArea::updatePath()
         mPath = rounder(mPolygon, mRadius);
 }
 
+
+bool hasNonZeroRadiuses(const double* radiuses, size_t length)
+{
+    if (length == 0)
+        return true;
+
+    for (const double* r = radiuses, *end = radiuses + length; r != end; ++r)
+        if (!qFuzzyIsNull(*r))
+            return true;
+
+    return false;
+}
+
+
 StarArea::StarArea(QWidget *parent) :
     QFrame(parent),
     mColor(Qt::red),
@@ -416,6 +474,9 @@ QColor StarArea::color() const
 
 void StarArea::setRadius(double radius)
 {
+    if (mRadius == radius)
+        return;
+
     mRadius = radius;
     updatePolygon();
     updatePath();
@@ -425,6 +486,14 @@ void StarArea::setRadius(double radius)
 double StarArea::radius() const
 {
     return mRadius;
+}
+
+void StarArea::setRadiuses(const RadiusesVector& radiuses)
+{
+    mRadiuses = radiuses;
+
+    updatePath();
+    update();
 }
 
 void StarArea::setFactor(double factor)
@@ -442,10 +511,16 @@ double StarArea::factor() const
 
 void StarArea::setSideCount(int sideCount)
 {
-    mSideCount = std::max(3, sideCount);
+    sideCount = std::max(3, sideCount);
+    if (mSideCount == sideCount)
+        return;
+
+    mSideCount = sideCount;
     updatePolygon();
     updatePath();
     update();
+
+    Q_EMIT verticesCountChanged(mPolygon.size());
 }
 
 int StarArea::sideCount() const
@@ -472,14 +547,16 @@ void StarArea::resizeEvent(QResizeEvent *event)
 void StarArea::updatePolygon()
 {
     QtStarPolygonizer polygonizer;
+
     mPolygon = polygonizer(mPolygon, mSideCount, mFactor, rect());
 }
 
 void StarArea::updatePath()
 {
+    QtPolygonRounder<ManhattanDistance> rounder;
     mPath = QPainterPath();
-    if (mRadius == 0)
-        mPath.addPolygon(mPolygon);
+    if (mRadius == 0 && hasNonZeroRadiuses(mRadiuses.data(), mRadiuses.size()))
+        mPath = rounder(mPolygon,  mRadiuses);
     else
         mPath = rounder(mPolygon, mRadius);
 }

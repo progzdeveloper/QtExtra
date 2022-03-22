@@ -7,6 +7,8 @@
 
 #include <QtPaintUtils>
 
+#include "qtradiusesmodel.h"
+
 class QTabWidget;
 class QPushButton;
 
@@ -161,6 +163,7 @@ private:
     bool mOutline;
 };
 
+
 class StarArea :
         public QFrame
 {
@@ -180,11 +183,16 @@ public:
     void setRadius(double radius);
     double radius() const;
 
+    void setRadiuses(const RadiusesVector& radiuses);
+
     void setFactor(double factor);
     double factor() const;
 
     void setSideCount(int sideCount);
     int sideCount() const;
+
+Q_SIGNALS:
+    void verticesCountChanged(int);
 
     // QWidget interface
 protected:
@@ -196,7 +204,7 @@ private:
     void updatePath();
 
 private:
-    QtPolygonRounder<ManhattanDistance> rounder;
+    RadiusesVector mRadiuses;
     QPainterPath mPath;
     QPolygonF mPolygon;
     QColor mColor;
@@ -205,5 +213,6 @@ private:
     double mRadius;
 };
 
+Q_DECLARE_METATYPE(RadiusesVector);
 
 #endif // WIDGET_H

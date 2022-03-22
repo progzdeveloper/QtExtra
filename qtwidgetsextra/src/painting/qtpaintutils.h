@@ -110,6 +110,10 @@ class QtPolygonRounder : public _Distance
 {
 public:
 
+    QPainterPath operator()(const QRect& rect, double radius) const {
+        return operator ()(QRectF(rect), radius);
+    }
+
     QPainterPath operator()(const QPolygonF& polygon, double radius) const
     {
         QPainterPath path;
@@ -200,18 +204,118 @@ public:
           */
     }
 
+
+    QPainterPath operator()(const QPolygonF& polygon, const QVector<double>& radiuses) const {
+        return operator()(polygon, radiuses.data(), radiuses.size());
+    }
+
+    template<class _Alloc>
+    QPainterPath operator()(const QPolygonF& polygon, const std::vector<double, _Alloc>& radiuses) const {
+        return operator()(polygon, radiuses.data(), radiuses.size());
+    }
+
+    template<int _Prealloc>
+    QPainterPath operator()(const QPolygonF& polygon, const QVarLengthArray<double, _Prealloc>& radiuses) const {
+        return operator()(polygon, radiuses.data(), radiuses.size());
+    }
+
+    template<size_t _Size>
+    QPainterPath operator()(const QRect& rect, const double (&radiuses)[_Size]) const {
+        return operator()(QRectF(rect), radiuses, _Size);
+    }
+
+
 private:
-    inline double distance(const QPointF& curr, const QPointF& next) const
+    QPainterPath operator()(const QPolygonF& polygon, const double* radiuses, size_t length) const
     {
+        QPainterPath path;
+        const size_t n = static_cast<size_t>(polygon.size() - polygon.isClosed());
+        length = std::min(length, n);
+        if (n < 3 || !hasRadiuses(radiuses, length))
+        {
+            // unable to round off a polygon with less than 3 vertices
+            // or if all radiuses is zero or if no radiuses was provided
+            path.addPolygon(polygon);
+            return path;
+        }
+
+        double r, radius0 = std::max(radiuses[0], 0.0);
+        QPointF pt1, pt2, curr, next;
+
+        curr = polygon[0];
+        next = polygon[1];
+
+        //process first point
+        r = distanceRadius(curr, next, radius0);
+        pt1 = lineStart(curr, next, r);
+        path.moveTo(pt1);
+        r = distanceRadius(curr, next, std::max(radiuses[1], 0.0));
+        pt2 = lineEnd(curr, next, r);
+        path.lineTo(pt2);
+
+        size_t i = 1;
+        for (; i < (n - 1); ++i)
+        {
+            curr = polygon[i];
+            next = polygon[i + 1];
+            if (i >= length)
+            {
+                path.lineTo(curr);
+                path.lineTo(next);
+                continue;
+            }
+
+            r = distanceRadius(curr, next, std::max(radiuses[i], 0.0));
+            pt1 = lineStart(curr, next, r);
+            path.quadTo(curr, pt1);
+            r = distanceRadius(curr, next, std::max(radiuses[i + 1], 0.0));
+            pt2 = lineEnd(curr, next, r);
+            path.lineTo(pt2);
+        }
+
+        //process last point
+        curr = polygon[i];
+        next = polygon[0];
+
+        r = distanceRadius(curr, next, std::max(radiuses[i], 0.0));
+        pt1 = lineStart(curr, next, r);
+        path.quadTo(curr, pt1);
+        r = distanceRadius(curr, next, radius0);
+        pt2 = lineEnd(curr, next, r);
+        path.lineTo(pt2);
+
+        // close last corner
+        curr = polygon[0];
+        next = polygon[1];
+        r = distanceRadius(curr, next, radius0);
+        pt1 = lineStart(curr, next, r);
+        path.quadTo(curr, pt1);
+
+        return path;
+    }
+
+    static bool hasRadiuses(const double* radiuses, size_t length)
+    {
+        if (length == 0)
+            return true;
+
+        for (const double* r = radiuses, *end = radiuses + length; r != end; ++r)
+            if (!qFuzzyIsNull(*r))
+                return true;
+
+        return false;
+    }
+
+private:
+    inline double distance(const QPointF& curr, const QPointF& next) const {
         return static_cast<const _Distance&>(*this)(curr, next);
     }
 
-    inline double distanceRadius(const QPointF& curr, const QPointF& next, double radius) const
-    {
+    inline double distanceRadius(const QPointF& curr, const QPointF& next, double radius) const {
         return std::min(0.5, radius / distance(curr, next));
     }
 
-    QPointF lineStart(const QPointF& curr, const QPointF& next, double r) const
+    inline QPointF lineStart(const QPointF& curr, const QPointF& next, double r) const
     {
         QPointF pt;
         pt.setX((1.0 - r) * curr.x() + r * next.x());
@@ -219,7 +323,7 @@ private:
         return pt;
     }
 
-    QPointF lineEnd(const QPointF& curr, const QPointF& next, double r) const
+    inline QPointF lineEnd(const QPointF& curr, const QPointF& next, double r) const
     {
         QPointF pt;
         pt.setX(r * curr.x() + (1.0 - r) * next.x());
@@ -279,9 +383,6 @@ struct QtStarPolygonizer
 
         return starGeometry;
     }
-
-private:
-
 };
 
 #endif // QTPAINTER_H
