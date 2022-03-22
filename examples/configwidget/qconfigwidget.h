@@ -10,19 +10,19 @@ class QtSlideController;
 
 class QConfigWidget : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	QConfigWidget(QWidget* parent = Q_NULLPTR);
+    QConfigWidget(QWidget* parent = Q_NULLPTR);
 
 public slots:
-	void changePage(QListWidgetItem *current, QListWidgetItem *previous);
+    void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
-	void createIcons();
+    void createIcons();
 
-	QListWidget *contentsWidget;
-	QStackedWidget *pagesWidget;
-	QtSlideController* controller;
+    QListWidget *contentsWidget;
+    QStackedWidget *pagesWidget;
+    QtSlideController* controller;
 };
 

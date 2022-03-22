@@ -66,7 +66,7 @@ inline void drawCurvedTextImpl(QPainter& painter, const QString &text, const QPa
         painter.translate(0, offset);
         // Draw a line width above the origin to move the text above the line
         // and let Qt do the transformations
-        painter.drawText(QPoint(0, -pen.width()),QString(*it));
+        painter.drawText(QPoint(0, -pen.width()), QString(*it));
         painter.restore();
     }
 }
