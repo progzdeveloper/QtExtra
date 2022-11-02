@@ -88,7 +88,10 @@ HEADERS += \
     $$PWD/src/itemviews/models/qttreeproxymodel.h \
     $$PWD/src/widgets/qtspinboxedit.h \
     $$PWD/src/painting/qtpaintutils.h \
-    $$PWD/src/itemviews/delegates/qtwidgetitemdelegate.h
+    $$PWD/src/itemviews/delegates/qtwidgetitemdelegate.h \
+    $$PWD/src/effects/qtblurbehindeffect.h \
+    $$PWD/src/effects/blur.h \
+    $$PWD/src/effects/glblurfunctions.h
 
 
 SOURCES += \
@@ -175,7 +178,11 @@ SOURCES += \
     $$PWD/src/itemviews/models/qttreeproxymodel.cpp \
     $$PWD/src/widgets/qtspinboxedit.cpp \
     $$PWD/src/painting/qtpaintutils.cpp \
-    $$PWD/src/itemviews/delegates/qtwidgetitemdelegate.cpp
+    $$PWD/src/itemviews/delegates/qtwidgetitemdelegate.cpp \
+    $$PWD/src/effects/qtblurbehindeffect.cpp \
+    $$PWD/src/effects/boxblur.cpp \
+    $$PWD/src/effects/stackblur.cpp \
+    $$PWD/src/effects/glblurfunctions.cpp
 
 RESOURCES += \
     $$PWD/qtwidgetsextra.qrc

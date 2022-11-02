@@ -1,5 +1,4 @@
-#ifndef QTPAINTER_H
-#define QTPAINTER_H
+#pragma once
 
 #include <QtMath>
 
@@ -335,7 +334,6 @@ private:
 
 struct QtStarPolygonizer
 {
-
     inline QPolygonF operator()(int sideCount, double factor, const QRectF& rect) const
     {
         QPolygonF result;
@@ -343,46 +341,17 @@ struct QtStarPolygonizer
         return result;
     }
 
-    QPolygonF& operator()(QPolygonF& starGeometry, quint32 sideCount, double factor, const QRectF& rect) const
-    {
-        starGeometry.resize(sideCount);
-        if (sideCount < 3)
-            starGeometry.resize(3);
-        else
-            starGeometry.resize(sideCount*2);
-
-        factor = qBound(0.0, factor, 1.0); // bound factor to [0...1]
-        double angle = M_PI / 2; // start at the top
-        const double diff = 2 * M_PI / starGeometry.size(); // angle step for each side
-
-        const double rw = rect.width() * 0.5;
-        const double rh = rect.height() * 0.5;
-
-        const QPointF c = rect.center();
-
-        // calculate vertices for each inner and outer side
-        for (int i = 0; i < starGeometry.size(); ++i, angle += diff)
-        {
-            //double angleCos = std::cos(angle);
-            //double angleSin = std::sin(angle);
-
-            double angleCos = qFastCos(angle);
-            double angleSin = qFastSin(angle);
-
-            if ( (i & 1) ) // for every odd vertex
-            {
-                starGeometry[i].rx() = c.x() + rw * angleCos;
-                starGeometry[i].ry() = c.y() + rh * angleSin;
-            }
-            else // for every not odd vertex
-            {
-                starGeometry[i].rx() = c.x() + (factor * rw) * angleCos;
-                starGeometry[i].ry() = c.y() + (factor * rh) * angleSin;
-            }
-        }
-
-        return starGeometry;
-    }
+    QPolygonF& operator()(QPolygonF& starGeometry, quint32 sideCount, double factor, const QRectF& rect) const;
 };
 
-#endif // QTPAINTER_H
+struct QtStarPolygonizerF
+{
+    inline QPolygonF operator()(int sideCount, double factor, const QRectF& rect) const
+    {
+        QPolygonF result;
+        (*this)(result, sideCount, factor, rect);
+        return result;
+    }
+
+    QPolygonF& operator()(QPolygonF& starGeometry, quint32 sideCount, double factor, const QRectF& rect) const;
+};

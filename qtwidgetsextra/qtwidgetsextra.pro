@@ -1,3 +1,4 @@
+CONFIG += c++1z
 CONFIG += debug_and_release
 
 CONFIG(debug, debug|release) {

@@ -32,6 +32,7 @@ private:
     void createTextPage(QtAttributeResource* resource);
     void createRounderPage(QtAttributeResource* resource);
     void createStarPage(QtAttributeResource* resource);
+    void createPathPage(QtAttributeResource* resource);
 private:
     QTabWidget* tabWidget;
     QScopedPointer<QtAttributeResource> mAttributeResource;
@@ -214,5 +215,40 @@ private:
 };
 
 Q_DECLARE_METATYPE(RadiusesVector);
+
+
+class PathArea : public QFrame
+{
+    Q_OBJECT
+    Q_PROPERTY(Qt::Edges edges READ edges WRITE setEdges)
+    Q_PROPERTY(double radius READ radius WRITE setRadius)
+    Q_PROPERTY(QSize arrowSize READ arrowSize WRITE setArrowSize)
+public:
+
+    explicit PathArea(QWidget* parent = Q_NULLPTR);
+
+    void setEdges(Qt::Edges e);
+    Qt::Edges edges() const;
+
+    void setArrowSize(const QSize& s);
+    QSize arrowSize() const;
+
+    void setRadius(double radius);
+    double radius() const;
+
+protected:
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+
+private:
+    void updatePath();
+    QPolygon buildPolygon(const QRect &boundingRect);
+    int polygonVertices(Qt::Edges edges) const;
+private:
+    Qt::Edges mEdges;
+    QSize mArrowSize;
+    QPainterPath mPath;
+    double mRadius;
+};
 
 #endif // WIDGET_H

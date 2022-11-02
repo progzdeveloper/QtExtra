@@ -263,10 +263,7 @@ bool QtOverviewWidget::eventFilter(QObject *watched, QEvent *event)
 {
     Q_D(QtOverviewWidget);
 
-    if (!isVisible())
-        return QWidget::eventFilter(watched, event);
-
-    if (watched != d->area)
+    if (!isVisible() || watched != d->area)
         return QWidget::eventFilter(watched, event);
 
     QWidget* viewport = d->area->viewport();

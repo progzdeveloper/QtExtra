@@ -49,6 +49,7 @@ Widget::Widget(QWidget *parent)
     createTextPage(mAttributeResource.data());
     createRounderPage(mAttributeResource.data());
     createStarPage(mAttributeResource.data());
+    createPathPage(mAttributeResource.data());
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(tabWidget);
@@ -151,6 +152,28 @@ void Widget::createStarPage(QtAttributeResource *resource)
         model->reset(n);
         paintArea->setRadiuses(model->radiuses());
     });
+}
+
+void Widget::createPathPage(QtAttributeResource *resource)
+{
+    QWidget* pageWidget = new QWidget(this);
+    PathArea* paintArea = new PathArea(pageWidget);
+    paintArea->setContentsMargins(10, 10, 10, 10);
+    QtPropertyWidget* browser = new QtPropertyWidget(pageWidget);
+
+    browser->setFinal(true);
+    if (resource)
+        browser->setResource(resource);
+    browser->setObject(paintArea);
+
+    QSplitter* splitter = new QSplitter(Qt::Horizontal, pageWidget);
+    splitter->addWidget(paintArea);
+    splitter->addWidget(browser);
+
+    QVBoxLayout* layout = new QVBoxLayout(pageWidget);
+    layout->addWidget(splitter);
+
+    tabWidget->addTab(pageWidget, tr("Path Polygon"));
 }
 
 
@@ -559,4 +582,158 @@ void StarArea::updatePath()
         mPath = rounder(mPolygon,  mRadiuses);
     else
         mPath = rounder(mPolygon, mRadius);
+}
+
+
+
+PathArea::PathArea(QWidget *parent)
+{
+}
+
+void PathArea::setEdges(Qt::Edges e)
+{
+    if (mEdges == e)
+        return;
+
+    mEdges = e;
+    updatePath();
+    update();
+}
+
+Qt::Edges PathArea::edges() const
+{
+    return mEdges;
+}
+
+void PathArea::setArrowSize(const QSize &s)
+{
+    if (mArrowSize == s)
+        return;
+
+    mArrowSize = s;
+    updatePath();
+    update();
+}
+
+QSize PathArea::arrowSize() const
+{
+    return mArrowSize;
+}
+
+void PathArea::setRadius(double radius)
+{
+    if (mRadius == radius)
+        return;
+
+    mRadius = radius;
+    updatePath();
+    update();
+}
+
+double PathArea::radius() const
+{
+    return mRadius;
+}
+
+void PathArea::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.fillRect(rect(), Qt::white);
+    painter.fillPath(mPath, Qt::red);
+}
+
+void PathArea::resizeEvent(QResizeEvent *event)
+{
+    updatePath();
+    update();
+}
+
+void PathArea::updatePath()
+{
+    QtPolygonRounder<ManhattanDistance> rounder;
+    mPath = rounder(buildPolygon(contentsRect()), mRadius);
+}
+
+QPolygon PathArea::buildPolygon(const QRect& boundingRect)
+{
+    if (mEdges == Qt::Edges(0))
+        return QPolygon(boundingRect);
+
+    const int h = mArrowSize.height();
+    const int w = mArrowSize.width();
+
+    QRect rect = boundingRect;
+    for (int i = Qt::TopEdge; i <= Qt::BottomEdge; i <<= 1)
+    {
+        if (!(mEdges & i))
+            continue;
+
+        switch(i)
+        {
+        case Qt::TopEdge:
+            rect.adjust(0, h, 0, 0);
+            break;
+        case Qt::LeftEdge:
+            rect.adjust(h, 0, 0, 0);
+            break;
+        case Qt::RightEdge:
+            rect.adjust(0, 0, -h, 0);
+            break;
+        case Qt::BottomEdge:
+            rect.adjust(0, 0, 0, -h);
+            break;
+        }
+    }
+
+    const QPoint center = boundingRect.center();
+
+    QPolygon polygon;
+    polygon.reserve(polygonVertices(mEdges));
+
+    // process edges from top in clockwise manner
+    if ((mEdges & Qt::TopEdge))
+    {
+        polygon.push_back( { center.x() - w/2, rect.top() } );
+        polygon.push_back( { center.x(), rect.top() - h });
+        polygon.push_back( { center.x() + w/2, rect.top() });
+    }
+    polygon.push_back(rect.topRight());
+
+    if ((mEdges & Qt::RightEdge))
+    {
+        polygon.push_back( { rect.right(), center.y() - w/2 } );
+        polygon.push_back( { rect.right() + h, center.y() });
+        polygon.push_back( { rect.right(), center.y() + w/2 });
+    }
+    polygon.push_back(rect.bottomRight());
+
+    if ((mEdges & Qt::BottomEdge))
+    {
+        polygon.push_back( { center.x() + w/2, rect.bottom() } );
+        polygon.push_back( { center.x(), rect.bottom() + h });
+        polygon.push_back( { center.x() - w/2, rect.bottom() });
+    }
+    polygon.push_back(rect.bottomLeft());
+
+    if ((mEdges & Qt::LeftEdge))
+    {
+        polygon.push_back( { rect.left(), center.y() + w/2 } );
+        polygon.push_back( { rect.left() - h, center.y()  });
+        polygon.push_back( { rect.left(), center.y() - w/2 });
+    }
+    polygon.push_back(rect.topLeft());
+
+    return polygon;
+}
+
+int PathArea::polygonVertices(Qt::Edges edges) const
+{
+    int n = 3;
+    for (int i = Qt::TopEdge; i <= Qt::BottomEdge; i <<= 1)
+    {
+        if (mEdges & i)
+            n += 3;
+    }
+    return n;
 }

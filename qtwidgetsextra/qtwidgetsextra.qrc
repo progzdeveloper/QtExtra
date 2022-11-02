@@ -12,4 +12,9 @@
         <file alias="patterns-RX.png">resources/images/patterns-RX.png</file>
         <file alias="patterns-search.png">resources/images/icons8-search-16.png</file>
     </qresource>
+    <qresource prefix="/shaders">
+        <file alias="dual_kawase_down.frag">resources/shaders/dual_kawase_down.frag</file>
+        <file alias="dual_kawase_up.frag">resources/shaders/dual_kawase_up.frag</file>
+        <file alias="simple.vert">resources/shaders/simple.vert</file>
+    </qresource>
 </RCC>
