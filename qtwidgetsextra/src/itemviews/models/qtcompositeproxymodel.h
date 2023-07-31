@@ -48,7 +48,6 @@ public:
 private:
     QScopedPointer<class QtCompositeProxyModelPrivate> d_ptr;
     Q_DECLARE_PRIVATE(QtCompositeProxyModel)
-
 };
 
 #endif // QTCOMPOSITEPROXYMODEL_H

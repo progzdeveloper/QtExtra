@@ -24,19 +24,15 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-    int columnCount(const QModelIndex &parent = QModelIndex()) const {
-        Q_UNUSED(parent)
-        return ValueColumn+1;
-    }
+    int columnCount(const QModelIndex& = QModelIndex()) const { return ValueColumn+1; }
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-public slots:
+public Q_SLOTS:
     void clear();
 
 private:
-    Q_DISABLE_COPY(QtPluginPropertyModel)
-    QT_PIMPL(QtPluginPropertyModel)
+    QScopedPointer<class QtPluginPropertyModelPrivate> d;
 };

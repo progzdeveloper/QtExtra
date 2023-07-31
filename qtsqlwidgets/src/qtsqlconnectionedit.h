@@ -69,8 +69,7 @@ Q_SIGNALS:
     void reportWarning(const QString& message);
 
 private:
-    QT_PIMPL(QtSqlConnectionEdit)
+    QScopedPointer<class QtSqlConnectionEditPrivate> d;
 };
-
 
 #endif // QTSQLCONNECTIONEDIT_H

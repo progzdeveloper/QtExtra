@@ -47,12 +47,12 @@ public Q_SLOTS:
     void load(const QDir& pluginsDir);
 
 private:
-    void loadPlugin(QPluginLoader& loader);
+    void loadPlugin(QPluginLoader *loader);
     bool resolve(QObject* instance, const QString &filePath);
 
 private:
-    explicit QtPluginManager();
-    QT_PIMPL(QtPluginManager)
+    QtPluginManager();
+    QScopedPointer<class QtPluginManagerPrivate> d;
 };
 
 
@@ -60,7 +60,8 @@ private:
 #define QT_PLUGIN_INTERFACE(_Class) static QtPluginInterfaceRegisterer<_Class> __##_Class##_instance;
 
 template<class _Interface>
-struct QtPluginInterfaceRegisterer {
+struct QtPluginInterfaceRegisterer
+{
     QtPluginInterfaceRegisterer() {
         QtPluginManager::instance().registrate<_Interface>();
     }

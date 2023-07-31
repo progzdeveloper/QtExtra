@@ -2,7 +2,6 @@
 #include <QtGlobal>
 #include <QtTableModelExporterPlugin>
 
-
 class QtExcelExporterPlugin :
         public QObject,
         public QtTableModelExporterPlugin

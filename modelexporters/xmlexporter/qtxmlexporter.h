@@ -24,6 +24,5 @@ public:
     QWidget *createEditor(QDialog *parent) const override;
 
 private:
-    class QtTableModelXmlExporterPrivate *d_ptr;
-    Q_DECLARE_PRIVATE(QtTableModelXmlExporter)
+    QScopedPointer<class QtTableModelXmlExporterPrivate> d;
 };

@@ -31,22 +31,22 @@ QT_METAINFO_TR(QtTableModelJsonExporter)
 class QtTableModelJsonExporterPrivate
 {
 public:
-    QtTableModelJsonExporter* q_ptr;
+    QtTableModelJsonExporter* q;
     bool boolalpha;
     QString dateFormat;
     QString timeFormat;
     QJsonDocument::JsonFormat jsonFormat;
     QJsonObject json;
     QJsonArray array;
-    QtTableModelJsonExporterPrivate(QtTableModelExporter* q);
+    QtTableModelJsonExporterPrivate(QtTableModelExporter* e);
 
-    QtTableModelJsonExporterPrivate(QtTableModelJsonExporter* q);
+    QtTableModelJsonExporterPrivate(QtTableModelJsonExporter* e);
     inline void storeTableHeader(QJsonObject &json);
     inline QJsonValue jsonValue(const QVariant& v) const;
 };
 
-QtTableModelJsonExporterPrivate::QtTableModelJsonExporterPrivate(QtTableModelJsonExporter *q) :
-    q_ptr(q)
+QtTableModelJsonExporterPrivate::QtTableModelJsonExporterPrivate(QtTableModelJsonExporter *e) :
+    q(e)
 {
     boolalpha = false;
     dateFormat = "dd-MM-yyyy";
@@ -56,7 +56,7 @@ QtTableModelJsonExporterPrivate::QtTableModelJsonExporterPrivate(QtTableModelJso
 void QtTableModelJsonExporterPrivate::storeTableHeader(QJsonObject &json)
 {
     QJsonArray columns;
-    QAbstractTableModel *m = q_ptr->model();
+    QAbstractTableModel *m = q->model();
     for (int i = 0, n = m->columnCount(); i < n; ++i) {
         columns.append(QJsonValue::fromVariant(m->headerData(i, Qt::Horizontal, Qt::DisplayRole)));
     }
@@ -96,61 +96,52 @@ QJsonValue QtTableModelJsonExporterPrivate::jsonValue(const QVariant &v) const
 
 QtTableModelJsonExporter::QtTableModelJsonExporter(QAbstractTableModel* model) :
     QtTableModelExporter(model),
-    d_ptr(new QtTableModelJsonExporterPrivate(this))
+    d(new QtTableModelJsonExporterPrivate(this))
 {
     setModel(model);
 }
 
 QtTableModelJsonExporter::~QtTableModelJsonExporter()
 {
-    delete d_ptr;
 }
 
 void QtTableModelJsonExporter::setBoolAlpha(bool on)
 {
-    Q_D(QtTableModelJsonExporter);
     d->boolalpha = on;
 }
 
 bool QtTableModelJsonExporter::isBoolAlpha() const
 {
-    Q_D(const QtTableModelJsonExporter);
     return d->boolalpha;
 }
 
 void QtTableModelJsonExporter::setDateFormat(const QString& ch)
 {
-    Q_D(QtTableModelJsonExporter);
     d->dateFormat = ch;
 }
 
 QString QtTableModelJsonExporter::dateFormat() const
 {
-    Q_D(const QtTableModelJsonExporter);
     return d->dateFormat;
 }
 
 void QtTableModelJsonExporter::setTimeFormat(const QString& ch)
 {
-    Q_D(QtTableModelJsonExporter);
     d->timeFormat = ch;
 }
 
 QString QtTableModelJsonExporter::timeFormat() const
 {
-    Q_D(const QtTableModelJsonExporter);
     return d->timeFormat;
 }
 
 void QtTableModelJsonExporter::setJsonFormat(QtTableModelJsonExporter::Format f)
 {
-    Q_D(QtTableModelJsonExporter);
     d->jsonFormat = static_cast<QJsonDocument::JsonFormat>(f);
 }
 
 QtTableModelJsonExporter::Format QtTableModelJsonExporter::jsonFormat() const
 {
-    Q_D(const QtTableModelJsonExporter);
     return static_cast<QtTableModelJsonExporter::Format>(d->jsonFormat);
 }
 
@@ -161,7 +152,6 @@ QStringList QtTableModelJsonExporter::fileFilter() const
 
 bool QtTableModelJsonExporter::exportModel(QIODevice *device)
 {
-    Q_D(QtTableModelJsonExporter);
     if (!beginExport(device))
         return false;
 
@@ -191,8 +181,6 @@ bool QtTableModelJsonExporter::exportModel(QIODevice *device)
 
 void QtTableModelJsonExporter::storeIndex(const QModelIndex &index)
 {
-    Q_D(QtTableModelJsonExporter);
-
     if (aborted())
         return;
 

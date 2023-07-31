@@ -10,8 +10,6 @@ class QMetaProperty;
 
 class QRegExp;
 
-
-
 class QTCOREEXTRA_EXPORT QtAbstractObjectMapper
 {
     Q_DISABLE_COPY(QtAbstractObjectMapper)
@@ -38,7 +36,7 @@ protected:
     virtual bool validate(void* v, const QMetaProperty& p) const;
 
 private:
-    QT_PIMPL(QtAbstractObjectMapper)
+    QScopedPointer<class QtAbstractObjectMapperPrivate> d;
 };
 
 
@@ -116,9 +114,5 @@ bool QtObjectMapper<_Writer, _Reader>::validate(void *v, const QMetaProperty &p)
     Q_ASSERT(v != Q_NULLPTR);
     return this->validate(*reinterpret_cast<_Reader*>(v), p);
 }
-
-
-
-
 
 #endif // QTOBJECTMAPPER_H

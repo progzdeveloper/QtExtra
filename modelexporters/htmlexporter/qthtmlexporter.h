@@ -27,7 +27,6 @@ class QtTableModelHtmlExporter :
     Q_PROPERTY(QColor headerBackground READ headerBackground WRITE setHeaderBackground)
     Q_CLASSINFO("headerBackground", "Header background")
 
-
 public:
     explicit QtTableModelHtmlExporter(QAbstractTableModel* model = Q_NULLPTR);
     ~QtTableModelHtmlExporter();
@@ -57,7 +56,6 @@ public:
     void storeIndex(const QModelIndex &index = QModelIndex()) override;
 
 private:
-    class QtTableModelHtmlExporterPrivate* d_ptr;
-    Q_DECLARE_PRIVATE(QtTableModelHtmlExporter)
+    QScopedPointer<class QtTableModelHtmlExporterPrivate> d;
 };
 

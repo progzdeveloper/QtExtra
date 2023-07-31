@@ -103,15 +103,16 @@ bool QtSqlItem::removeChild(int position)
 
 
 
-
-
-
 class QtSqlItemTreeModelPrivate
 {
 public:
+    static const QLatin1String kRootItemName;
+
     QtSqlItemTreeModel::Categories categories;
     QScopedPointer<QtSqlItem> rootItem;
     bool supressDefaultConnection;
+
+    QtSqlItemTreeModelPrivate();
 
     QtSqlItem* decodePointer(const QModelIndex& index) const;
 
@@ -121,6 +122,12 @@ public:
     void populateTable(QtSqlItem* parent, const QString& tableName, int type, const QSqlRecord& record);
 };
 
+const QLatin1String QtSqlItemTreeModelPrivate::kRootItemName("{root}");
+
+QtSqlItemTreeModelPrivate::QtSqlItemTreeModelPrivate()
+    : categories(QtSqlItemTreeModel::AllCategories)
+    , rootItem(new QtSqlItem(-1, kRootItemName))
+{}
 
 QtSqlItem *QtSqlItemTreeModelPrivate::decodePointer(const QModelIndex &index) const
 {
@@ -165,7 +172,7 @@ void QtSqlItemTreeModelPrivate::update(const QModelIndex &index, QtSqlItemTreeMo
 
     } else {
         model->beginResetModel();
-        rootItem.reset(new QtSqlItem(-1, ""));
+        rootItem.reset(new QtSqlItem(-1, kRootItemName));
         QStringList keys = QSqlDatabase::connectionNames();
         std::sort(keys.begin(), keys.end());
         for (auto it = keys.begin(); it != keys.end(); ++it) {
@@ -238,16 +245,10 @@ void QtSqlItemTreeModelPrivate::populateTable(QtSqlItem *parent,
 }
 
 
-
-
-
 QtSqlItemTreeModel::QtSqlItemTreeModel(QObject *parent) :
     QAbstractItemModel(parent),
-    d_ptr(new QtSqlItemTreeModelPrivate)
+    d(new QtSqlItemTreeModelPrivate)
 {
-    Q_D(QtSqlItemTreeModel);
-    d->categories = AllCategories;
-    d->rootItem.reset(new QtSqlItem(-1, ":root:"));
 }
 
 QtSqlItemTreeModel::~QtSqlItemTreeModel()
@@ -256,7 +257,6 @@ QtSqlItemTreeModel::~QtSqlItemTreeModel()
 
 void QtSqlItemTreeModel::setCategories(QtSqlItemTreeModel::Categories categories)
 {
-    Q_D(QtSqlItemTreeModel);
     if (d->categories != categories) {
         d->categories = categories;
         refresh();
@@ -265,19 +265,16 @@ void QtSqlItemTreeModel::setCategories(QtSqlItemTreeModel::Categories categories
 
 QtSqlItemTreeModel::Categories QtSqlItemTreeModel::categories() const
 {
-    Q_D(const QtSqlItemTreeModel);
     return d->categories;
 }
 
 void QtSqlItemTreeModel::setDefaultDatabaseSupressed(bool on)
 {
-    Q_D(QtSqlItemTreeModel);
     d->supressDefaultConnection = on;
 }
 
 bool QtSqlItemTreeModel::isDefaultDatabaseSupressed() const
 {
-    Q_D(const QtSqlItemTreeModel);
     return d->supressDefaultConnection;
 }
 
@@ -290,7 +287,6 @@ QVariant QtSqlItemTreeModel::headerData(int section, Qt::Orientation orientation
 
 QModelIndex QtSqlItemTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    Q_D(const QtSqlItemTreeModel);
     if (parent.isValid() && parent.column() != 0)
         return QModelIndex();
 
@@ -304,7 +300,6 @@ QModelIndex QtSqlItemTreeModel::index(int row, int column, const QModelIndex &pa
 
 QModelIndex QtSqlItemTreeModel::parent(const QModelIndex &index) const
 {
-    Q_D(const QtSqlItemTreeModel);
     if (!index.isValid())
         return QModelIndex();
 
@@ -319,8 +314,6 @@ QModelIndex QtSqlItemTreeModel::parent(const QModelIndex &index) const
 
 int QtSqlItemTreeModel::rowCount(const QModelIndex &parent) const
 {
-    Q_D(const QtSqlItemTreeModel);
-
     QtSqlItem *item = d->decodePointer(parent);
     return (item != Q_NULLPTR ? item->childCount() : 0);
 }
@@ -332,7 +325,6 @@ int QtSqlItemTreeModel::columnCount(const QModelIndex &) const
 
 QVariant QtSqlItemTreeModel::data(const QModelIndex &index, int role) const
 {
-    Q_D(const QtSqlItemTreeModel);
     if (!index.isValid())
         return QVariant();
 
@@ -362,13 +354,11 @@ Qt::ItemFlags QtSqlItemTreeModel::flags(const QModelIndex &index) const
 
 void QtSqlItemTreeModel::refresh()
 {
-    Q_D(QtSqlItemTreeModel);
     d->update(QModelIndex(), this);
 }
 
 void QtSqlItemTreeModel::update(const QModelIndex &index)
 {
-    Q_D(QtSqlItemTreeModel);
     d->update(index, this);
 }
 

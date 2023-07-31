@@ -53,8 +53,8 @@ public Q_SLOTS:
     virtual void update(const QModelIndex& index);
 
 private:
-    QT_PIMPL(QtSqlItemTreeModel)
-
+    friend class QtSqlItemTreeModelPrivate;
+    QScopedPointer<class QtSqlItemTreeModelPrivate> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QtSqlItemTreeModel::Categories)

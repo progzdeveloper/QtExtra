@@ -37,16 +37,14 @@ public:
 
     QStringList fileFilter() const;
 
-    bool exportModel(QIODevice *device) override;
+    bool exportModel(QIODevice* device) override;
     void storeIndex(const QModelIndex& index = QModelIndex()) override;
-    QWidget *createEditor(QDialog *parent) const override;
+    QWidget *createEditor(QDialog* parent) const override;
 
 private Q_SLOTS:
     void reportError(int errcode, const QString& source, const QString& desc, const QString& help);
 
 private:
-    Q_DISABLE_COPY(QtTableModelExcelExporter)
-    Q_DECLARE_PRIVATE(QtTableModelExcelExporter)
-    QtTableModelExcelExporterPrivate *d_ptr;
+    QScopedPointer<class QtTableModelExcelExporterPrivate> d;
 };
 #endif

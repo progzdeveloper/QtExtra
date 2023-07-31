@@ -105,8 +105,6 @@ void QtCrumbBarPrivate::addCrumb(const QModelIndex &index)
         return;
     }
 
-
-
     int count = model->rowCount(index);
     QMenu* menu = (count > 0 ? new QMenu(toolBar) : Q_NULLPTR);
     for (int i = 0; i < count; ++i) {

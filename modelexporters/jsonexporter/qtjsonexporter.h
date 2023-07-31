@@ -55,7 +55,6 @@ protected:
     void storeIndex(const QModelIndex &index) override;
 
 private:
-    class QtTableModelJsonExporterPrivate* d_ptr;
-    Q_DECLARE_PRIVATE(QtTableModelJsonExporter)
+    QScopedPointer<class QtTableModelJsonExporterPrivate> d;
 };
 

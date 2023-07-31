@@ -70,10 +70,11 @@ void QtTableModelExcelExporterPrivate::storeHeader()
 
 QString QtTableModelExcelExporterPrivate::columnName( int col ) const
 {
+    static const int kAlphabetSize = 26;
+
     QString s;
-    int alpha, remainder;
-    alpha = col / 26;
-    remainder = col % 26;
+    const int alpha = col / kAlphabetSize;
+    const int remainder = col % kAlphabetSize;
     if (alpha > 0) {
         s += QChar(alpha-1 + 'A');
     }
@@ -120,7 +121,7 @@ void QtTableModelExcelExporterPrivate::openExcel(const QString& fileName)
 
 QtTableModelExcelExporter::QtTableModelExcelExporter( QAbstractTableModel* model /*= 0*/ ) :
     QtTableModelExporter(model),
-    d_ptr(new QtTableModelExcelExporterPrivate(this))
+    d(new QtTableModelExcelExporterPrivate(this))
 {
     QProgressDialog dlg;
     dlg.setLabelText(tr("Connecting with Microsoft Excel..."));
@@ -128,65 +129,58 @@ QtTableModelExcelExporter::QtTableModelExcelExporter( QAbstractTableModel* model
 
     dlg.setRange(0, 4);
 
-    d_ptr->workbook.reset(new QAxObject("Excel.Sheet"));
+    d->workbook.reset(new QAxObject("Excel.Sheet"));
     dlg.setValue(1);
 
-    d_ptr->excel.reset(d_ptr->workbook->querySubObject("Application"));
+    d->excel.reset(d->workbook->querySubObject("Application"));
     dlg.setValue(2);
 
-    d_ptr->activeSheet.reset(d_ptr->workbook->querySubObject("ActiveSheet"));
+    d->activeSheet.reset(d->workbook->querySubObject("ActiveSheet"));
     dlg.setValue(3);
 
-    d_ptr->sheetCells.reset(d_ptr->activeSheet->querySubObject("Cells"));
+    d->sheetCells.reset(d->activeSheet->querySubObject("Cells"));
     dlg.setValue(4);
 
-    connect(d_ptr->workbook.data(), SIGNAL(exception(int, const QString&, const QString&, const QString&)),
+    connect(d->workbook.data(), SIGNAL(exception(int, const QString&, const QString&, const QString&)),
             SLOT(reportError(int, const QString&, const QString&, const QString&)));
-    connect(d_ptr->activeSheet.data(), SIGNAL(exception(int, const QString&, const QString&, const QString&)),
+    connect(d->activeSheet.data(), SIGNAL(exception(int, const QString&, const QString&, const QString&)),
             SLOT(reportError(int, const QString&, const QString&, const QString&)));
-    connect(d_ptr->sheetCells.data(), SIGNAL(exception(int, const QString&, const QString&, const QString&)),
+    connect(d->sheetCells.data(), SIGNAL(exception(int, const QString&, const QString&, const QString&)),
             SLOT(reportError(int, const QString&, const QString&, const QString&)));
 
 }
 
 QtTableModelExcelExporter::~QtTableModelExcelExporter()
 {
-    delete d_ptr;
 }
 
 void QtTableModelExcelExporter::setDateFormat( const QString& format )
 {
-    Q_D(QtTableModelExcelExporter);
     d->dateFormat = format;
 }
 
 QString QtTableModelExcelExporter::dateFormat() const
 {
-    Q_D(const QtTableModelExcelExporter);
     return d->dateFormat;
 }
 
 void QtTableModelExcelExporter::setTimeFormat( const QString& format )
 {
-    Q_D(QtTableModelExcelExporter);
     d->timeFormat = format;
 }
 
 QString QtTableModelExcelExporter::timeFormat() const
 {
-    Q_D(const QtTableModelExcelExporter);
     return d->timeFormat;
 }
 
 void QtTableModelExcelExporter::setAutoOpen(bool on)
 {
-    Q_D(QtTableModelExcelExporter);
     d->autoOpen = on;
 }
 
 bool QtTableModelExcelExporter::isAutoOpen() const
 {
-    Q_D(const QtTableModelExcelExporter);
     return d->autoOpen;
 }
 
@@ -196,9 +190,8 @@ QStringList QtTableModelExcelExporter::fileFilter() const
             << tr("MS Excel Workbook 97-2003 (*.xls)"));
 }
 
-bool QtTableModelExcelExporter::exportModel( QIODevice *device )
+bool QtTableModelExcelExporter::exportModel( QIODevice* device )
 {
-    Q_D(QtTableModelExcelExporter);
     QFile *file = qobject_cast<QFile*>(device);
     if (!file) {
         setErrorString(tr("Incorrect output device: saving data in this format (MS Excel) can only be done in file."));
@@ -239,7 +232,6 @@ bool QtTableModelExcelExporter::exportModel( QIODevice *device )
 
 void QtTableModelExcelExporter::storeIndex( const QModelIndex& index /*= QModelIndex()*/ )
 {
-    Q_D(QtTableModelExcelExporter);
     if (aborted())
         return;
 
@@ -270,7 +262,7 @@ void QtTableModelExcelExporter::storeIndex( const QModelIndex& index /*= QModelI
     }
 }
 
-QWidget *QtTableModelExcelExporter::createEditor(QDialog *parent) const
+QWidget *QtTableModelExcelExporter::createEditor(QDialog* parent) const
 {
     QtPropertyWidget* editor = new QtPropertyWidget(parent);
     editor->setObject(const_cast<QtTableModelExcelExporter*>(this));
@@ -289,7 +281,6 @@ void QtTableModelExcelExporter::reportError( int errcode, const QString& source,
                           .arg(desc)
                           .arg(help));
 }
-
 
 #undef MAX_COLUMNS
 

@@ -67,12 +67,12 @@ public:
     QHash<QtSqlConnectionEdit::Field, QWidget*> editors;
 
     QJsonObject driverOptions;
-    QtSqlConnectionEdit* q_ptr;
+    QtSqlConnectionEdit* q;
     QCheckBox* echoSwitcher;
     QFormLayout* formLayout;
     bool isReadOnly;
 
-    QtSqlConnectionEditPrivate(QtSqlConnectionEdit* q);
+    QtSqlConnectionEditPrivate(QtSqlConnectionEdit* editor);
 
     void initUi();
     void createEditors();
@@ -89,8 +89,8 @@ public:
 #endif
 };
 
-QtSqlConnectionEditPrivate::QtSqlConnectionEditPrivate(QtSqlConnectionEdit *q) :
-    q_ptr(q), isReadOnly(false)
+QtSqlConnectionEditPrivate::QtSqlConnectionEditPrivate(QtSqlConnectionEdit *editor) :
+    q(editor), isReadOnly(false)
 {
     QFile file(":/text/connect_options.json");
     if (!file.open(QFile::ReadOnly))
@@ -103,7 +103,7 @@ void QtSqlConnectionEditPrivate::initUi()
 {
     createEditors();
     setupPlaceholders();
-    formLayout = new QFormLayout(q_ptr);
+    formLayout = new QFormLayout(q);
     for (int i = 0; i <= QtSqlConnectionEdit::ConnectionOptions; i++) {
         formLayout->addRow(tr(fieldNames[i]) + ':', editors[static_cast<QtSqlConnectionEdit::Field>(i)]);
     }
@@ -113,10 +113,10 @@ void QtSqlConnectionEditPrivate::initUi()
 
 void QtSqlConnectionEditPrivate::createEditors()
 {
-    QLineEdit* connectionNameEdit = new QLineEdit(q_ptr);
+    QLineEdit* connectionNameEdit = new QLineEdit(q);
     connectionNameEdit->setCompleter(new QCompleter(QStringList() << QSqlDatabase::connectionNames(), connectionNameEdit));
 
-    QComboBox* driverNameEdit = new QComboBox(q_ptr);
+    QComboBox* driverNameEdit = new QComboBox(q);
     QStringList driversList = QSqlDatabase::drivers();
     for (auto it = driversList.begin(); it != driversList.end(); ++it) {
 #ifdef QTSQLEXTRA_DLL
@@ -125,28 +125,28 @@ void QtSqlConnectionEditPrivate::createEditors()
         driverNameEdit->addItem(*it, *it);
 #endif
     }
-    QObject::connect(driverNameEdit, SIGNAL(currentTextChanged(QString)), q_ptr, SLOT(driverChanged(QString)));
+    QObject::connect(driverNameEdit, SIGNAL(currentTextChanged(QString)), q, SLOT(driverChanged(QString)));
 
     editors[QtSqlConnectionEdit::ConnectionName] = connectionNameEdit;
     editors[QtSqlConnectionEdit::DriverName] = driverNameEdit;
-    editors[QtSqlConnectionEdit::DatabaseName] = new QLineEdit(q_ptr);
-    editors[QtSqlConnectionEdit::UserName] = new QLineEdit(q_ptr);
-    editors[QtSqlConnectionEdit::Password] = new QLineEdit(q_ptr);
+    editors[QtSqlConnectionEdit::DatabaseName] = new QLineEdit(q);
+    editors[QtSqlConnectionEdit::UserName] = new QLineEdit(q);
+    editors[QtSqlConnectionEdit::Password] = new QLineEdit(q);
     editors[QtSqlConnectionEdit::Password]->setProperty("echoMode", QLineEdit::Password);
-    editors[QtSqlConnectionEdit::HostName] = new QLineEdit(q_ptr);
-    editors[QtSqlConnectionEdit::Port] = new QSpinBox(q_ptr);
+    editors[QtSqlConnectionEdit::HostName] = new QLineEdit(q);
+    editors[QtSqlConnectionEdit::Port] = new QSpinBox(q);
     editors[QtSqlConnectionEdit::Port]->setProperty("minimum", 0);
     editors[QtSqlConnectionEdit::Port]->setProperty("maximum", 65536);
 #ifdef QTWIDGETSEXTRA_DLL
-    editors[QtSqlConnectionEdit::ConnectionOptions] = new QtLineBoxEdit(q_ptr);
-    QObject::connect(editors[QtSqlConnectionEdit::ConnectionOptions], SIGNAL(clicked()), q_ptr, SLOT(editOptions()));
+    editors[QtSqlConnectionEdit::ConnectionOptions] = new QtLineBoxEdit(q);
+    QObject::connect(editors[QtSqlConnectionEdit::ConnectionOptions], SIGNAL(clicked()), q, SLOT(editOptions()));
 #else
     editors[QtSqlConnectionEdit::ConnectionOptions] = new QPlainTextEdit(q_ptr);
     editors[QtSqlConnectionEdit::ConnectionOptions]->setMaximumHeight(100);
 #endif
-    echoSwitcher = new QCheckBox(tr("Show password"), q_ptr);
+    echoSwitcher = new QCheckBox(tr("Show password"), q);
     echoSwitcher->setChecked(false);
-    QObject::connect(echoSwitcher, SIGNAL(toggled(bool)), q_ptr, SLOT(enableEchoMode(bool)));
+    QObject::connect(echoSwitcher, SIGNAL(toggled(bool)), q, SLOT(enableEchoMode(bool)));
 }
 
 void QtSqlConnectionEditPrivate::setupPlaceholders()
@@ -308,9 +308,8 @@ void QtSqlConnectionEditPrivate::setupOptions(QtEditDialog *dialog)
 
 
 QtSqlConnectionEdit::QtSqlConnectionEdit(QWidget *parent, Qt::WindowFlags flags) :
-    QWidget(parent, flags), d_ptr(new QtSqlConnectionEditPrivate(this))
+    QWidget(parent, flags), d(new QtSqlConnectionEditPrivate(this))
 {
-    Q_D(QtSqlConnectionEdit);
     d->initUi();
     //adjustSize();
     //setFixedHeight(height());
@@ -318,7 +317,6 @@ QtSqlConnectionEdit::QtSqlConnectionEdit(QWidget *parent, Qt::WindowFlags flags)
 
 QtSqlConnectionEdit::~QtSqlConnectionEdit()
 {
-
 }
 
 void QtSqlConnectionEdit::setDatabase(const QSqlDatabase &db)
@@ -335,118 +333,98 @@ void QtSqlConnectionEdit::setDatabase(const QSqlDatabase &db)
 
 void QtSqlConnectionEdit::setReadOnly(bool on)
 {
-    Q_D(QtSqlConnectionEdit);
-    if (on != d->isReadOnly) {
+    if (on != d->isReadOnly)
         d->setReadOnly(on);
-    }
 }
 
 bool QtSqlConnectionEdit::isReadOnly() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->isReadOnly;
 }
 
 void QtSqlConnectionEdit::setConnectionName(const QString &name)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(ConnectionName, name);
 }
 
 QString QtSqlConnectionEdit::connectionName() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(ConnectionName).toString();
 }
 
 void QtSqlConnectionEdit::setDatabaseName(const QString &databaseName)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(DatabaseName, databaseName);
 }
 
 QString QtSqlConnectionEdit::databaseName() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(DatabaseName).toString();
 }
 
 void QtSqlConnectionEdit::setDriverName(const QString &driverName)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(DriverName, driverName);
 }
 
 QString QtSqlConnectionEdit::driverName() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(DriverName).toString();
 }
 
 void QtSqlConnectionEdit::setUserName(const QString &userName)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(UserName, userName);
 }
 
 QString QtSqlConnectionEdit::userName() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(UserName).toString();
 }
 
 void QtSqlConnectionEdit::setPassword(const QString &password)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(Password, password);
 }
 
 QString QtSqlConnectionEdit::password() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(Password).toString();
 }
 
 void QtSqlConnectionEdit::setHostName(const QString& hostName)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(HostName, hostName);
 }
 
 QString QtSqlConnectionEdit::hostName() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(HostName).toString();
 }
 
 void QtSqlConnectionEdit::setPort(int port)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(Port, port);
 }
 
 int QtSqlConnectionEdit::port() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(Port).toInt();
 }
 
 void QtSqlConnectionEdit::setOptions(const QString& options)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(ConnectionOptions, options);
 }
 
 
 QString QtSqlConnectionEdit::options() const
 {
-    Q_D(const QtSqlConnectionEdit);
     return d->value(ConnectionOptions).toString();
 }
 
 bool QtSqlConnectionEdit::verifyInput()
 {
-    Q_D(const QtSqlConnectionEdit);
     QWidget* editor = Q_NULLPTR;
 
     editor = d->editors[QtSqlConnectionEdit::DriverName];
@@ -471,15 +449,12 @@ bool QtSqlConnectionEdit::verifyInput()
 
 void QtSqlConnectionEdit::enableEchoMode(bool on)
 {
-    Q_D(QtSqlConnectionEdit);
     d->editors[Password]->setProperty("echoMode", on ? QLineEdit::Normal : QLineEdit::Password);
 }
 
 void QtSqlConnectionEdit::editOptions()
 {
 #ifdef QTWIDGETSEXTRA_DLL
-    Q_D(QtSqlConnectionEdit);
-
     QString name = driverName();
     QtEditDialog dialog;
     if (!d->setupDialog(name, &dialog))
@@ -494,16 +469,13 @@ void QtSqlConnectionEdit::editOptions()
 
 void QtSqlConnectionEdit::driverChanged(const QString &)
 {
-    Q_D(QtSqlConnectionEdit);
     d->setValue(ConnectionOptions, QVariant(QVariant::String));
 }
 
-
 void QtSqlConnectionEdit::test()
 {
-    if (!verifyInput()) {
+    if (!verifyInput())
         return;
-    }
 
     QString key = connectionName();
     // check connection pool first

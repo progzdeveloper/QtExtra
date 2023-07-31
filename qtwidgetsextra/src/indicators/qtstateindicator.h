@@ -11,9 +11,7 @@ class QTWIDGETSEXTRA_EXPORT QtStateIndicator :
     Q_OBJECT
     Q_PROPERTY(Shape shape READ shape WRITE setShape NOTIFY shapeChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-
     Q_PROPERTY(bool clickable READ isClickable WRITE setClickable NOTIFY clickableChanged)
-
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
     Q_PROPERTY(int duration READ duration WRITE setDuration NOTIFY durationChanged)
     Q_PROPERTY(qreal frameWidth READ frameWidth WRITE setFrameWidth NOTIFY frameWidthChanged)

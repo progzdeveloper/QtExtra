@@ -26,8 +26,8 @@ public:
     const QMetaObject* metaObject;
 
     QtPluginPropertyModelPrivate() :
-        metaObject(Q_NULLPTR) {}
-
+        metaObject(Q_NULLPTR)
+    {}
 
     QString translateClassName() const
     {
@@ -110,8 +110,9 @@ public:
 
 
 
-QtPluginPropertyModel::QtPluginPropertyModel( QObject *parent /*= 0*/ ) :
-    QAbstractTableModel(parent), d_ptr(new QtPluginPropertyModelPrivate)
+QtPluginPropertyModel::QtPluginPropertyModel( QObject *parent /*= 0*/ )
+    : QAbstractTableModel(parent)
+    , d(new QtPluginPropertyModelPrivate)
 {
 }
 
@@ -121,7 +122,6 @@ QtPluginPropertyModel::~QtPluginPropertyModel()
 
 void QtPluginPropertyModel::setMetadata( const QtPluginMetadata& metadata )
 {
-    Q_D(QtPluginPropertyModel);
     beginResetModel();
     d->metadata = metadata;
     d->metaObject = Q_NULLPTR;
@@ -132,23 +132,20 @@ void QtPluginPropertyModel::setMetadata( const QtPluginMetadata& metadata )
 
 int QtPluginPropertyModel::rowCount( const QModelIndex& parent) const
 {
-    Q_D(const QtPluginPropertyModel);
     if (parent.isValid())
         return 0;
+
     return d->fieldCount();
 }
 
 QVariant QtPluginPropertyModel::data( const QModelIndex &index, int role) const
 {
-    Q_D(const QtPluginPropertyModel);
-    if (!index.isValid()) {
+    if (!index.isValid())
         return QVariant();
-    }
 
     const int row = index.row();
-    if (row < 0 || row >= d->fieldCount()) {
+    if (row < 0 || row >= d->fieldCount())
         return QVariant();
-    }
 
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
@@ -167,7 +164,8 @@ QVariant QtPluginPropertyModel::headerData( int section, Qt::Orientation orienta
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        switch(section) {
+        switch(section)
+        {
         case TitleColumn: return tr("Property");
         case ValueColumn: return tr("Value");
         }
@@ -177,7 +175,6 @@ QVariant QtPluginPropertyModel::headerData( int section, Qt::Orientation orienta
 
 void QtPluginPropertyModel::clear()
 {
-    Q_D(QtPluginPropertyModel);
     beginResetModel();
     d->metaObject = Q_NULLPTR;
     d->metadata.instance = Q_NULLPTR;

@@ -14,12 +14,11 @@ public:
     explicit QtPluginManagerDialog(QWidget *parent = Q_NULLPTR);
     ~QtPluginManagerDialog();
 
-private slots:
+private Q_SLOTS:
     void showProperties(QTreeWidgetItem* item);
 
 private:
-    Q_DISABLE_COPY(QtPluginManagerDialog)
-    QT_PIMPL(QtPluginManagerDialog)
+    QScopedPointer<class QtPluginManagerDialogPrivate> d;
 };
 
 

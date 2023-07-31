@@ -51,7 +51,5 @@ public:
     QWidget *createEditor(QDialog *parent) const;
 
 private:
-    class QtTableModelCsvExporterPrivate *d_ptr;
-    Q_DISABLE_COPY(QtTableModelCsvExporter)
-    Q_DECLARE_PRIVATE(QtTableModelCsvExporter)
+    QScopedPointer<class QtTableModelCsvExporterPrivate> d;
 };

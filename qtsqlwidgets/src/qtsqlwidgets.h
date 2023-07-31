@@ -8,13 +8,6 @@
 # define Q_NO_IMPL(x) qWarning("(%s:%d) %s:%s is not yet implemented", __FILE__, __LINE__, Q_FUNC_INFO, #x);
 #endif
 
-#ifndef QT_PIMPL
-#define QT_PIMPL(_Class)                          \
-    QScopedPointer<class _Class##Private> d_ptr;  \
-    Q_DECLARE_PRIVATE(_Class)
-#endif
-
-
 #if defined(QTSQLWIDGETS_NODLL)
 #    undef QTSQLWIDGETS_MAKEDLL
 #    undef QTSQLWIDGETS_DLL

@@ -69,14 +69,15 @@ class QtPluginTreeViewPrivate
 {
     Q_DECLARE_TR_FUNCTIONS(QtPluginTreeViewPrivate)
 public:
-    QtPluginTreeView *q_ptr;
-    QtPluginTreeViewPrivate(QtPluginTreeView* q);
+    QtPluginTreeView *q;
+    QtPluginTreeViewPrivate(QtPluginTreeView* view);
     void buildTree();
 };
 
 
-QtPluginTreeViewPrivate::QtPluginTreeViewPrivate(QtPluginTreeView *q) :
-    q_ptr(q) {
+QtPluginTreeViewPrivate::QtPluginTreeViewPrivate(QtPluginTreeView *view)
+    : q(view)
+{
 }
 
 void QtPluginTreeViewPrivate::buildTree()
@@ -89,7 +90,7 @@ void QtPluginTreeViewPrivate::buildTree()
 
     for (auto iidIt = iids.cbegin(); iidIt != iids.cend(); ++iidIt)
     {
-        folder = new QtPluginFolderItem(q_ptr);
+        folder = new QtPluginFolderItem(q);
         folder->setText(0, manager.category(*iidIt));
         const QStringList keys = manager.keys(*iidIt);
         auto it = keys.cbegin();
@@ -101,9 +102,9 @@ void QtPluginTreeViewPrivate::buildTree()
 
 
 QtPluginTreeView::QtPluginTreeView( QWidget *parent /*= 0*/ ) 
-    : QTreeWidget(parent), d_ptr(new QtPluginTreeViewPrivate(this))
+    : QTreeWidget(parent), d(new QtPluginTreeViewPrivate(this))
 {
-    d_ptr->buildTree();
+    d->buildTree();
 }
 
 QtPluginTreeView::~QtPluginTreeView()
@@ -112,7 +113,6 @@ QtPluginTreeView::~QtPluginTreeView()
 
 QString QtPluginTreeView::key( const QModelIndex& index ) const
 {
-    //Q_D(const QtPluginTreeView);
     const QTreeWidgetItem *it = itemFromIndex(index);
     if (it->type() != QtPluginItem::LibraryItem) {
         return QString();

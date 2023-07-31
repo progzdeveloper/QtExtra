@@ -38,9 +38,7 @@ private Q_SLOTS:
     void warning(const QString& message);
     void error(const QString& message);
 private:
-    QT_PIMPL(QtSqlConnectionDialog)
-
-
+    QScopedPointer<class QtSqlConnectionDialogPrivate> d;
 };
 
 #endif // QTSQLCONNECTIONDIALOG_H

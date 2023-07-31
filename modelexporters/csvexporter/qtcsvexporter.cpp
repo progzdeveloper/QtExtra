@@ -23,7 +23,7 @@ class QtTableModelCsvExporterPrivate
 {
     Q_DECLARE_TR_FUNCTIONS(QtTableModelCsvExporterPrivate)
 public:
-    QtTableModelCsvExporter *q_ptr;
+    QtTableModelCsvExporter *q;
     bool boolalpha;
     QString delimiter;
     QChar stringQuote;
@@ -31,15 +31,17 @@ public:
     QString timeFormat;
     QTextStream stream;
 
+    QtTableModelCsvExporterPrivate(QtTableModelCsvExporter* e)
+        : q(e)
+    {}
     inline void storeTableHeader();
     inline void storeItem(const QVariant& v);
 };
 
 
-
 void QtTableModelCsvExporterPrivate::storeTableHeader()
 {
-    QAbstractTableModel *m = q_ptr->model();
+    QAbstractTableModel *m = q->model();
     QString s;
     for (int i = 0; i < m->columnCount(); ++i) {
         s = m->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
@@ -94,83 +96,67 @@ void QtTableModelCsvExporterPrivate::storeItem( const QVariant& v )
 }
 
 
-
-
-
 QtTableModelCsvExporter::QtTableModelCsvExporter(QAbstractTableModel* model, const QString& delim) :
     QtTableModelExporter(model),
-    d_ptr(new QtTableModelCsvExporterPrivate)
+    d(new QtTableModelCsvExporterPrivate(this))
 {
-    d_ptr->q_ptr = this;
-    d_ptr->boolalpha = false;
-    d_ptr->delimiter = delim;
-    d_ptr->stringQuote = '"';
-    d_ptr->dateFormat = "dd-MM-yyyy";
-    d_ptr->timeFormat = "hh.mm.ss";
+    d->boolalpha = false;
+    d->delimiter = delim;
+    d->stringQuote = '"';
+    d->dateFormat = "dd-MM-yyyy";
+    d->timeFormat = "hh.mm.ss";
     setModel(model);
 }
 
 QtTableModelCsvExporter::~QtTableModelCsvExporter()
 {
-    delete d_ptr;
 }
-
 
 void QtTableModelCsvExporter::setDelimiter(const QString& delim)
 {
-    Q_D(QtTableModelCsvExporter);
     d->delimiter = delim;
 }
 QString QtTableModelCsvExporter::delimiter() const
 {
-    Q_D(const QtTableModelCsvExporter);
     return d->delimiter;
 }
 
 void QtTableModelCsvExporter::setBoolAlpha(bool on)
 {
-    Q_D(QtTableModelCsvExporter);
     d->boolalpha = on;
 }
 
 bool QtTableModelCsvExporter::isBoolAlpha() const
 {
-    Q_D(const QtTableModelCsvExporter);
     return d->boolalpha;
 }
 
 void QtTableModelCsvExporter::setStringQuote(QChar ch)
 {
-    Q_D(QtTableModelCsvExporter);
     d->stringQuote = ch;
 }
 QChar QtTableModelCsvExporter::stringQuote() const
 {
-    Q_D(const QtTableModelCsvExporter);
     return d->stringQuote;
 }
 
 void QtTableModelCsvExporter::setDateFormat(const QString& ch)
-{ 
-    Q_D(QtTableModelCsvExporter);
+{
     d->dateFormat = ch;
 }
 
 QString QtTableModelCsvExporter::dateFormat() const
 {
-    Q_D(const QtTableModelCsvExporter);
     return d->dateFormat;
 }
 
 void QtTableModelCsvExporter::setTimeFormat(const QString& ch)
 {
-    Q_D(QtTableModelCsvExporter);
     d->timeFormat = ch;
 }
 
 QString QtTableModelCsvExporter::timeFormat() const
 {
-    Q_D(const QtTableModelCsvExporter);
     return d->timeFormat;
 }
 
@@ -181,7 +167,6 @@ QStringList QtTableModelCsvExporter::fileFilter() const
 
 bool QtTableModelCsvExporter::exportModel(QIODevice *device)
 {
-    Q_D(QtTableModelCsvExporter);
     if (!beginExport(device))
         return false;
 
@@ -199,8 +184,6 @@ bool QtTableModelCsvExporter::exportModel(QIODevice *device)
 
 void QtTableModelCsvExporter::storeIndex(const QModelIndex& index)
 {
-    Q_D(QtTableModelCsvExporter);
-
     if (aborted())
         return;
 

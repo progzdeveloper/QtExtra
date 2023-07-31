@@ -48,25 +48,22 @@ QtTableModelXmlExporterPrivate::QtTableModelXmlExporterPrivate() :
 
 
 QtTableModelXmlExporter::QtTableModelXmlExporter(QAbstractTableModel* model) :
-    d_ptr(new QtTableModelXmlExporterPrivate)
+    d(new QtTableModelXmlExporterPrivate)
 {
     setModel(model);
 }
 
 QtTableModelXmlExporter::~QtTableModelXmlExporter()
 {
-    delete d_ptr;
 }
 
 void QtTableModelXmlExporter::setAutoFormatting(bool on /* = true */)
 {
-    Q_D(QtTableModelXmlExporter);
     d->autoFormat = on;
 }
 
 bool QtTableModelXmlExporter::isAutoFormatting() const
 {
-    Q_D(const QtTableModelXmlExporter);
     return d->autoFormat;
 }
 
@@ -77,8 +74,6 @@ QStringList QtTableModelXmlExporter::fileFilter() const
 
 bool QtTableModelXmlExporter::exportModel(QIODevice *device)
 {
-    Q_D(QtTableModelXmlExporter);
-
     if (!beginExport(device))
         return false;
 
@@ -99,8 +94,6 @@ bool QtTableModelXmlExporter::exportModel(QIODevice *device)
 
 void QtTableModelXmlExporter::storeIndex(const QModelIndex& index)
 {
-    Q_D(QtTableModelXmlExporter);
-
     const QAbstractTableModel *m = model();
     if (index.isValid()) {
         static QRegExp rx("^\\d+");

@@ -11,9 +11,9 @@ public:
 };
 
 QtAbstractObjectMapper::QtAbstractObjectMapper() :
-    d_ptr(new QtAbstractObjectMapperPrivate)
+    d(new QtAbstractObjectMapperPrivate)
 {
-    d_ptr->isFinal = false;
+    d->isFinal = false;
 }
 
 QtAbstractObjectMapper::~QtAbstractObjectMapper()
@@ -22,31 +22,26 @@ QtAbstractObjectMapper::~QtAbstractObjectMapper()
 
 void QtAbstractObjectMapper::setClassFilter(const QString &pattern)
 {
-    Q_D(QtAbstractObjectMapper);
     d->regExp.setPattern(pattern);
 }
 
 QString QtAbstractObjectMapper::classFilter() const
 {
-    Q_D(const QtAbstractObjectMapper);
     return d->regExp.pattern();
 }
 
 void QtAbstractObjectMapper::setFinal(bool on)
 {
-    Q_D(QtAbstractObjectMapper);
     d->isFinal = on;
 }
 
 bool QtAbstractObjectMapper::isFinal() const
 {
-    Q_D(const QtAbstractObjectMapper);
     return d->isFinal;
 }
 
 bool QtAbstractObjectMapper::accepted(const QString& className) const
 {
-    Q_D(const QtAbstractObjectMapper);
     return (d->regExp.isValid() && className.contains(d->regExp));
 }
 

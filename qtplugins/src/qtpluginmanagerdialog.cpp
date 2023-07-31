@@ -16,29 +16,29 @@
 class QtPluginManagerDialogPrivate
 {
 public:
-    QtPluginManagerDialog *q_ptr;
+    QtPluginManagerDialog *q;
     QDialogButtonBox *buttonBox;
     QTableView *propertyView;
     QtPluginPropertyModel *propertyModel;
     QtPluginTreeView *pluginView;
 
-    QtPluginManagerDialogPrivate(QtPluginManagerDialog* q);
+    QtPluginManagerDialogPrivate(QtPluginManagerDialog* dialog);
     void initUi();
 };
 
-QtPluginManagerDialogPrivate::QtPluginManagerDialogPrivate(QtPluginManagerDialog *q) :
-    q_ptr(q) {
+QtPluginManagerDialogPrivate::QtPluginManagerDialogPrivate(QtPluginManagerDialog *dialog) :
+    q(dialog) {
 }
 
 void QtPluginManagerDialogPrivate::initUi()
 {
-    buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, q_ptr);
-    QObject::connect(buttonBox, SIGNAL(accepted()), q_ptr, SLOT(accept()));
-    QObject::connect(buttonBox, SIGNAL(rejected()), q_ptr, SLOT(reject()));
+    buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, q);
+    QObject::connect(buttonBox, SIGNAL(accepted()), q, SLOT(accept()));
+    QObject::connect(buttonBox, SIGNAL(rejected()), q, SLOT(reject()));
 
-    pluginView = new QtPluginTreeView(q_ptr);
+    pluginView = new QtPluginTreeView(q);
     pluginView->setHeaderHidden(true);
-    propertyView = new QTableView(q_ptr);
+    propertyView = new QTableView(q);
     propertyModel = new QtPluginPropertyModel(propertyView);
     propertyView->setModel(propertyModel);
     propertyView->setAlternatingRowColors(true);
@@ -54,28 +54,25 @@ void QtPluginManagerDialogPrivate::initUi()
         q_ptr, SLOT(showProperties(const QModelIndex&)));*/
 
     QObject::connect(pluginView, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-                     q_ptr, SLOT(showProperties(QTreeWidgetItem*)));
+                     q, SLOT(showProperties(QTreeWidgetItem*)));
     QObject::connect(pluginView, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-                     q_ptr, SLOT(showProperties(QTreeWidgetItem*)));
+                     q, SLOT(showProperties(QTreeWidgetItem*)));
 
     QSplitter *splitter = new QSplitter;
     splitter->addWidget(pluginView);
     splitter->addWidget(propertyView);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(q_ptr);
+    QVBoxLayout *mainLayout = new QVBoxLayout(q);
     mainLayout->addWidget(splitter);
     mainLayout->addWidget(buttonBox);
 }
 
 
 
-
-
-
 QtPluginManagerDialog::QtPluginManagerDialog( QWidget *parent /*= 0*/ )
-    : QDialog(parent), d_ptr(new QtPluginManagerDialogPrivate(this))
+    : QDialog(parent), d(new QtPluginManagerDialogPrivate(this))
 {
-    d_ptr->initUi();
+    d->initUi();
 }
 
 QtPluginManagerDialog::~QtPluginManagerDialog()
@@ -84,8 +81,6 @@ QtPluginManagerDialog::~QtPluginManagerDialog()
 
 void QtPluginManagerDialog::showProperties( QTreeWidgetItem* item )
 {
-    Q_D(QtPluginManagerDialog);
-
     d->propertyModel->clear();
     const QString key = d->pluginView->key(d->pluginView->indexFromItem(item));
     if (key.isEmpty())

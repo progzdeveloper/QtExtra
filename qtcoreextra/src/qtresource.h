@@ -6,7 +6,6 @@
 
 #include <QtCoreExtra>
 
-
 class QBuffer;
 
 class QTCOREEXTRA_EXPORT QtResource :

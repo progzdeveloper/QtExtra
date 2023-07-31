@@ -22,7 +22,6 @@ QIcon QtJsonExporterPlugin::icon() const
 }
 
 
-
 #if QT_VERSION < 0x050000
 #ifdef _DEBUG
 Q_EXPORT_PLUGIN2("jsonexporterd", QtJsonExporterPlugin)

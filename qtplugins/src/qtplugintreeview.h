@@ -17,12 +17,12 @@ public:
 
     QString key(const QModelIndex& index) const;
 
-    inline QModelIndex indexFromItem ( QTreeWidgetItem * item, int column = 0 ) const {
+    inline QModelIndex indexFromItem ( QTreeWidgetItem * item, int column = 0 ) const
+    {
         return QTreeWidget::indexFromItem(item, column);
     }
 
 private:
-    Q_DISABLE_COPY(QtPluginTreeView)
-    QT_PIMPL(QtPluginTreeView)
+    QScopedPointer<class QtPluginTreeViewPrivate> d;
 };
 

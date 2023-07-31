@@ -22,6 +22,7 @@ QIcon QtCsvExporterPlugin::icon() const
     return QIcon(":/images/export-csv");
 }
 
+
 #if QT_VERSION < 0x050000
 #ifdef _DEBUG
 Q_EXPORT_PLUGIN2("csvexporterd", QtCsvExporterPlugin)
