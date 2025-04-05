@@ -2,7 +2,7 @@
 Qt Extra components and widgets
 
 # ATTENTION
-Recently I have started a new project ![Qt5Extra](https://github.com/progzdeveloper/Qt5Extra) which is a descendant of that project, but use modern CMake build system and targeting to modern C++ features and newest versions of Qt Framework. This repository is leaved as a backport for older versions of Qt and older compilers, since someone may found that useful.
+Recently I have started a new project ![Qt5Extra](https://github.com/progzdeveloper/Qt5Extra) which is a descendant of that project, but use modern CMake build system and targeting to modern C++ features and newest versions of Qt Framework. This repository will not be actively developed and it is leaved as a backport for older versions of Qt and older compilers, since someone may found that useful.
 
 ## Introduction
 This repository consists of extra components and widgets for popular Qt Framework.
